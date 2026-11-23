@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cálculo Multivariable – Integrales dobles y triples</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #f6f7fb; --card: #ffffff; --ink: #1c2030; --muted: #6a7087;
+    --brand: #4f46e5; --brand-soft: #eceafe; --ok: #0f9d6b; --ok-soft: #e3f6ee;
+    --warn: #b45309; --warn-soft: #fef3c7; --line: #e3e6f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161f; --card: #1c1f2c; --ink: #e8eaf4; --muted: #9298b3;
+      --brand: #8b84ff; --brand-soft: #262847; --ok: #3ccf98; --ok-soft: #153328;
+      --warn: #fbbf24; --warn-soft: #3a2f10; --line: #2c3043;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 17px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); }
+  .layout { display: grid; grid-template-columns: 270px 1fr; min-height: 100vh; }
+  aside { background: var(--card); border-right: 1px solid var(--line); padding: 24px 18px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  aside h1 { font-size: 17px; margin: 0 0 4px; line-height: 1.3; }
+  aside .sub { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
+  aside .group { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 18px 0 6px; }
+  .nav { display: block; width: 100%; text-align: left; border: 0; background: none; color: var(--ink); font: inherit; font-size: 15px; padding: 9px 12px; border-radius: 10px; cursor: pointer; }
+  .nav:hover { background: var(--brand-soft); }
+  .nav.active { background: var(--brand); color: #fff; }
+  .nav.soon { color: var(--muted); cursor: default; }
+  .nav.soon:hover { background: none; }
+  .nav small { display: block; font-size: 12px; opacity: .75; }
+  main { padding: 36px 44px 80px; max-width: 900px; }
+  .tag { display: inline-block; background: var(--brand-soft); color: var(--brand); font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 99px; margin-bottom: 8px; }
+  h2.title { font-size: 30px; margin: 0 0 6px; line-height: 1.2; }
+  .lead { color: var(--muted); margin: 0 0 28px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px 26px; margin-bottom: 20px; }
+  section h3 { margin: 0 0 12px; font-size: 20px; }
+  .step-num { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--brand); color: #fff; font-size: 14px; margin-right: 8px; }
+  .box { border-left: 4px solid var(--brand); background: var(--brand-soft); padding: 12px 16px; border-radius: 0 10px 10px 0; margin: 14px 0; }
+  .box b.t { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--brand); margin-bottom: 4px; }
+  .box.warn { border-color: var(--warn); background: var(--warn-soft); }
+  .box.warn b.t { color: var(--warn); }
+  .formula { background: var(--bg); border: 1px dashed var(--line); border-radius: 10px; padding: 8px 14px; margin: 12px 0; overflow-x: auto; }
+  ul { padding-left: 22px; }
+  li { margin: 4px 0; }
+  details { border: 1px solid var(--line); border-radius: 12px; margin: 14px 0; background: var(--bg); }
+  details > summary { cursor: pointer; padding: 12px 16px; font-weight: 600; list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::before { content: "▸"; display: inline-block; width: 1.2em; color: var(--brand); }
+  details[open] > summary::before { content: "▾"; }
+  details .inner { padding: 0 16px 14px; }
+  .ans { background: var(--ok-soft); border-radius: 10px; padding: 8px 14px; margin-top: 10px; font-weight: 600; color: var(--ok); }
+  .problem { padding: 14px 0; border-top: 1px solid var(--line); }
+  .problem:first-of-type { border-top: 0; }
+  .lvl { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .hint { color: var(--muted); font-size: 15px; }
+  mjx-container { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+  .qtext { margin: 0 0 10px; font-weight: 600; }
+  .q { padding: 14px 0; border-top: 1px solid var(--line); }
+  .q:first-of-type { border-top: 0; }
+  .opts { display: grid; gap: 8px; }
+  .opt { text-align: left; font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
+  .opt:hover:not(:disabled) { border-color: var(--brand); background: var(--brand-soft); }
+  .opt:disabled { cursor: default; }
+  .opt.right { border-color: var(--ok); background: var(--ok-soft); }
+  .opt.wrong { border-color: var(--warn); background: var(--warn-soft); }
+  .fb { margin-top: 10px; padding: 10px 14px; border-radius: 10px; background: var(--brand-soft); font-size: 15px; }
+  .fb b.v { display: block; margin-bottom: 2px; }
+  .fb.ok b.v { color: var(--ok); }
+  .fb.no b.v { color: var(--warn); }
+  .progress { color: var(--muted); font-size: 14px; margin-bottom: 6px; }
+  .result { margin-top: 16px; padding: 14px 16px; border-radius: 12px; background: var(--brand-soft); }
+  .result .score { font-size: 24px; font-weight: 700; }
+  .btn { font: inherit; font-size: 15px; font-weight: 600; background: var(--brand); color: #fff; border: 0; border-radius: 10px; padding: 8px 16px; cursor: pointer; margin-top: 8px; }
+  .hist { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+    main { padding: 22px 16px 60px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <h1>Cálculo Multivariable</h1>
+    <div class="sub">Meta: 10 en el examen</div>
+    <div class="group">Integrales dobles</div>
+    <button class="nav active">1 · Sobre rectángulos<small>Definición, Fubini</small></button>
+    <button class="nav soon">2 · Regiones generales<small>Tipo I y tipo II · próximamente</small></button>
+    <button class="nav soon">3 · Coordenadas polares<small>próximamente</small></button>
+    <button class="nav soon">4 · Aplicaciones<small>Área, masa, centro de masa · próximamente</small></button>
+    <div class="group">Integrales triples</div>
+    <button class="nav soon">5 · Sobre cajas y regiones sólidas<small>próximamente</small></button>
+    <button class="nav soon">6 · Cilíndricas y esféricas<small>próximamente</small></button>
+    <button class="nav soon">7 · Jacobiano y cambio de variables<small>próximamente</small></button>
+    <div class="group">Práctica</div>
+    <button class="nav soon">Simulacro de examen<small>próximamente</small></button>
+  </aside>
+
+  <main>
+    <span class="tag">Lección 1 · Integrales dobles</span>
+    <h2 class="title">Integrales dobles sobre rectángulos</h2>
+    <p class="lead">La idea: sumar infinitos pedacitos de volumen para encontrar el volumen bajo una superficie.</p>
+
+    <section id="pred-sec">
+      <h3>🔮 Antes de empezar: predice</h3>
+      <p class="hint">Responde con tu intuición, sin mirar abajo. No importa si fallas: equivocarte antes de ver la teoría hace que la recuerdes mejor.</p>
+      <div id="pred"></div>
+    </section>
+
+    <section>
+      <h3><span class="step-num">1</span>Definiciones</h3>
+      <p>Un <b>rectángulo</b> en el plano es $R=[a,b]\times[c,d]=\{(x,y)\;:\; a\le x\le b,\; c\le y\le d\}$.</p>
+      <p>Dividimos $R$ en $m\cdot n$ subrectángulos de área $\Delta A$ y elegimos un punto de muestra $(x_{ij}^*,y_{ij}^*)$ en cada uno. La <b>integral doble</b> de $f$ sobre $R$ es</p>
+      <div class="formula">$$\iint_R f(x,y)\,dA=\lim_{m,n\to\infty}\sum_{i=1}^{m}\sum_{j=1}^{n} f(x_{ij}^*,y_{ij}^*)\,\Delta A$$</div>
+      <div class="box"><b class="t">Interpretación geométrica</b>
+        Si $f(x,y)\ge 0$, la integral doble es el <b>volumen</b> del sólido que queda entre el rectángulo $R$ (abajo) y la superficie $z=f(x,y)$ (arriba).
+      </div>
+      <p>Si $f$ es continua en $R$, la integral siempre existe.</p>
+    </section>
+
+    <section>
+      <h3><span class="step-num">2</span>Fórmulas clave</h3>
+      <p><b>Teorema de Fubini</b> (para $f$ continua en $R=[a,b]\times[c,d]$): se puede integrar en cualquier orden.</p>
+      <div class="formula">$$\iint_R f\,dA=\int_a^b\!\left(\int_c^d f(x,y)\,dy\right)dx=\int_c^d\!\left(\int_a^b f(x,y)\,dx\right)dy$$</div>
+      <p><b>Caso especial (variables separadas):</b> si $f(x,y)=g(x)\,h(y)$, entonces</p>
+      <div class="formula">$$\iint_R g(x)h(y)\,dA=\left(\int_a^b g(x)\,dx\right)\left(\int_c^d h(y)\,dy\right)$$</div>
+      <p><b>Propiedades:</b></p>
+      <ul>
+        <li>Linealidad: $\iint_R (f+g)\,dA=\iint_R f\,dA+\iint_R g\,dA$ y $\iint_R k f\,dA=k\iint_R f\,dA$.</li>
+        <li>Si $f\ge g$ en $R$, entonces $\iint_R f\,dA\ge\iint_R g\,dA$.</li>
+        <li>$\iint_R 1\,dA=\text{Área}(R)=(b-a)(d-c)$.</li>
+      </ul>
+      <div class="box warn"><b class="t">Cómo se resuelve una integral iterada</b>
+        Se resuelve de <b>adentro hacia afuera</b>. En la integral interior, la otra variable se trata como constante.
+      </div>
+    </section>
+
+    <section>
+      <h3><span class="step-num">3</span>Ejemplo resuelto</h3>
+      <p>Calcula $\displaystyle\iint_R (x^2+y)\,dA$ donde $R=[0,2]\times[1,3]$.</p>
+      <p><b>Paso 1.</b> Plantea la integral iterada:</p>
+      <div class="formula">$$\int_0^2\!\int_1^3 (x^2+y)\,dy\,dx$$</div>
+      <p><b>Paso 2.</b> Integral interior en $y$ (con $x$ constante):</p>
+      <div class="formula">$$\int_1^3 (x^2+y)\,dy=\left[x^2y+\frac{y^2}{2}\right]_{y=1}^{y=3}=\left(3x^2+\tfrac92\right)-\left(x^2+\tfrac12\right)=2x^2+4$$</div>
+      <p><b>Paso 3.</b> Integral exterior en $x$:</p>
+      <div class="formula">$$\int_0^2 (2x^2+4)\,dx=\left[\frac{2x^3}{3}+4x\right]_0^2=\frac{16}{3}+8=\frac{40}{3}$$</div>
+      <div class="ans">Resultado: $\dfrac{40}{3}$</div>
+    </section>
+
+    <section>
+      <h3><span class="step-num">4</span>Ejercicios</h3>
+      <p class="hint">Intenta primero sin ver la solución. Abre la pista solo si te atoras.</p>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 1 · Variables separadas</span>
+        <p>Calcula $\displaystyle\iint_R 2xy\,dA$, con $R=[0,1]\times[0,2]$.</p>
+        <details><summary>Pista</summary><div class="inner">La función es $g(x)h(y)$ con $g=2x$ y $h=y$. Usa el producto de dos integrales simples.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          $$\int_0^1 2x\,dx=\Big[x^2\Big]_0^1=1,\qquad \int_0^2 y\,dy=\Big[\tfrac{y^2}{2}\Big]_0^2=2$$
+          Producto: $1\cdot 2=2$.
+          <div class="ans">Resultado: 2</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 2 · Exponenciales</span>
+        <p>Calcula $\displaystyle\iint_R e^{x+y}\,dA$, con $R=[0,1]\times[0,1]$.</p>
+        <details><summary>Pista</summary><div class="inner">Recuerda que $e^{x+y}=e^x\,e^y$, así que se separa.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          $$\iint_R e^{x}e^{y}\,dA=\left(\int_0^1 e^x\,dx\right)\left(\int_0^1 e^y\,dy\right)=(e-1)(e-1)$$
+          <div class="ans">Resultado: $(e-1)^2\approx 2.95$</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 3 · Elegir el orden (trampa de examen)</span>
+        <p>Calcula $\displaystyle\iint_R y\cos(xy)\,dA$, con $R=[0,1]\times[0,\pi]$.</p>
+        <details><summary>Pista</summary><div class="inner">Si integras primero en $y$ te toca por partes. Prueba integrar <b>primero en $x$</b>: ahí $y$ es constante y $\cos(xy)$ se integra directo.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          Orden $dx\,dy$:
+          $$\int_0^{\pi}\!\int_0^1 y\cos(xy)\,dx\,dy$$
+          Interior: $\displaystyle\int_0^1 y\cos(xy)\,dx=\Big[\sin(xy)\Big]_{x=0}^{x=1}=\sin y$.<br>
+          Exterior: $\displaystyle\int_0^\pi \sin y\,dy=\Big[-\cos y\Big]_0^\pi=1+1=2$.
+          <div class="ans">Resultado: 2</div>
+          <p class="hint">Moraleja: Fubini te deja elegir el orden. Elige el que haga la integral interior más fácil.</p></div></details>
+      </div>
+    </section>
+
+    <section id="quiz-sec">
+      <h3><span class="step-num">5</span>Mini-quiz</h3>
+      <p class="hint">Responde de memoria. Recibes retroalimentación al instante y tus resultados se guardan en este navegador.</p>
+      <div id="quiz"></div>
+    </section>
+
+    <section>
+      <h3>Siguiente paso</h3>
+      <p>Cuando domines esta lección, sigue la <b>Lección 2: regiones generales</b> (cuando los límites no son constantes). Dime y la agrego aquí.</p>
+    </section>
+  </main>
+</div>
+<script>
+(function () {
+  var KEY = 'calcmv:l1';
+  var state = { pred: {}, quiz: { answers: {}, attempts: [] } };
+  try {
+    var s = JSON.parse(localStorage.getItem(KEY));
+    if (s) {
+      state.pred = s.pred || {};
+      if (s.quiz) {
+        state.quiz.answers = s.quiz.answers || {};
+        state.quiz.attempts = s.quiz.attempts || [];
+      }
+    }
+  } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  var PRED = [
+    { id: 'p1',
+      q: 'Sea $f(x,y)=1$ y $R=[0,3]\\times[0,2]$. ¿Cuánto crees que vale $\\iint_R f\\,dA$?',
+      o: ['$5$', '$6$', '$3/2$', 'No se puede calcular'], c: 1,
+      e: 'La superficie $z=1$ es un techo plano a altura 1, así que el sólido es una caja: base $3\\cdot2=6$ por altura $1$. Por eso $\\iint_R 1\\,dA=\\text{Área}(R)$.' },
+    { id: 'p2',
+      q: 'Para integrar sobre un rectángulo, ¿crees que da lo mismo integrar primero en $x$ y luego en $y$, que al revés?',
+      o: ['Sí, siempre, para cualquier función', 'Sí, si la función es continua en el rectángulo', 'No, el orden siempre cambia el resultado'], c: 1,
+      e: 'Eso dice el teorema de Fubini: con $f$ continua en $R$ el orden no cambia el valor, y puedes elegir el que haga la integral más fácil.' }
+  ];
+
+  var QUIZ = [
+    { id: 'q1',
+      q: '$\\iint_R 1\\,dA$ con $R=[1,4]\\times[2,5]$ es:',
+      o: ['$6$', '$9$', '$15$', '$20$'], c: 1,
+      e: '$\\iint_R 1\\,dA=\\text{Área}(R)=(4-1)(5-2)=9$.' },
+    { id: 'q2',
+      q: '$\\iint_R 6x^2y\\,dA$ con $R=[0,1]\\times[0,2]$ es:',
+      o: ['$8$', '$2$', '$4$', '$12$'], c: 2,
+      e: 'Variables separadas: $\\int_0^1 6x^2\\,dx=2$ y $\\int_0^2 y\\,dy=2$. Producto: $2\\cdot2=4$.' },
+    { id: 'q3',
+      q: '¿Cuándo garantiza Fubini que el orden de integración no importa en $R=[a,b]\\times[c,d]$?',
+      o: ['Para cualquier función $f$', 'Si $f$ es continua en $R$', 'Solo si $R$ es un cuadrado', 'Nunca: el orden cambia el resultado'], c: 1,
+      e: 'La hipótesis es que $f$ sea continua en $R$. La forma del rectángulo no importa.' },
+    { id: 'q4',
+      q: '$\\iint_R (x+y)\\,dA$ con $R=[0,1]\\times[0,2]$ es:',
+      o: ['$4$', '$5$', '$3$', '$2$'], c: 2,
+      e: 'Interior: $\\int_0^2 (x+y)\\,dy=2x+2$. Exterior: $\\int_0^1 (2x+2)\\,dx=1+2=3$.' },
+    { id: 'q5',
+      q: 'En $\\int_0^2\\!\\int_0^1 x y^2\\,dx\\,dy$, el resultado de la integral interior es:',
+      o: ['$x^2y^2/2$', '$y^2/2$', '$xy^3/3$', '$1/2$'], c: 1,
+      e: 'Se integra en $x$ con $y$ constante: $y^2\\left[\\tfrac{x^2}{2}\\right]_0^1=\\tfrac{y^2}{2}$. Recuerda evaluar los límites de $x$: la respuesta ya no debe tener $x$.' },
+    { id: 'q6',
+      q: 'Para $\\iint_R y\\cos(xy)\\,dA$ con $R=[0,1]\\times[0,\\pi]$, ¿qué orden conviene?',
+      o: ['Primero en $x$ ($dx\\,dy$): $\\cos(xy)$ se integra directo', 'Primero en $y$ ($dy\\,dx$)', 'Da exactamente igual de fácil', 'No se puede por Fubini'], c: 0,
+      e: 'Integrando en $x$, $\\int_0^1 y\\cos(xy)\\,dx=\\sin y$ sin por partes. En $y$ primero tendrías que integrar por partes.' },
+    { id: 'q7',
+      q: 'Si $f(x,y)\\ge0$ en $R$, $\\iint_R f\\,dA$ representa:',
+      o: ['El área de $R$', 'La longitud de la frontera de $R$', 'El volumen bajo $z=f(x,y)$ y sobre $R$', 'La pendiente de $f$'], c: 2,
+      e: 'Suma de volúmenes de columnas de base $\\Delta A$ y altura $f$: el volumen del sólido entre $R$ y la superficie.' }
+  ];
+
+  function typeset(el) {
+    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]);
+  }
+
+  function paint(host, q, rec, kind, onPick) {
+    var chosen = rec ? rec.ch : null;
+    var box = document.createElement('div');
+    box.className = 'q';
+    var p = document.createElement('p');
+    p.className = 'qtext';
+    p.innerHTML = q.q;
+    box.appendChild(p);
+    var opts = document.createElement('div');
+    opts.className = 'opts';
+    q.o.forEach(function (t, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      b.innerHTML = t;
+      if (chosen !== null) {
+        b.disabled = true;
+        if (i === q.c) b.classList.add('right');
+        else if (i === chosen) b.classList.add('wrong');
+      } else {
+        b.addEventListener('click', function () { onPick(i); });
+      }
+      opts.appendChild(b);
+    });
+    box.appendChild(opts);
+    if (chosen !== null) {
+      var ok = chosen === q.c;
+      var fb = document.createElement('div');
+      fb.className = 'fb ' + (ok ? 'ok' : 'no');
+      var head = kind === 'pred'
+        ? (ok ? '¡Tu intuición acertó!' : 'No era eso, y está bien: ahora la teoría te va a quedar mejor.')
+        : (ok ? '¡Correcto!' : 'Incorrecto.');
+      fb.innerHTML = '<b class="v">' + head + '</b>' + q.e;
+      box.appendChild(fb);
+    }
+    host.appendChild(box);
+  }
+
+  // Predicciones
+  var predHost = document.getElementById('pred');
+  function renderPred() {
+    predHost.innerHTML = '';
+    PRED.forEach(function (q) {
+      paint(predHost, q, state.pred[q.id] ? { ch: state.pred[q.id].ch } : null, 'pred', function (i) {
+        state.pred[q.id] = { ch: i, ok: i === q.c, t: Date.now() };
+        save();
+        renderPred();
+      });
+    });
+    typeset(predHost);
+  }
+
+  // Mini-quiz
+  var quizHost = document.getElementById('quiz');
+  function renderQuiz() {
+    quizHost.innerHTML = '';
+    var answers = state.quiz.answers;
+    var done = QUIZ.filter(function (q) { return answers[q.id]; }).length;
+    var prog = document.createElement('div');
+    prog.className = 'progress';
+    prog.textContent = 'Pregunta ' + Math.min(done + 1, QUIZ.length) + ' de ' + QUIZ.length;
+    if (done < QUIZ.length) quizHost.appendChild(prog);
+    QUIZ.forEach(function (q) {
+      paint(quizHost, q, answers[q.id] ? { ch: answers[q.id].ch } : null, 'quiz', function (i) {
+        answers[q.id] = { ch: i, ok: i === q.c };
+        var all = QUIZ.every(function (x) { return answers[x.id]; });
+        if (all) {
+          var score = QUIZ.filter(function (x) { return answers[x.id].ok; }).length;
+          state.quiz.attempts.push({ t: Date.now(), s: score, n: QUIZ.length });
+          state.quiz.attempts = state.quiz.attempts.slice(-20);
+        }
+        save();
+        renderQuiz();
+      });
+    });
+    if (done === QUIZ.length) {
+      var att = state.quiz.attempts;
+      var last = att[att.length - 1];
+      var score = QUIZ.filter(function (x) { return answers[x.id].ok; }).length;
+      var best = att.reduce(function (m, a) { return Math.max(m, a.s); }, 0);
+      var msg = score === QUIZ.length ? '¡Perfecto! Vuelve a intentarlo mañana para fijarlo.'
+        : score >= 5 ? 'Muy bien. Repasa las que fallaste y reintenta.'
+        : 'Aún no. Relee las secciones 1 y 2 y vuelve a intentarlo.';
+      var r = document.createElement('div');
+      r.className = 'result';
+      r.innerHTML = '<div class="score">' + score + ' / ' + QUIZ.length + '</div><div>' + msg + '</div>' +
+        '<div class="hist">Intentos: ' + att.length + ' · Mejor: ' + best + ' / ' + QUIZ.length +
+        (last && att.length > 1 ? ' · Anterior: ' + att[att.length - 2].s + ' / ' + QUIZ.length : '') + '</div>';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn';
+      btn.textContent = 'Reintentar';
+      btn.addEventListener('click', function () {
+        state.quiz.answers = {};
+        save();
+        renderQuiz();
+        quizHost.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      r.appendChild(btn);
+      quizHost.appendChild(r);
+    }
+    typeset(quizHost);
+  }
+
+  renderPred();
+  renderQuiz();
+})();
+</script>
+</body>
+</html>
