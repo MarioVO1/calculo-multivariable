@@ -147,6 +147,29 @@ window.MathJax = {
   .stepnav .btn { margin-top: 0; }
   .stepnav .hint { flex: 1; text-align: center; font-size: 13px; }
 
+
+  /* dibujos de regiones */
+  .fig { margin: 12px 0; }
+  .figpair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .fig-svg { width: 100%; max-width: 380px; height: auto; display: block; margin: 0 auto; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
+  .fig figcaption { font-size: 14px; color: var(--muted); margin-top: 6px; }
+  .sv-ax { stroke: var(--muted); stroke-width: 1.5; }
+  .sv-fill { fill: var(--brand); fill-opacity: .14; stroke: none; }
+  .sv-l { stroke: var(--cl); stroke-width: 2.5; fill: none; stroke-linejoin: round; }
+  .sv-dash { stroke: var(--cl); stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .sv-arx { stroke: var(--cx); stroke-width: 3; }
+  .sv-ary { stroke: var(--cy); stroke-width: 3; }
+  .mk-x { fill: var(--cx); } .mk-y { fill: var(--cy); }
+  .svt { font: italic 15px Georgia, "Times New Roman", serif; }
+  .tx-x { fill: var(--cx); } .tx-y { fill: var(--cy); } .tx-l { fill: var(--cl); } .tx-z { fill: var(--cz); }
+  /* huecos con botones */
+  .fc-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0; }
+  .fc-n { min-width: 1.8em; font-weight: 700; text-align: center; }
+  .fc-opt { font: italic 17px Georgia, "Times New Roman", serif; color: var(--ink); background: var(--card); border: 2px solid var(--line); border-radius: 10px; padding: 8px 14px; min-height: 44px; cursor: pointer; }
+  .fc-opt:hover { border-color: var(--brand); }
+  .fc-opt.sel { border-color: var(--brand); background: var(--brand-soft); font-weight: 700; }
+  .fc-row.bad .fc-opt.sel { border-style: dashed; border-color: var(--muted); }
+  @media (max-width: 800px) { .figpair { grid-template-columns: 1fr; } }
   @media (max-width: 800px) {
     .layout { grid-template-columns: 1fr; }
     aside { position: static; height: auto; display: block; border-right: 0; border-bottom: 1px solid var(--line); }
@@ -166,7 +189,7 @@ window.MathJax = {
     <div class="sub">Meta: 10 en el examen</div>
     <div class="group">Integrales dobles</div>
     <button class="nav active" id="nav-l1">1 · Sobre rectángulos<small>Definición, Fubini</small></button>
-    <button class="nav soon">2 · Regiones generales<small>Tipo I y tipo II · próximamente</small></button>
+    <button class="nav" id="nav-l2">2 · Regiones generales<small>Tipo I y tipo II</small></button>
     <button class="nav soon">3 · Coordenadas polares<small>próximamente</small></button>
     <button class="nav soon">4 · Aplicaciones<small>Área, masa, centro de masa · próximamente</small></button>
     <div class="group">Integrales triples</div>
@@ -202,11 +225,11 @@ window.MathJax = {
     <h2 class="title">Integrales dobles sobre rectángulos</h2>
 
     <div class="lprog" id="lprog">
-      <div class="segs" id="segs"></div>
-      <div class="plabel" id="plabel"></div>
+      <div class="segs"></div>
+      <div class="plabel"></div>
     </div>
 
-    <div id="steps">
+    <div class="steps">
 
     <!-- 1 -->
     <section class="step" data-title="Resumen">
@@ -264,12 +287,12 @@ window.MathJax = {
       <span class="kicker">Tema 1 · Integral doble</span>
       <h3>La fórmula</h3>
       <p>El piso es $R=[\cl{a},\cl{b}]\times[\cl{c},\cl{d}]=\{(\cx{x},\cy{y})\;:\; \cl{a}\le \cx{x}\le \cl{b},\; \cl{c}\le \cy{y}\le \cl{d}\}$.</p>
-      <div class="fcard" data-id="def" data-ans='[["f"],["deltaa","δa","da"]]'>
+      <div class="fcard" data-id="def" data-blanks='[{"o": ["f", "ΔA", "dA", "R"], "a": "f"}, {"o": ["f", "ΔA", "dA", "R"], "a": "ΔA"}]'>
         <div class="fc-head"><span class="fc-name">Definición de la integral doble</span><span class="fc-badge"></span></div>
         <div class="fc-msg" aria-live="polite"></div>
         <div class="fc-full">$$\iint_R \cf{f}(\cx{x},\cy{y})\,\cd{dA}=\lim_{m,n\to\infty}\sum_{i=1}^{m}\sum_{j=1}^{n} \cf{f}(\cx{x_{ij}^*},\cy{y_{ij}^*})\,\cd{\Delta A}$$</div>
         <div class="fc-drill" hidden>
-          <p class="hint">Completa los huecos (o escríbela en papel y pulsa Revelar).</p>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
           <div class="fc-cloze">$$\iint_R \cf{f}(\cx{x},\cy{y})\,\cd{dA}=\lim_{m,n\to\infty}\sum_{i=1}^{m}\sum_{j=1}^{n} \boxed{\,\mathbf{1}\,}(\cx{x_{ij}^*},\cy{y_{ij}^*})\,\boxed{\,\mathbf{2}\,}$$</div>
           <div class="fc-inputs"></div>
           <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
@@ -314,12 +337,12 @@ window.MathJax = {
         <tr><td>$\displaystyle\int_{\cl{a}}^{\cl{b}}(\cdots)\,\cx{dx}$</td><td>La integral de <b>afuera</b>: suma todas las rebanadas, moviendo <span class="c-x">x</span> de <span class="c-l">a</span> a <span class="c-l">b</span>.</td></tr>
         <tr><td>$\cy{dy},\ \cx{dx}$</td><td>Te dicen con qué variable integras. Los <span class="c-l">límites</span> de $\cy{dy}$ son los de <span class="c-y">y</span>; los de $\cx{dx}$ son los de <span class="c-x">x</span>.</td></tr>
       </table></div>
-      <div class="fcard" data-id="fubini" data-ans='[["c"],["d"],["y","dy"],["x","dx"]]'>
+      <div class="fcard" data-id="fubini" data-blanks='[{"o": ["a", "b", "c", "d"], "a": "c"}, {"o": ["a", "b", "c", "d"], "a": "d"}, {"o": ["x", "y", "z"], "a": "y"}, {"o": ["x", "y", "z"], "a": "x"}]'>
         <div class="fc-head"><span class="fc-name">Teorema de Fubini</span><span class="fc-badge"></span></div>
         <div class="fc-msg" aria-live="polite"></div>
         <div class="fc-full">$$\iint_R \cf{f}\,\cd{dA}=\int_{\cl{a}}^{\cl{b}}\!\left(\int_{\cl{c}}^{\cl{d}} \cf{f}(\cx{x},\cy{y})\,\cy{dy}\right)\cx{dx}=\int_{\cl{c}}^{\cl{d}}\!\left(\int_{\cl{a}}^{\cl{b}} \cf{f}(\cx{x},\cy{y})\,\cx{dx}\right)\cy{dy}$$</div>
         <div class="fc-drill" hidden>
-          <p class="hint">Completa los huecos de la primera igualdad (o escríbela en papel y pulsa Revelar).</p>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
           <div class="fc-cloze">$$\iint_R \cf{f}\,\cd{dA}=\int_{\cl{a}}^{\cl{b}}\!\left(\int_{\boxed{\,\mathbf{1}\,}}^{\boxed{\,\mathbf{2}\,}} \cf{f}(\cx{x},\cy{y})\,\mathrm{d}\boxed{\,\mathbf{3}\,}\right)\mathrm{d}\boxed{\,\mathbf{4}\,}$$</div>
           <div class="fc-inputs"></div>
           <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
@@ -365,12 +388,12 @@ window.MathJax = {
         <tr><td>$\cf{h}(\cy{y})$</td><td>La parte de la función que solo tiene <span class="c-y">y</span>.</td></tr>
         <tr><td>$\displaystyle\int_{\cl{a}}^{\cl{b}} \cf{g}(\cx{x})\,\cx{dx}$</td><td>Un número: la integral normal de la parte de <span class="c-x">x</span>.</td></tr>
       </table></div>
-      <div class="fcard" data-id="sep" data-ans='[["g(x)","g"],["h(y)","h"]]'>
+      <div class="fcard" data-id="sep" data-blanks='[{"o": ["g(x)", "h(y)", "f(x,y)", "g(y)"], "a": "g(x)"}, {"o": ["g(x)", "h(y)", "f(x,y)", "g(y)"], "a": "h(y)"}]'>
         <div class="fc-head"><span class="fc-name">Variables separadas</span><span class="fc-badge"></span></div>
         <div class="fc-msg" aria-live="polite"></div>
         <div class="fc-full">$$\iint_R \cf{g}(\cx{x})\,\cf{h}(\cy{y})\,\cd{dA}=\left(\int_{\cl{a}}^{\cl{b}} \cf{g}(\cx{x})\,\cx{dx}\right)\left(\int_{\cl{c}}^{\cl{d}} \cf{h}(\cy{y})\,\cy{dy}\right)$$</div>
         <div class="fc-drill" hidden>
-          <p class="hint">Completa los huecos (o escríbela en papel y pulsa Revelar).</p>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
           <div class="fc-cloze">$$\iint_R \cf{g}(\cx{x})\,\cf{h}(\cy{y})\,\cd{dA}=\left(\int_{\cl{a}}^{\cl{b}} \boxed{\,\mathbf{1}\,}\,\cx{dx}\right)\left(\int_{\cl{c}}^{\cl{d}} \boxed{\,\mathbf{2}\,}\,\cy{dy}\right)$$</div>
           <div class="fc-inputs"></div>
           <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
@@ -415,12 +438,12 @@ window.MathJax = {
         <tr><td>$\text{Área}(R)$</td><td>El área del piso: ancho por largo, $(\cl{b}-\cl{a})(\cl{d}-\cl{c})$.</td></tr>
       </table></div>
 
-      <div class="fcard" data-id="area" data-ans='[["b"],["c"]]'>
+      <div class="fcard" data-id="area" data-blanks='[{"o": ["a", "b", "c", "d"], "a": "b"}, {"o": ["a", "b", "c", "d"], "a": "c"}]'>
         <div class="fc-head"><span class="fc-name">Área del rectángulo</span><span class="fc-badge"></span></div>
         <div class="fc-msg" aria-live="polite"></div>
         <div class="fc-full">$$\iint_R 1\,\cd{dA}=\text{Área}(R)=(\cl{b}-\cl{a})(\cl{d}-\cl{c})$$</div>
         <div class="fc-drill" hidden>
-          <p class="hint">Completa los huecos (o escríbela en papel y pulsa Revelar).</p>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
           <div class="fc-cloze">$$\iint_R 1\,\cd{dA}=\text{Área}(R)=(\boxed{\,\mathbf{1}\,}-\cl{a})(\cl{d}-\boxed{\,\mathbf{2}\,})$$</div>
           <div class="fc-inputs"></div>
           <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
@@ -429,12 +452,12 @@ window.MathJax = {
         <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
       </div>
 
-      <div class="fcard" data-id="lin" data-ans='[["g"],["k"]]'>
+      <div class="fcard" data-id="lin" data-blanks='[{"o": ["f", "g", "k", "1"], "a": "g"}, {"o": ["f", "g", "k", "1"], "a": "k"}]'>
         <div class="fc-head"><span class="fc-name">Linealidad</span><span class="fc-badge"></span></div>
         <div class="fc-msg" aria-live="polite"></div>
         <div class="fc-full">$$\begin{aligned}\iint_R (\cf{f}+\cf{g})\,\cd{dA}&=\iint_R \cf{f}\,\cd{dA}+\iint_R \cf{g}\,\cd{dA}\\ \iint_R k\,\cf{f}\,\cd{dA}&=k\iint_R \cf{f}\,\cd{dA}\end{aligned}$$</div>
         <div class="fc-drill" hidden>
-          <p class="hint">Completa los huecos (o escríbela en papel y pulsa Revelar).</p>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
           <div class="fc-cloze">$$\begin{aligned}\iint_R (\cf{f}+\cf{g})\,\cd{dA}&=\iint_R \cf{f}\,\cd{dA}+\iint_R \boxed{\,\mathbf{1}\,}\,\cd{dA}\\ \iint_R k\,\cf{f}\,\cd{dA}&=\boxed{\,\mathbf{2}\,}\iint_R \cf{f}\,\cd{dA}\end{aligned}$$</div>
           <div class="fc-inputs"></div>
           <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
@@ -570,16 +593,422 @@ window.MathJax = {
     </div>
 
     <div class="stepnav">
-      <button type="button" class="btn ghost" id="prev">← Anterior</button>
-      <span class="hint" id="gatehint"></span>
-      <button type="button" class="btn" id="next">Siguiente →</button>
+      <button type="button" class="btn ghost prev">← Anterior</button>
+      <span class="hint gatehint"></span>
+      <button type="button" class="btn next">Siguiente →</button>
+    </div>
+  </main>
+
+  <main id="lesson2-main" hidden>
+    <span class="tag">Lección 2 · Integrales dobles</span>
+    <h2 class="title">Regiones generales: tipo I y tipo II</h2>
+
+    <div class="lprog">
+      <div class="segs"></div>
+      <div class="plabel"></div>
+    </div>
+
+    <div class="steps">
+
+    <!-- 1 -->
+    <section class="step" data-title="Resumen">
+      <h3>🎯 Qué vas a aprender y para qué sirve</h3>
+      <p class="lead">Cómo integrar sobre regiones que no son rectángulos: triángulos, zonas entre curvas, formas "chuecas".</p>
+      <p><b>Qué vas a aprender:</b></p>
+      <ul>
+        <li>Describir una región como <b>tipo I</b> (franjas verticales) o <b>tipo II</b> (franjas horizontales).</li>
+        <li>Armar la integral iterada: ahora los <span class="c-l">límites</span> de adentro son <b>funciones</b>.</li>
+        <li>Cambiar el orden de integración cuando una de las dos formas es imposible de resolver.</li>
+      </ul>
+      <p><b>Para qué sirve:</b></p>
+      <ul>
+        <li>Casi ninguna región del examen es un rectángulo: esto es lo que más se pregunta de integrales dobles.</li>
+        <li>Con $\iint_D 1\,\cd{dA}$ calculas el <b>área</b> de cualquier región.</li>
+        <li>Es la base de las integrales triples sobre sólidos.</li>
+      </ul>
+      <p class="hint">Mismo método de siempre: una idea por pantalla, colores fijos (mira la leyenda), tarjetas de fórmula y dibujos de la región.</p>
+    </section>
+
+    <!-- 2 -->
+    <section class="step" data-title="Predice">
+      <h3>🔮 Antes de empezar: predice</h3>
+      <p class="hint">Responde con tu intuición, sin mirar nada más. No importa si fallas: equivocarte antes de ver la teoría hace que la recuerdes mejor.</p>
+      <div id="pred2"></div>
+    </section>
+
+    <!-- 3 -->
+    <section class="step" data-title="Tipo I · La idea">
+      <span class="kicker">Tema 1 · Región tipo I</span>
+      <h3>La idea: cortar en franjas verticales</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        Imagina un pastel con forma de mancha, sin esquinas rectas. Lo cortas con un cuchillo vertical, en tiras delgadas. Cada tira empieza en la orilla de <b>abajo</b> y termina en la orilla de <b>arriba</b>, y su largo cambia según dónde la cortes. Calculas lo que hay en una tira (integral de adentro) y luego sumas todas las tiras, de izquierda a derecha (integral de afuera).
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="step" data-title="Tipo I · Dibujo y símbolos">
+      <span class="kicker">Tema 1 · Región tipo I</span>
+      <h3>El dibujo y los símbolos</h3>
+      <figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="fi-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="fi-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="81.5,77.2 85.7,75.5 89.8,73.9 94.0,72.4 98.2,71.0 102.3,69.6 106.5,68.3 110.7,67.1 114.8,66.0 119.0,64.9 123.2,63.9 127.3,62.9 131.5,62.0 135.7,61.2 139.8,60.5 144.0,59.8 148.2,59.2 152.3,58.7 156.5,58.3 160.7,57.9 164.8,57.6 169.0,57.3 173.2,57.1 177.3,57.0 181.5,57.0 185.7,57.0 189.8,57.1 194.0,57.3 198.2,57.6 202.3,57.9 206.5,58.3 210.7,58.7 214.8,59.2 219.0,59.8 223.2,60.5 227.3,61.2 231.5,62.0 235.7,62.9 239.8,63.9 244.0,64.9 248.2,66.0 252.3,67.1 256.5,68.3 260.7,69.6 264.8,71.0 269.0,72.4 273.2,73.9 277.3,75.5 281.5,77.2 281.5,151.0 277.3,152.8 273.2,154.6 269.0,156.4 264.8,158.0 260.7,159.6 256.5,161.0 252.3,162.4 248.2,163.8 244.0,165.0 239.8,166.2 235.7,167.2 231.5,168.2 227.3,169.2 223.2,170.0 219.0,170.8 214.8,171.4 210.7,172.0 206.5,172.6 202.3,173.0 198.2,173.4 194.0,173.6 189.8,173.8 185.7,174.0 181.5,174.0 177.3,174.0 173.2,173.8 169.0,173.6 164.8,173.4 160.7,173.0 156.5,172.6 152.3,172.0 148.2,171.4 144.0,170.8 139.8,170.0 135.7,169.2 131.5,168.2 127.3,167.2 123.2,166.2 119.0,165.0 114.8,163.8 110.7,162.4 106.5,161.0 102.3,159.6 98.2,158.0 94.0,156.4 89.8,154.6 85.7,152.8 81.5,151.0"/><polyline class="sv-l" points="81.5,77.2 85.7,75.5 89.8,73.9 94.0,72.4 98.2,71.0 102.3,69.6 106.5,68.3 110.7,67.1 114.8,66.0 119.0,64.9 123.2,63.9 127.3,62.9 131.5,62.0 135.7,61.2 139.8,60.5 144.0,59.8 148.2,59.2 152.3,58.7 156.5,58.3 160.7,57.9 164.8,57.6 169.0,57.3 173.2,57.1 177.3,57.0 181.5,57.0 185.7,57.0 189.8,57.1 194.0,57.3 198.2,57.6 202.3,57.9 206.5,58.3 210.7,58.7 214.8,59.2 219.0,59.8 223.2,60.5 227.3,61.2 231.5,62.0 235.7,62.9 239.8,63.9 244.0,64.9 248.2,66.0 252.3,67.1 256.5,68.3 260.7,69.6 264.8,71.0 269.0,72.4 273.2,73.9 277.3,75.5 281.5,77.2"/><polyline class="sv-l" points="81.5,151.0 85.7,152.8 89.8,154.6 94.0,156.4 98.2,158.0 102.3,159.6 106.5,161.0 110.7,162.4 114.8,163.8 119.0,165.0 123.2,166.2 127.3,167.2 131.5,168.2 135.7,169.2 139.8,170.0 144.0,170.8 148.2,171.4 152.3,172.0 156.5,172.6 160.7,173.0 164.8,173.4 169.0,173.6 173.2,173.8 177.3,174.0 181.5,174.0 185.7,174.0 189.8,173.8 194.0,173.6 198.2,173.4 202.3,173.0 206.5,172.6 210.7,172.0 214.8,171.4 219.0,170.8 223.2,170.0 227.3,169.2 231.5,168.2 235.7,167.2 239.8,166.2 244.0,165.0 248.2,163.8 252.3,162.4 256.5,161.0 260.7,159.6 264.8,158.0 269.0,156.4 273.2,154.6 277.3,152.8 281.5,151.0"/><line class="sv-l" x1="81.5" y1="151.0" x2="81.5" y2="77.2"/><line class="sv-l" x1="281.5" y1="151.0" x2="281.5" y2="77.2"/><line class="sv-dash" x1="81.5" y1="210" x2="81.5" y2="151.0"/><text class="svt tx-l" x="81.5" y="228" text-anchor="middle">a</text><line class="sv-dash" x1="281.5" y1="210" x2="281.5" y2="151.0"/><text class="svt tx-l" x="281.5" y="228" text-anchor="middle">b</text><line class="sv-ary" x1="199.0" y1="173.3" x2="199.0" y2="61.6" marker-end="url(#fi-my)"/><text class="svt tx-l" x="239.0" y="53.7" text-anchor="middle">y = g₂(x)</text><text class="svt tx-l" x="239.0" y="186.4" text-anchor="middle">y = g₁(x)</text></svg><figcaption>Región tipo I. La flecha verde (la integral de adentro, en $\cy{y}$) entra por la curva de abajo $\cl{g_1}(\cx{x})$ y sale por la de arriba $\cl{g_2}(\cx{x})$. Luego te mueves de $\cl{a}$ a $\cl{b}$.</figcaption></figure>
+      <div class="symwrap"><table class="sym">
+        <tr><th>Símbolo</th><th>En español</th></tr>
+        <tr><td>$\cl{a}\le\cx{x}\le\cl{b}$</td><td>El ancho de la región: <span class="c-x">x</span> va de <span class="c-l">a</span> a <span class="c-l">b</span>. Son números.</td></tr>
+        <tr><td>$\cl{g_1}(\cx{x})$</td><td>La curva de <b>abajo</b>: dónde entra la flecha en cada franja.</td></tr>
+        <tr><td>$\cl{g_2}(\cx{x})$</td><td>La curva de <b>arriba</b>: dónde sale la flecha.</td></tr>
+        <tr><td>$D$</td><td>La región donde integras.</td></tr>
+      </table></div>
+    </section>
+
+    <!-- 5 -->
+    <section class="step" data-title="Tipo I · La fórmula">
+      <span class="kicker">Tema 1 · Región tipo I</span>
+      <h3>La fórmula</h3>
+      <p>La región es $D=\{(\cx{x},\cy{y})\;:\;\cl{a}\le\cx{x}\le\cl{b},\ \cl{g_1}(\cx{x})\le\cy{y}\le\cl{g_2}(\cx{x})\}$.</p>
+            <div class="fcard" data-id="tipo1" data-blanks='[{"o": ["g₁(x)", "g₂(x)", "h₁(y)", "h₂(y)"], "a": "g₁(x)"}, {"o": ["g₁(x)", "g₂(x)", "h₁(y)", "h₂(y)"], "a": "g₂(x)"}, {"o": ["x", "y", "z"], "a": "y"}, {"o": ["x", "y", "z"], "a": "x"}]'>
+        <div class="fc-head"><span class="fc-name">Región tipo I (franjas verticales)</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\iint_D \cf{f}\,\cd{dA}=\int_{\cl{a}}^{\cl{b}}\!\int_{\cl{g_1}(\cx{x})}^{\cl{g_2}(\cx{x})}\cf{f}(\cx{x},\cy{y})\,\cy{dy}\,\cx{dx}$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\iint_D \cf{f}\,\cd{dA}=\int_{\cl{a}}^{\cl{b}}\!\int_{\boxed{\,\mathbf{1}\,}}^{\boxed{\,\mathbf{2}\,}}\cf{f}(\cx{x},\cy{y})\,\mathrm{d}\boxed{\,\mathbf{3}\,}\,\mathrm{d}\boxed{\,\mathbf{4}\,}$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> franjas verticales. La flecha entra por la curva de <b>abajo</b> ($\cl{g_1}$) y sale por la de <b>arriba</b> ($\cl{g_2}$). Adentro, funciones; afuera, números.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="step" data-title="Tipo I · Clave y error">
+      <span class="kicker">Tema 1 · Región tipo I</span>
+      <h3>Lo que debes recordar</h3>
+      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
+        <ul>
+          <li>Los <span class="c-l">límites</span> de <b>afuera</b> son números ($\cl{a}$ y $\cl{b}$); los de <b>adentro</b> son funciones de $\cx{x}$.</li>
+          <li>Dibuja la región y traza una flecha vertical: por dónde entra y por dónde sale te da $\cl{g_1}$ y $\cl{g_2}$.</li>
+          <li>El resultado final es un número: ya no debe quedar ninguna variable.</li>
+        </ul>
+      </div>
+      <div class="box warn"><b class="t">⚠️ Error común</b>
+        Poner la curva de arriba como límite inferior (o al revés). Si $\cl{g_2}$ queda abajo, el resultado sale con el signo contrario. La flecha siempre va de <b>abajo hacia arriba</b>.
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="step" data-title="Tipo II · La idea">
+      <span class="kicker">Tema 2 · Región tipo II</span>
+      <h3>La idea: cortar en franjas horizontales</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        Es el mismo pastel, pero ahora lo cortas con el cuchillo <b>acostado</b>, en tiras horizontales. Cada tira empieza en la orilla de la <b>izquierda</b> y termina en la de la <b>derecha</b>. Sumas lo que hay en cada tira y luego sumas las tiras de abajo hacia arriba. Es el espejo del tipo I: los papeles de $\cx{x}$ y $\cy{y}$ se intercambian.
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section class="step" data-title="Tipo II · Dibujo y símbolos">
+      <span class="kicker">Tema 2 · Región tipo II</span>
+      <h3>El dibujo y los símbolos</h3>
+      <figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="fii-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="fii-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="228.5,183.0 230.8,180.0 233.0,177.0 235.1,174.0 237.1,171.0 239.0,168.0 240.7,165.0 242.5,162.0 244.1,159.0 245.6,156.0 247.0,153.0 248.3,150.0 249.5,147.0 250.6,144.0 251.6,141.0 252.6,138.0 253.4,135.0 254.1,132.0 254.8,129.0 255.3,126.0 255.7,123.0 256.1,120.0 256.3,117.0 256.5,114.0 256.5,111.0 256.5,108.0 256.3,105.0 256.1,102.0 255.7,99.0 255.3,96.0 254.8,93.0 254.1,90.0 253.4,87.0 252.6,84.0 251.6,81.0 250.6,78.0 249.5,75.0 248.3,72.0 247.0,69.0 245.6,66.0 244.1,63.0 242.5,60.0 240.8,57.0 239.0,54.0 237.1,51.0 235.1,48.0 233.0,45.0 230.8,42.0 228.5,39.0 126.0,39.0 123.4,42.0 120.9,45.0 118.5,48.0 116.2,51.0 114.1,54.0 112.0,57.0 110.1,60.0 108.2,63.0 106.5,66.0 104.9,69.0 103.4,72.0 102.0,75.0 100.7,78.0 99.6,81.0 98.5,84.0 97.6,87.0 96.7,90.0 96.0,93.0 95.4,96.0 94.9,99.0 94.5,102.0 94.2,105.0 94.1,108.0 94.0,111.0 94.1,114.0 94.2,117.0 94.5,120.0 94.9,123.0 95.4,126.0 96.0,129.0 96.7,132.0 97.6,135.0 98.5,138.0 99.6,141.0 100.7,144.0 102.0,147.0 103.4,150.0 104.9,153.0 106.5,156.0 108.2,159.0 110.1,162.0 112.0,165.0 114.1,168.0 116.2,171.0 118.5,174.0 120.9,177.0 123.4,180.0 126.0,183.0"/><polyline class="sv-l" points="228.5,183.0 230.8,180.0 233.0,177.0 235.1,174.0 237.1,171.0 239.0,168.0 240.7,165.0 242.5,162.0 244.1,159.0 245.6,156.0 247.0,153.0 248.3,150.0 249.5,147.0 250.6,144.0 251.6,141.0 252.6,138.0 253.4,135.0 254.1,132.0 254.8,129.0 255.3,126.0 255.7,123.0 256.1,120.0 256.3,117.0 256.5,114.0 256.5,111.0 256.5,108.0 256.3,105.0 256.1,102.0 255.7,99.0 255.3,96.0 254.8,93.0 254.1,90.0 253.4,87.0 252.6,84.0 251.6,81.0 250.6,78.0 249.5,75.0 248.3,72.0 247.0,69.0 245.6,66.0 244.1,63.0 242.5,60.0 240.8,57.0 239.0,54.0 237.1,51.0 235.1,48.0 233.0,45.0 230.8,42.0 228.5,39.0"/><polyline class="sv-l" points="126.0,183.0 123.4,180.0 120.9,177.0 118.5,174.0 116.2,171.0 114.1,168.0 112.0,165.0 110.1,162.0 108.2,159.0 106.5,156.0 104.9,153.0 103.4,150.0 102.0,147.0 100.7,144.0 99.6,141.0 98.5,138.0 97.6,135.0 96.7,132.0 96.0,129.0 95.4,126.0 94.9,123.0 94.5,120.0 94.2,117.0 94.1,114.0 94.0,111.0 94.1,108.0 94.2,105.0 94.5,102.0 94.9,99.0 95.4,96.0 96.0,93.0 96.7,90.0 97.6,87.0 98.5,84.0 99.6,81.0 100.7,78.0 102.0,75.0 103.4,72.0 104.9,69.0 106.5,66.0 108.2,63.0 110.1,60.0 112.0,57.0 114.1,54.0 116.2,51.0 118.5,48.0 120.9,45.0 123.4,42.0 126.0,39.0"/><line class="sv-l" x1="126.0" y1="183.0" x2="228.5" y2="183.0"/><line class="sv-l" x1="126.0" y1="39.0" x2="228.5" y2="39.0"/><line class="sv-dash" x1="44" y1="183.0" x2="126.0" y2="183.0"/><text class="svt tx-l" x="36" y="188.0" text-anchor="end">c</text><line class="sv-dash" x1="44" y1="39.0" x2="126.0" y2="39.0"/><text class="svt tx-l" x="36" y="44.0" text-anchor="end">d</text><line class="sv-arx" x1="94.5" y1="120.0" x2="252.1" y2="120.0" marker-end="url(#fii-mx)"/><text class="svt tx-l" x="259.4" y="85.4" text-anchor="start">x = h₂(y)</text><text class="svt tx-l" x="91.8" y="85.4" text-anchor="end">x = h₁(y)</text></svg><figcaption>Región tipo II. La flecha azul (la integral de adentro, en $\cx{x}$) entra por la curva de la izquierda $\cl{h_1}(\cy{y})$ y sale por la de la derecha $\cl{h_2}(\cy{y})$. Luego subes de $\cl{c}$ a $\cl{d}$.</figcaption></figure>
+      <div class="symwrap"><table class="sym">
+        <tr><th>Símbolo</th><th>En español</th></tr>
+        <tr><td>$\cl{c}\le\cy{y}\le\cl{d}$</td><td>El alto de la región: <span class="c-y">y</span> va de <span class="c-l">c</span> a <span class="c-l">d</span>. Son números.</td></tr>
+        <tr><td>$\cl{h_1}(\cy{y})$</td><td>La curva de la <b>izquierda</b>: dónde entra la flecha en cada franja.</td></tr>
+        <tr><td>$\cl{h_2}(\cy{y})$</td><td>La curva de la <b>derecha</b>: dónde sale la flecha.</td></tr>
+      </table></div>
+    </section>
+
+    <!-- 9 -->
+    <section class="step" data-title="Tipo II · La fórmula">
+      <span class="kicker">Tema 2 · Región tipo II</span>
+      <h3>La fórmula</h3>
+      <p>La región es $D=\{(\cx{x},\cy{y})\;:\;\cl{c}\le\cy{y}\le\cl{d},\ \cl{h_1}(\cy{y})\le\cx{x}\le\cl{h_2}(\cy{y})\}$.</p>
+            <div class="fcard" data-id="tipo2" data-blanks='[{"o": ["g₁(x)", "g₂(x)", "h₁(y)", "h₂(y)"], "a": "h₁(y)"}, {"o": ["g₁(x)", "g₂(x)", "h₁(y)", "h₂(y)"], "a": "h₂(y)"}, {"o": ["x", "y", "z"], "a": "x"}, {"o": ["x", "y", "z"], "a": "y"}]'>
+        <div class="fc-head"><span class="fc-name">Región tipo II (franjas horizontales)</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\iint_D \cf{f}\,\cd{dA}=\int_{\cl{c}}^{\cl{d}}\!\int_{\cl{h_1}(\cy{y})}^{\cl{h_2}(\cy{y})}\cf{f}(\cx{x},\cy{y})\,\cx{dx}\,\cy{dy}$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\iint_D \cf{f}\,\cd{dA}=\int_{\cl{c}}^{\cl{d}}\!\int_{\boxed{\,\mathbf{1}\,}}^{\boxed{\,\mathbf{2}\,}}\cf{f}(\cx{x},\cy{y})\,\mathrm{d}\boxed{\,\mathbf{3}\,}\,\mathrm{d}\boxed{\,\mathbf{4}\,}$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> franjas horizontales. La flecha entra por la curva de la <b>izquierda</b> ($\cl{h_1}$) y sale por la de la <b>derecha</b> ($\cl{h_2}$). Es el espejo del tipo I: cambian $\cx{x}$ y $\cy{y}$.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="step" data-title="Tipo II · Clave y error">
+      <span class="kicker">Tema 2 · Región tipo II</span>
+      <h3>Lo que debes recordar</h3>
+      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
+        <ul>
+          <li>Los <span class="c-l">límites</span> de <b>afuera</b> son números ($\cl{c}$ y $\cl{d}$, de $\cy{y}$); los de <b>adentro</b> son funciones de $\cy{y}$.</li>
+          <li>Flecha horizontal: entra por la izquierda ($\cl{h_1}$) y sale por la derecha ($\cl{h_2}$).</li>
+          <li>Conviene cuando la región se describe fácil con $\cx{x}$ en función de $\cy{y}$, como una parábola $\cl{x=y^2}$.</li>
+        </ul>
+      </div>
+      <div class="box warn"><b class="t">⚠️ Error común</b>
+        Escribir los límites de adentro en términos de $\cx{x}$ cuando integras en $\cx{dx}$. Si adentro integras $\cx{x}$, sus límites deben estar en términos de $\cy{y}$ (o ser números).
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section class="step" data-title="Cambiar orden · La idea">
+      <span class="kicker">Tema 3 · Cambiar el orden</span>
+      <h3>La idea: la misma región, cortada al revés</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        Una misma región se puede cortar en tiras verticales o en tiras horizontales, y la cantidad total es la misma. A veces una de las dos formas te deja una integral imposible de resolver y la otra una muy fácil. Entonces dibujas la región y la lees <b>al revés</b>. Ejemplo: el triángulo $0\le\cy{y}\le\cx{x}\le1$.
+      </div>
+      <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ft1-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="ft1-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0 294.0,210.0 288.8,210.0 283.6,210.0 278.4,210.0 273.2,210.0 268.0,210.0 262.8,210.0 257.5,210.0 252.3,210.0 247.1,210.0 241.9,210.0 236.7,210.0 231.5,210.0 226.3,210.0 221.1,210.0 215.9,210.0 210.7,210.0 205.5,210.0 200.2,210.0 195.0,210.0 189.8,210.0 184.6,210.0 179.4,210.0 174.2,210.0 169.0,210.0 163.8,210.0 158.6,210.0 153.4,210.0 148.2,210.0 143.0,210.0 137.8,210.0 132.5,210.0 127.3,210.0 122.1,210.0 116.9,210.0 111.7,210.0 106.5,210.0 101.3,210.0 96.1,210.0 90.9,210.0 85.7,210.0 80.5,210.0 75.2,210.0 70.0,210.0 64.8,210.0 59.6,210.0 54.4,210.0 49.2,210.0 44.0,210.0"/><polyline class="sv-l" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0"/><polyline class="sv-l" points="44.0,210.0 49.2,210.0 54.4,210.0 59.6,210.0 64.8,210.0 70.0,210.0 75.2,210.0 80.5,210.0 85.7,210.0 90.9,210.0 96.1,210.0 101.3,210.0 106.5,210.0 111.7,210.0 116.9,210.0 122.1,210.0 127.3,210.0 132.5,210.0 137.8,210.0 143.0,210.0 148.2,210.0 153.4,210.0 158.6,210.0 163.8,210.0 169.0,210.0 174.2,210.0 179.4,210.0 184.6,210.0 189.8,210.0 195.0,210.0 200.2,210.0 205.5,210.0 210.7,210.0 215.9,210.0 221.1,210.0 226.3,210.0 231.5,210.0 236.7,210.0 241.9,210.0 247.1,210.0 252.3,210.0 257.5,210.0 262.8,210.0 268.0,210.0 273.2,210.0 278.4,210.0 283.6,210.0 288.8,210.0 294.0,210.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="44.0" y2="210.0"/><line class="sv-l" x1="294.0" y1="210.0" x2="294.0" y2="30.0"/><line class="sv-dash" x1="44.0" y1="210" x2="44.0" y2="210.0"/><text class="svt tx-l" x="44.0" y="228" text-anchor="middle">0</text><line class="sv-dash" x1="294.0" y1="210" x2="294.0" y2="210.0"/><text class="svt tx-l" x="294.0" y="228" text-anchor="middle">1</text><line class="sv-ary" x1="219.0" y1="210.0" x2="219.0" y2="88.0" marker-end="url(#ft1-my)"/><text class="svt tx-l" x="181.5" y="101.0" text-anchor="middle">y = x</text><text class="svt tx-l" x="181.5" y="230.0" text-anchor="middle">y = 0</text></svg><figcaption>Como tipo I: para cada $\cx{x}$, la $\cy{y}$ va de $\cl{0}$ a $\cl{x}$.</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ft2-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="ft2-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="294.0,210.0 294.0,206.2 294.0,202.5 294.0,198.8 294.0,195.0 294.0,191.2 294.0,187.5 294.0,183.8 294.0,180.0 294.0,176.2 294.0,172.5 294.0,168.8 294.0,165.0 294.0,161.2 294.0,157.5 294.0,153.8 294.0,150.0 294.0,146.2 294.0,142.5 294.0,138.8 294.0,135.0 294.0,131.2 294.0,127.5 294.0,123.8 294.0,120.0 294.0,116.2 294.0,112.5 294.0,108.8 294.0,105.0 294.0,101.2 294.0,97.5 294.0,93.8 294.0,90.0 294.0,86.2 294.0,82.5 294.0,78.8 294.0,75.0 294.0,71.2 294.0,67.5 294.0,63.8 294.0,60.0 294.0,56.2 294.0,52.5 294.0,48.8 294.0,45.0 294.0,41.2 294.0,37.5 294.0,33.8 294.0,30.0 294.0,30.0 288.8,33.8 283.6,37.5 278.4,41.2 273.2,45.0 268.0,48.8 262.8,52.5 257.5,56.2 252.3,60.0 247.1,63.8 241.9,67.5 236.7,71.2 231.5,75.0 226.3,78.8 221.1,82.5 215.9,86.2 210.7,90.0 205.5,93.8 200.2,97.5 195.0,101.2 189.8,105.0 184.6,108.8 179.4,112.5 174.2,116.2 169.0,120.0 163.8,123.8 158.6,127.5 153.4,131.2 148.2,135.0 143.0,138.8 137.8,142.5 132.5,146.2 127.3,150.0 122.1,153.8 116.9,157.5 111.7,161.2 106.5,165.0 101.3,168.8 96.1,172.5 90.9,176.2 85.7,180.0 80.5,183.8 75.2,187.5 70.0,191.2 64.8,195.0 59.6,198.8 54.4,202.5 49.2,206.2 44.0,210.0"/><polyline class="sv-l" points="294.0,210.0 294.0,206.2 294.0,202.5 294.0,198.8 294.0,195.0 294.0,191.2 294.0,187.5 294.0,183.8 294.0,180.0 294.0,176.2 294.0,172.5 294.0,168.8 294.0,165.0 294.0,161.2 294.0,157.5 294.0,153.8 294.0,150.0 294.0,146.2 294.0,142.5 294.0,138.8 294.0,135.0 294.0,131.2 294.0,127.5 294.0,123.8 294.0,120.0 294.0,116.2 294.0,112.5 294.0,108.8 294.0,105.0 294.0,101.2 294.0,97.5 294.0,93.8 294.0,90.0 294.0,86.2 294.0,82.5 294.0,78.8 294.0,75.0 294.0,71.2 294.0,67.5 294.0,63.8 294.0,60.0 294.0,56.2 294.0,52.5 294.0,48.8 294.0,45.0 294.0,41.2 294.0,37.5 294.0,33.8 294.0,30.0"/><polyline class="sv-l" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="294.0" y2="210.0"/><line class="sv-l" x1="294.0" y1="30.0" x2="294.0" y2="30.0"/><line class="sv-dash" x1="44" y1="210.0" x2="44.0" y2="210.0"/><text class="svt tx-l" x="36" y="215.0" text-anchor="end">0</text><line class="sv-dash" x1="44" y1="30.0" x2="294.0" y2="30.0"/><text class="svt tx-l" x="36" y="35.0" text-anchor="end">1</text><line class="sv-arx" x1="144.0" y1="138.0" x2="290.0" y2="138.0" marker-end="url(#ft2-mx)"/><text class="svt tx-l" x="302.0" y="143.0" text-anchor="start">x = 1</text><text class="svt tx-l" x="136.0" y="143.0" text-anchor="end">x = y</text></svg><figcaption>Como tipo II: para cada $\cy{y}$, la $\cx{x}$ va de $\cl{y}$ a $\cl{1}$.</figcaption></figure></div>
+    </section>
+
+    <!-- 12 -->
+    <section class="step" data-title="Cambiar orden · La fórmula">
+      <span class="kicker">Tema 3 · Cambiar el orden</span>
+      <h3>La receta y la fórmula</h3>
+      <ol>
+        <li><b>Dibuja</b> la región con los límites que te dieron.</li>
+        <li>Mira qué curvas forman el borde y <b>despeja</b> la otra variable (por ejemplo, de $\cy{y}=\cx{x}$ sale $\cx{x}=\cy{y}$).</li>
+        <li>Traza la flecha en el <b>otro sentido</b> y lee dónde entra y dónde sale.</li>
+        <li>Escribe los límites nuevos: afuera, números; adentro, funciones.</li>
+      </ol>
+            <div class="fcard" data-id="orden" data-blanks='[{"o": ["0", "1", "x", "y"], "a": "y"}, {"o": ["0", "1", "x", "y"], "a": "1"}]'>
+        <div class="fc-head"><span class="fc-name">Cambiar el orden (el triángulo)</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{x}}\cf{f}\,\cy{dy}\,\cx{dx}=\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{y}}^{\cl{1}}\cf{f}\,\cx{dx}\,\cy{dy}$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{x}}\cf{f}\,\cy{dy}\,\cx{dx}=\int_{\cl{0}}^{\cl{1}}\!\int_{\boxed{\,\mathbf{1}\,}}^{\boxed{\,\mathbf{2}\,}}\cf{f}\,\cx{dx}\,\cy{dy}$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> dibuja y lee la región <b>al revés</b>. Antes la flecha subía de $\cl{0}$ a $\cl{x}$; ahora cruza de la recta $\cl{x=y}$ hasta el borde $\cl{x=1}$. No basta con intercambiar las letras $dx$ y $dy$.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+    </section>
+
+    <!-- 13 -->
+    <section class="step" data-title="Cambiar orden · Clave y error">
+      <span class="kicker">Tema 3 · Cambiar el orden</span>
+      <h3>Lo que debes recordar</h3>
+      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
+        <ul>
+          <li>Siempre dibuja la región antes de cambiar el orden.</li>
+          <li>Los límites de afuera quedan en números; los de adentro, en la variable de afuera.</li>
+          <li>Cámbialo cuando la integral de adentro sea imposible (por ejemplo, $\cf{e^{\cy{y}^2}}$ o $\cf{\sin(\cx{x}^3)}$) y al revés sí salga.</li>
+        </ul>
+      </div>
+      <div class="box warn"><b class="t">⚠️ Error común</b>
+        Intercambiar solo las letras $\cx{dx}$ y $\cy{dy}$ y dejar los mismos límites. Eso describe <b>otra región</b>: hay que volver a leerla en el dibujo.
+      </div>
+    </section>
+
+    <!-- 14 -->
+    <section class="step" data-title="Área y partes · La idea">
+      <span class="kicker">Tema 4 · Área y regiones por partes</span>
+      <h3>La idea: altura 1 y piezas de rompecabezas</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        Si la "altura" es 1 en todas partes, el volumen es igual al área de la base: así calculas el <b>área</b> de cualquier región. Y si una región es muy complicada (por ejemplo, el borde de arriba cambia de fórmula a la mitad), la partes en pedazos que no se encimen, resuelves cada pedazo y <b>sumas</b>, como armar un rompecabezas.
+      </div>
+    </section>
+
+    <!-- 15 -->
+    <section class="step" data-title="Área y partes · La fórmula">
+      <span class="kicker">Tema 4 · Área y regiones por partes</span>
+      <h3>Símbolos y fórmula</h3>
+      <div class="symwrap"><table class="sym">
+        <tr><th>Símbolo</th><th>En español</th></tr>
+        <tr><td>$\text{Área}(D)$</td><td>El área de la región $D$.</td></tr>
+        <tr><td>$\cd{dA}$</td><td>Un pedacito de <span class="c-d">área</span>.</td></tr>
+        <tr><td>$D_1\cup D_2$</td><td>La región formada al pegar $D_1$ y $D_2$ (sin encimarlas).</td></tr>
+      </table></div>
+            <div class="fcard" data-id="areaD" data-blanks='[{"o": ["1", "f", "dA", "0"], "a": "1"}, {"o": ["+", "−", "×", "÷"], "a": "+"}]'>
+        <div class="fc-head"><span class="fc-name">Área y suma de regiones</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\begin{aligned}\text{Área}(D)&=\iint_D 1\,\cd{dA}\\ \iint_{D_1\cup D_2}\cf{f}\,\cd{dA}&=\iint_{D_1}\cf{f}\,\cd{dA}+\iint_{D_2}\cf{f}\,\cd{dA}\end{aligned}$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\begin{aligned}\text{Área}(D)&=\iint_D \boxed{\,\mathbf{1}\,}\,\cd{dA}\\ \iint_{D_1\cup D_2}\cf{f}\,\cd{dA}&=\iint_{D_1}\cf{f}\,\cd{dA}\ \boxed{\,\mathbf{2}\,}\ \iint_{D_2}\cf{f}\,\cd{dA}\end{aligned}$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> altura 1 ⇒ el volumen es el área de la base. Y si partes la región en pedazos que no se traslapan, sumas los pedazos.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+    </section>
+
+    <!-- 16 -->
+    <section class="step" data-title="Área y partes · Clave y error">
+      <span class="kicker">Tema 4 · Área y regiones por partes</span>
+      <h3>Lo que debes recordar</h3>
+      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
+        <ul>
+          <li>$\iint_D 1\,\cd{dA}$ es el área de $D$.</li>
+          <li>Si $D$ no es ni tipo I ni tipo II, pártela en pedazos que sí lo sean y suma.</li>
+        </ul>
+      </div>
+      <div class="box warn"><b class="t">⚠️ Error común</b>
+        Sumar integrales de pedazos que se <b>encimen</b>: esa parte se cuenta dos veces. Los pedazos solo pueden compartir el borde.
+      </div>
+    </section>
+
+    <!-- 17 -->
+    <section class="step" data-title="Lo que más cae">
+      <div class="exam"><b class="t">⭐ Lo que más cae en examen</b>
+        <ol>
+          <li><b>Dibujar la región y trazar la flecha:</b> de ahí salen todos los límites. Sin dibujo, casi siempre te equivocas.</li>
+          <li><b>Afuera números, adentro funciones:</b> los límites de la integral de afuera son constantes; los de adentro dependen de la variable de afuera.</li>
+          <li><b>Cambiar el orden:</b> no basta intercambiar $\cx{dx}$ y $\cy{dy}$; hay que volver a leer los límites en el dibujo. Se pide cuando la antiderivada es imposible ($\cf{e^{\cy{y}^2}}$, $\cf{\sin(\cx{x}^3)}$).</li>
+        </ol>
+      </div>
+      <p class="hint">Si solo repasas tres cosas antes del examen, que sean estas.</p>
+    </section>
+
+    <!-- 18 -->
+    <section class="step" data-title="Ejemplo A · ¿Qué harías?" data-gate="e2a">
+      <span class="kicker">Ejemplo resuelto A</span>
+      <h3>¿Qué harías primero?</h3>
+      <p>Antes de ver cómo se resuelve, decide tú el primer paso. Elige una opción para continuar.</p>
+      <div id="first2a"></div>
+    </section>
+
+    <!-- 19 -->
+    <section class="step" data-title="Ejemplo A · Paso 1">
+      <span class="kicker">Ejemplo resuelto A · Paso 1 de 3</span>
+      <p class="problem-line">Calcula $\displaystyle\iint_D \cf{\cx{x}\cy{y}}\,\cd{dA}$, donde $D$ está entre $\cl{y=x^2}$ y $\cl{y=x}$.</p>
+      <h3>Dibujar y plantear</h3>
+      <p>Buscamos dónde se cortan las curvas: $\cl{x^2=x}$ da $x(x-1)=0$, o sea $\cx{x}=0$ y $\cx{x}=1$. Entre esos valores, por ejemplo en $x=\tfrac12$, la recta vale $0.5$ y la parábola $0.25$: la recta queda <b>arriba</b>. Entonces la región es tipo I: $\cx{x}$ va de 0 a 1 y $\cy{y}$ va de $\cl{x^2}$ (abajo) a $\cl{x}$ (arriba).</p>
+      <figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="fea-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="fea-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0 294.0,30.0 288.8,37.4 283.6,44.7 278.4,51.8 273.2,58.8 268.0,65.5 262.8,72.2 257.5,78.7 252.3,85.0 247.1,91.2 241.9,97.2 236.7,103.0 231.5,108.8 226.3,114.3 221.1,119.7 215.9,124.9 210.7,130.0 205.5,134.9 200.2,139.7 195.0,144.3 189.8,148.8 184.6,153.0 179.4,157.2 174.2,161.2 169.0,165.0 163.8,168.7 158.6,172.2 153.4,175.5 148.2,178.8 143.0,181.8 137.8,184.7 132.5,187.4 127.3,190.0 122.1,192.4 116.9,194.7 111.7,196.8 106.5,198.8 101.3,200.5 96.1,202.2 90.9,203.7 85.7,205.0 80.5,206.2 75.2,207.2 70.0,208.0 64.8,208.8 59.6,209.3 54.4,209.7 49.2,209.9 44.0,210.0"/><polyline class="sv-l" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0"/><polyline class="sv-l" points="44.0,210.0 49.2,209.9 54.4,209.7 59.6,209.3 64.8,208.8 70.0,208.0 75.2,207.2 80.5,206.2 85.7,205.0 90.9,203.7 96.1,202.2 101.3,200.5 106.5,198.8 111.7,196.8 116.9,194.7 122.1,192.4 127.3,190.0 132.5,187.4 137.8,184.7 143.0,181.8 148.2,178.8 153.4,175.5 158.6,172.2 163.8,168.7 169.0,165.0 174.2,161.2 179.4,157.2 184.6,153.0 189.8,148.8 195.0,144.3 200.2,139.7 205.5,134.9 210.7,130.0 215.9,124.9 221.1,119.7 226.3,114.3 231.5,108.8 236.7,103.0 241.9,97.2 247.1,91.2 252.3,85.0 257.5,78.7 262.8,72.2 268.0,65.5 273.2,58.8 278.4,51.8 283.6,44.7 288.8,37.4 294.0,30.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="44.0" y2="210.0"/><line class="sv-l" x1="294.0" y1="30.0" x2="294.0" y2="30.0"/><line class="sv-dash" x1="44.0" y1="210" x2="44.0" y2="210.0"/><text class="svt tx-l" x="44.0" y="228" text-anchor="middle">0</text><line class="sv-dash" x1="294.0" y1="210" x2="294.0" y2="30.0"/><text class="svt tx-l" x="294.0" y="228" text-anchor="middle">1</text><line class="sv-ary" x1="169.0" y1="165.0" x2="169.0" y2="124.0" marker-end="url(#fea-my)"/><text class="svt tx-l" x="231.5" y="65.0" text-anchor="middle">y = x</text><text class="svt tx-l" x="231.5" y="128.8" text-anchor="middle">y = x²</text></svg><figcaption>La región $D$: arriba la recta $\cl{y=x}$, abajo la parábola $\cl{y=x^2}$, de $\cl{x=0}$ a $\cl{x=1}$.</figcaption></figure>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{x^2}}^{\cl{x}} \cf{\cx{x}\cy{y}}\,\cy{dy}\,\cx{dx}$$</div>
+    </section>
+
+    <!-- 20 -->
+    <section class="step" data-title="Ejemplo A · Paso 2">
+      <span class="kicker">Ejemplo resuelto A · Paso 2 de 3</span>
+      <h3>Integral de adentro, en $\cy{y}$</h3>
+      <p>Integramos en $\cy{y}$ con $\cx{x}$ constante: $\cx{x}$ sale como factor y $\int \cy{y}\,\cy{dy}=\cy{y}^2/2$. Evaluamos con los <span class="c-l">límites</span> de $\cy{y}$, que son funciones: arriba $\cl{x}$, abajo $\cl{x^2}$.</p>
+      <div class="formula">$$\int_{\cl{x^2}}^{\cl{x}} \cx{x}\cy{y}\,\cy{dy}=\cx{x}\left[\frac{\cy{y}^2}{2}\right]_{\cy{y}=\cl{x^2}}^{\cy{y}=\cl{x}}=\cx{x}\left(\frac{\cx{x}^2}{2}-\frac{\cx{x}^4}{2}\right)=\frac{\cx{x}^3-\cx{x}^5}{2}$$</div>
+      <p class="hint">Fíjate: ya no queda ninguna $\cy{y}$, solo $\cx{x}$. Eso es lo que debe pasar.</p>
+    </section>
+
+    <!-- 21 -->
+    <section class="step" data-title="Ejemplo A · Paso 3">
+      <span class="kicker">Ejemplo resuelto A · Paso 3 de 3</span>
+      <h3>Integral de afuera, en $\cx{x}$</h3>
+      <p>Ahora los <span class="c-l">límites</span> son números, de 0 a 1. Es una integral normal de una variable.</p>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{1}}\frac{\cx{x}^3-\cx{x}^5}{2}\,\cx{dx}=\frac12\left[\frac{\cx{x}^4}{4}-\frac{\cx{x}^6}{6}\right]_{\cl{0}}^{\cl{1}}=\frac12\left(\frac14-\frac16\right)=\frac{1}{24}$$</div>
+      <div class="ans">Resultado: $\dfrac{1}{24}$</div>
+      <p><b>¿Tiene sentido?</b> El área de $D$ es $\int_0^1 (x-x^2)\,dx=\frac16$. Dividiendo, el valor promedio de $xy$ en la región es $\frac{1/24}{1/6}=\frac14$. En la región $x$ y $y$ valen entre 0 y 1, así que $\frac14$ es razonable.</p>
+    </section>
+
+    <!-- 22 -->
+    <section class="step" data-title="Ejemplo B · ¿Qué harías?" data-gate="e2b">
+      <span class="kicker">Ejemplo resuelto B · Cambiar el orden</span>
+      <h3>¿Qué harías primero?</h3>
+      <p>Esta es la trampa clásica de examen. Elige una opción para continuar.</p>
+      <div id="first2b"></div>
+    </section>
+
+    <!-- 23 -->
+    <section class="step" data-title="Ejemplo B · Paso 1">
+      <span class="kicker">Ejemplo resuelto B · Paso 1 de 3</span>
+      <p class="problem-line">Calcula $\displaystyle\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{x}}^{\cl{1}} \cf{e^{\cy{y}^2}}\,\cy{dy}\,\cx{dx}$.</p>
+      <h3>Ver por qué te atoras y dibujar</h3>
+      <p>La integral de adentro es $\int \cf{e^{\cy{y}^2}}\,\cy{dy}$, y esa <b>no</b> tiene antiderivada con funciones elementales. Si intentas resolver en este orden, no sales. Leemos los límites para dibujar: $\cx{x}$ va de 0 a 1 y, para cada $\cx{x}$, $\cy{y}$ va de $\cl{x}$ a $\cl{1}$. Es el triángulo con vértices $(0,0)$, $(0,1)$ y $(1,1)$.</p>
+      <figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="feb1-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="feb1-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="44.0,30.0 49.2,30.0 54.4,30.0 59.6,30.0 64.8,30.0 70.0,30.0 75.2,30.0 80.5,30.0 85.7,30.0 90.9,30.0 96.1,30.0 101.3,30.0 106.5,30.0 111.7,30.0 116.9,30.0 122.1,30.0 127.3,30.0 132.5,30.0 137.8,30.0 143.0,30.0 148.2,30.0 153.4,30.0 158.6,30.0 163.8,30.0 169.0,30.0 174.2,30.0 179.4,30.0 184.6,30.0 189.8,30.0 195.0,30.0 200.2,30.0 205.5,30.0 210.7,30.0 215.9,30.0 221.1,30.0 226.3,30.0 231.5,30.0 236.7,30.0 241.9,30.0 247.1,30.0 252.3,30.0 257.5,30.0 262.8,30.0 268.0,30.0 273.2,30.0 278.4,30.0 283.6,30.0 288.8,30.0 294.0,30.0 294.0,30.0 288.8,33.8 283.6,37.5 278.4,41.2 273.2,45.0 268.0,48.8 262.8,52.5 257.5,56.2 252.3,60.0 247.1,63.8 241.9,67.5 236.7,71.2 231.5,75.0 226.3,78.8 221.1,82.5 215.9,86.2 210.7,90.0 205.5,93.8 200.2,97.5 195.0,101.2 189.8,105.0 184.6,108.8 179.4,112.5 174.2,116.2 169.0,120.0 163.8,123.8 158.6,127.5 153.4,131.2 148.2,135.0 143.0,138.8 137.8,142.5 132.5,146.2 127.3,150.0 122.1,153.8 116.9,157.5 111.7,161.2 106.5,165.0 101.3,168.8 96.1,172.5 90.9,176.2 85.7,180.0 80.5,183.8 75.2,187.5 70.0,191.2 64.8,195.0 59.6,198.8 54.4,202.5 49.2,206.2 44.0,210.0"/><polyline class="sv-l" points="44.0,30.0 49.2,30.0 54.4,30.0 59.6,30.0 64.8,30.0 70.0,30.0 75.2,30.0 80.5,30.0 85.7,30.0 90.9,30.0 96.1,30.0 101.3,30.0 106.5,30.0 111.7,30.0 116.9,30.0 122.1,30.0 127.3,30.0 132.5,30.0 137.8,30.0 143.0,30.0 148.2,30.0 153.4,30.0 158.6,30.0 163.8,30.0 169.0,30.0 174.2,30.0 179.4,30.0 184.6,30.0 189.8,30.0 195.0,30.0 200.2,30.0 205.5,30.0 210.7,30.0 215.9,30.0 221.1,30.0 226.3,30.0 231.5,30.0 236.7,30.0 241.9,30.0 247.1,30.0 252.3,30.0 257.5,30.0 262.8,30.0 268.0,30.0 273.2,30.0 278.4,30.0 283.6,30.0 288.8,30.0 294.0,30.0"/><polyline class="sv-l" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="44.0" y2="30.0"/><line class="sv-l" x1="294.0" y1="30.0" x2="294.0" y2="30.0"/><line class="sv-dash" x1="44.0" y1="210" x2="44.0" y2="210.0"/><text class="svt tx-l" x="44.0" y="228" text-anchor="middle">0</text><line class="sv-dash" x1="294.0" y1="210" x2="294.0" y2="30.0"/><text class="svt tx-l" x="294.0" y="228" text-anchor="middle">1</text><line class="sv-ary" x1="194.0" y1="102.0" x2="194.0" y2="34.0" marker-end="url(#feb1-my)"/><text class="svt tx-l" x="131.5" y="20.0" text-anchor="middle">y = 1</text><text class="svt tx-l" x="131.5" y="167.0" text-anchor="middle">y = x</text></svg><figcaption>Orden original ($dy\,dx$): para cada $\cx{x}$, la $\cy{y}$ va de $\cl{x}$ a $\cl{1}$.</figcaption></figure>
+    </section>
+
+    <!-- 24 -->
+    <section class="step" data-title="Ejemplo B · Paso 2">
+      <span class="kicker">Ejemplo resuelto B · Paso 2 de 3</span>
+      <h3>Leer la región al revés</h3>
+      <p>Ahora cortamos en franjas horizontales. La $\cy{y}$ de afuera recorre toda la región, de 0 a 1. Para cada $\cy{y}$, la flecha horizontal entra por el borde izquierdo $\cl{x=0}$ y sale por la recta $\cl{x=y}$ (porque la región está donde $x\le y$). Así el orden nuevo es $\cx{dx}$ adentro y $\cy{dy}$ afuera.</p>
+      <figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="feb2-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="feb2-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0 44.0,30.0 44.0,33.8 44.0,37.5 44.0,41.2 44.0,45.0 44.0,48.8 44.0,52.5 44.0,56.2 44.0,60.0 44.0,63.8 44.0,67.5 44.0,71.2 44.0,75.0 44.0,78.8 44.0,82.5 44.0,86.2 44.0,90.0 44.0,93.8 44.0,97.5 44.0,101.2 44.0,105.0 44.0,108.8 44.0,112.5 44.0,116.2 44.0,120.0 44.0,123.8 44.0,127.5 44.0,131.2 44.0,135.0 44.0,138.8 44.0,142.5 44.0,146.2 44.0,150.0 44.0,153.8 44.0,157.5 44.0,161.2 44.0,165.0 44.0,168.8 44.0,172.5 44.0,176.2 44.0,180.0 44.0,183.8 44.0,187.5 44.0,191.2 44.0,195.0 44.0,198.8 44.0,202.5 44.0,206.2 44.0,210.0"/><polyline class="sv-l" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0"/><polyline class="sv-l" points="44.0,210.0 44.0,206.2 44.0,202.5 44.0,198.8 44.0,195.0 44.0,191.2 44.0,187.5 44.0,183.8 44.0,180.0 44.0,176.2 44.0,172.5 44.0,168.8 44.0,165.0 44.0,161.2 44.0,157.5 44.0,153.8 44.0,150.0 44.0,146.2 44.0,142.5 44.0,138.8 44.0,135.0 44.0,131.2 44.0,127.5 44.0,123.8 44.0,120.0 44.0,116.2 44.0,112.5 44.0,108.8 44.0,105.0 44.0,101.2 44.0,97.5 44.0,93.8 44.0,90.0 44.0,86.2 44.0,82.5 44.0,78.8 44.0,75.0 44.0,71.2 44.0,67.5 44.0,63.8 44.0,60.0 44.0,56.2 44.0,52.5 44.0,48.8 44.0,45.0 44.0,41.2 44.0,37.5 44.0,33.8 44.0,30.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="44.0" y2="210.0"/><line class="sv-l" x1="44.0" y1="30.0" x2="294.0" y2="30.0"/><line class="sv-dash" x1="44" y1="210.0" x2="44.0" y2="210.0"/><text class="svt tx-l" x="36" y="215.0" text-anchor="end">0</text><line class="sv-dash" x1="44" y1="30.0" x2="44.0" y2="30.0"/><text class="svt tx-l" x="36" y="35.0" text-anchor="end">1</text><line class="sv-arx" x1="44.0" y1="111.0" x2="177.5" y2="111.0" marker-end="url(#feb2-mx)"/><text class="svt tx-l" x="207.0" y="103.4" text-anchor="start">x = y</text><text class="svt tx-l" x="36.0" y="103.4" text-anchor="end">x = 0</text></svg><figcaption>Orden nuevo ($dx\,dy$): para cada $\cy{y}$, la $\cx{x}$ va de $\cl{0}$ a $\cl{y}$.</figcaption></figure>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{y}} \cf{e^{\cy{y}^2}}\,\cx{dx}\,\cy{dy}$$</div>
+    </section>
+
+    <!-- 25 -->
+    <section class="step" data-title="Ejemplo B · Paso 3">
+      <span class="kicker">Ejemplo resuelto B · Paso 3 de 3</span>
+      <h3>Resolver con el orden nuevo</h3>
+      <p>Adentro integramos en $\cx{x}$. Como $\cf{e^{\cy{y}^2}}$ no tiene $\cx{x}$, es una constante y la integral es solo "constante por el largo", $\cy{y}-0$. Luego afuera sale con un cambio de variable $u=\cy{y}^2$ directo.</p>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{y}} \cf{e^{\cy{y}^2}}\,\cx{dx}=\cy{y}\,\cf{e^{\cy{y}^2}}\qquad\Longrightarrow\qquad \int_{\cl{0}}^{\cl{1}}\cy{y}\,\cf{e^{\cy{y}^2}}\,\cy{dy}=\left[\frac{\cf{e^{\cy{y}^2}}}{2}\right]_{\cl{0}}^{\cl{1}}=\frac{e-1}{2}$$</div>
+      <div class="ans">Resultado: $\dfrac{e-1}{2}\approx 0.859$</div>
+      <p class="hint">Moraleja: el mismo problema, en el orden correcto, se vuelve fácil.</p>
+    </section>
+
+    <!-- 26 -->
+    <section class="step" data-title="Ejercicios">
+      <h3><span class="step-num">★</span>Ejercicios</h3>
+      <p class="hint">Dibuja siempre la región primero. Intenta sin ver la solución; abre la pista solo si te atoras.</p>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 1 · Triángulo, tipo I</span>
+        <p>Calcula $\displaystyle\iint_D (\cx{x}+\cy{y})\,\cd{dA}$, donde $D$ es el triángulo con vértices $(0,0)$, $(1,0)$ y $(1,1)$.</p>
+        <details><summary>Pista</summary><div class="inner">Dibuja el triángulo: para cada $\cx{x}$ entre 0 y 1, la $\cy{y}$ va de $\cl{0}$ (el eje) hasta $\cl{x}$ (la recta $y=x$).</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          Región tipo I: $\cl{0}\le\cx{x}\le\cl{1}$, $\cl{0}\le\cy{y}\le\cl{x}$.
+          $$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{x}} (\cx{x}+\cy{y})\,\cy{dy}\,\cx{dx}$$
+          Adentro: $\left[\cx{x}\cy{y}+\tfrac{\cy{y}^2}{2}\right]_{\cy{y}=0}^{\cy{y}=\cx{x}}=\cx{x}^2+\tfrac{\cx{x}^2}{2}=\tfrac{3\cx{x}^2}{2}$.<br>
+          Afuera: $\int_0^1 \tfrac{3\cx{x}^2}{2}\,\cx{dx}=\Big[\tfrac{\cx{x}^3}{2}\Big]_0^1=\tfrac12$.
+          <div class="ans">Resultado: $\tfrac12$</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 2 · Área entre curvas</span>
+        <p>Calcula el área de la región entre $\cl{y=x^2}$ y $\cl{y=2x}$.</p>
+        <details><summary>Pista</summary><div class="inner">El área es $\iint_D 1\,\cd{dA}$. Primero encuentra dónde se cortan las curvas: $x^2=2x$. Luego decide cuál queda arriba.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          $x^2=2x$ da $\cx{x}=0$ y $\cx{x}=2$. Entre esos valores, por ejemplo $x=1$: la recta vale 2 y la parábola 1, así que la recta queda arriba.
+          $$\text{Área}=\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{x^2}}^{\cl{2x}} 1\,\cy{dy}\,\cx{dx}=\int_0^2 (2\cx{x}-\cx{x}^2)\,\cx{dx}=\Big[\cx{x}^2-\tfrac{\cx{x}^3}{3}\Big]_0^2=4-\tfrac83$$
+          <div class="ans">Resultado: $\tfrac43$</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 3 · Cambiar el orden (trampa de examen)</span>
+        <p>Calcula $\displaystyle\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{\sqrt{y}}}^{\cl{1}} \cf{\sin(\cx{x}^3)}\,\cx{dx}\,\cy{dy}$.</p>
+        <details><summary>Pista</summary><div class="inner">$\int \sin(x^3)\,dx$ no se puede hacer. Dibuja la región: $0\le y\le 1$ y $\sqrt{y}\le x\le 1$. Elevando al cuadrado, el borde izquierdo es $y=x^2$. Intenta ahora $dy$ adentro.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          Para cada $\cx{x}$ entre 0 y 1, la $\cy{y}$ va de $\cl{0}$ a $\cl{x^2}$ (la región queda entre el eje y la parábola). Orden nuevo:
+          $$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{x^2}} \cf{\sin(\cx{x}^3)}\,\cy{dy}\,\cx{dx}=\int_0^1 \cx{x}^2\sin(\cx{x}^3)\,\cx{dx}$$
+          Con $u=\cx{x}^3$, $du=3\cx{x}^2\,dx$: queda $\Big[-\tfrac{\cos(\cx{x}^3)}{3}\Big]_0^1=\tfrac{1-\cos 1}{3}$.
+          <div class="ans">Resultado: $\dfrac{1-\cos 1}{3}\approx 0.153$</div></div></details>
+      </div>
+    </section>
+
+    <!-- 27 -->
+    <section class="step" id="quiz2-sec" data-title="Mini-quiz">
+      <h3><span class="step-num">?</span>Mini-quiz</h3>
+      <p class="hint">Responde de memoria. Recibes retroalimentación al instante, se guarda tu resultado y estas preguntas entran al repaso espaciado.</p>
+      <div id="quiz2"></div>
+    </section>
+
+    <!-- 28 -->
+    <section class="step" data-title="Lo siguiente">
+      <h3>✅ Terminaste la Lección 2</h3>
+      <p>Para que se quede en la memoria:</p>
+      <ul>
+        <li>Mañana abre <b>Repaso del día</b>: las preguntas de las lecciones 1 y 2 vuelven justo antes de que las olvides.</li>
+        <li>Vuelve a las tarjetas de fórmula y pulsa <b>Taparla y recordarla</b> sin mirar.</li>
+        <li>Dibuja a mano una región tipo I y una tipo II, y escribe sus límites.</li>
+      </ul>
+      <p class="hint">Lección 3 (coordenadas polares): próximamente.</p>
+    </section>
+
+    </div>
+
+    <div class="stepnav">
+      <button type="button" class="btn ghost prev">← Anterior</button>
+      <span class="hint gatehint"></span>
+      <button type="button" class="btn next">Siguiente →</button>
     </div>
   </main>
 </div>
 <script>
 (function () {
   var KEY = 'calcmv:l1';
-  var state = { pred: {}, quiz: { answers: {}, attempts: [] } };
+  var state = { pred: {}, quiz: { answers: {}, attempts: [] }, qz: {} };
   try {
     var s = JSON.parse(localStorage.getItem(KEY));
     if (s) {
@@ -588,11 +1017,20 @@ window.MathJax = {
         state.quiz.answers = s.quiz.answers || {};
         state.quiz.attempts = s.quiz.attempts || [];
       }
+      state.qz = s.qz || {};
     }
   } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function qstore(id) {
+    if (id === 'l1') return state.quiz;
+    var q = state.qz[id] || (state.qz[id] = {});
+    q.answers = q.answers || {};
+    q.attempts = q.attempts || [];
+    return q;
+  }
 
-  var PRED = [
+  // ---------- Preguntas ----------
+  var PRED1 = [
     { id: 'p1',
       q: 'Sea $f(x,y)=1$ y $R=[0,3]\\times[0,2]$. ¿Cuánto crees que vale $\\iint_R f\\,dA$?',
       o: ['$5$', '$6$', '$3/2$', 'No se puede calcular'], c: 1,
@@ -602,38 +1040,90 @@ window.MathJax = {
       o: ['Sí, siempre, para cualquier función', 'Sí, si la función es continua en el rectángulo', 'No, el orden siempre cambia el resultado'], c: 1,
       e: 'Eso dice el teorema de Fubini: con $f$ continua en $R$ el orden no cambia el valor, y puedes elegir el que haga la integral más fácil.' }
   ];
-
-  var QUIZ = [
-    { id: 'q1',
-      q: '$\\iint_R 1\\,dA$ con $R=[1,4]\\times[2,5]$ es:',
+  var PRED2 = [
+    { id: 'pa',
+      q: 'Quieres integrar sobre el triángulo con vértices $(0,0)$, $(1,0)$ y $(1,1)$. ¿Cómo crees que serán los límites de la integral de adentro?',
+      o: ['Números fijos, igual que en un rectángulo', 'Pueden depender de la variable de afuera', 'No se puede integrar sobre un triángulo'], c: 1,
+      e: 'Un triángulo no tiene todos sus lados paralelos a los ejes, así que el largo de cada franja cambia. Aquí, para cada $x$ la $y$ va de $0$ a $x$: el límite de adentro depende de $x$.' },
+    { id: 'pb',
+      q: '¿Cuánto crees que vale $\\iint_D 1\\,dA$ para ese mismo triángulo?',
+      o: ['$1$', '$1/2$', '$2$'], c: 1,
+      e: '$\\iint_D 1\\,dA$ es el área de $D$. El triángulo es la mitad del cuadrado unitario, así que vale $1/2$.' }
+  ];
+  var QUIZ1 = [
+    { id: 'q1', q: '$\\iint_R 1\\,dA$ con $R=[1,4]\\times[2,5]$ es:',
       o: ['$6$', '$9$', '$15$', '$20$'], c: 1,
       e: '$\\iint_R 1\\,dA=\\text{Área}(R)=(4-1)(5-2)=9$.' },
-    { id: 'q2',
-      q: '$\\iint_R 6x^2y\\,dA$ con $R=[0,1]\\times[0,2]$ es:',
+    { id: 'q2', q: '$\\iint_R 6x^2y\\,dA$ con $R=[0,1]\\times[0,2]$ es:',
       o: ['$8$', '$2$', '$4$', '$12$'], c: 2,
       e: 'Variables separadas: $\\int_0^1 6x^2\\,dx=2$ y $\\int_0^2 y\\,dy=2$. Producto: $2\\cdot2=4$.' },
-    { id: 'q3',
-      q: '¿Cuándo garantiza Fubini que el orden de integración no importa en $R=[a,b]\\times[c,d]$?',
+    { id: 'q3', q: '¿Cuándo garantiza Fubini que el orden de integración no importa en $R=[a,b]\\times[c,d]$?',
       o: ['Para cualquier función $f$', 'Si $f$ es continua en $R$', 'Solo si $R$ es un cuadrado', 'Nunca: el orden cambia el resultado'], c: 1,
       e: 'La hipótesis es que $f$ sea continua en $R$. La forma del rectángulo no importa.' },
-    { id: 'q4',
-      q: '$\\iint_R (x+y)\\,dA$ con $R=[0,1]\\times[0,2]$ es:',
+    { id: 'q4', q: '$\\iint_R (x+y)\\,dA$ con $R=[0,1]\\times[0,2]$ es:',
       o: ['$4$', '$5$', '$3$', '$2$'], c: 2,
       e: 'Interior: $\\int_0^2 (x+y)\\,dy=2x+2$. Exterior: $\\int_0^1 (2x+2)\\,dx=1+2=3$.' },
-    { id: 'q5',
-      q: 'En $\\int_0^2\\!\\int_0^1 x y^2\\,dx\\,dy$, el resultado de la integral interior es:',
+    { id: 'q5', q: 'En $\\int_0^2\\!\\int_0^1 x y^2\\,dx\\,dy$, el resultado de la integral interior es:',
       o: ['$x^2y^2/2$', '$y^2/2$', '$xy^3/3$', '$1/2$'], c: 1,
       e: 'Se integra en $x$ con $y$ constante: $y^2\\left[\\tfrac{x^2}{2}\\right]_0^1=\\tfrac{y^2}{2}$. Recuerda evaluar los límites de $x$: la respuesta ya no debe tener $x$.' },
-    { id: 'q6',
-      q: 'Para $\\iint_R y\\cos(xy)\\,dA$ con $R=[0,1]\\times[0,\\pi]$, ¿qué orden conviene?',
+    { id: 'q6', q: 'Para $\\iint_R y\\cos(xy)\\,dA$ con $R=[0,1]\\times[0,\\pi]$, ¿qué orden conviene?',
       o: ['Primero en $x$ ($dx\\,dy$): $\\cos(xy)$ se integra directo', 'Primero en $y$ ($dy\\,dx$)', 'Da exactamente igual de fácil', 'No se puede por Fubini'], c: 0,
       e: 'Integrando en $x$, $\\int_0^1 y\\cos(xy)\\,dx=\\sin y$ sin por partes. En $y$ primero tendrías que integrar por partes.' },
-    { id: 'q7',
-      q: 'Si $f(x,y)\\ge0$ en $R$, $\\iint_R f\\,dA$ representa:',
+    { id: 'q7', q: 'Si $f(x,y)\\ge0$ en $R$, $\\iint_R f\\,dA$ representa:',
       o: ['El área de $R$', 'La longitud de la frontera de $R$', 'El volumen bajo $z=f(x,y)$ y sobre $R$', 'La pendiente de $f$'], c: 2,
       e: 'Suma de volúmenes de columnas de base $\\Delta A$ y altura $f$: el volumen del sólido entre $R$ y la superficie.' }
   ];
+  var QUIZ2 = [
+    { id: 'r1', q: 'En una región tipo I, $\\iint_D f\\,dA=\\int_a^b\\!\\int_{g_1(x)}^{g_2(x)} f\\,dy\\,dx$. ¿Cómo son los límites?',
+      o: ['Los de afuera son números y los de adentro son funciones de $x$', 'Todos son números', 'Los de afuera son funciones y los de adentro son números', 'Los de adentro son funciones de $y$'], c: 0,
+      e: 'La integral de afuera ($dx$) recorre todas las franjas con límites constantes $a$ y $b$. En cada franja, $y$ va de $g_1(x)$ a $g_2(x)$, y eso cambia con $x$.' },
+    { id: 'r2', q: 'En una región tipo II (franjas horizontales), la integral de adentro es en:',
+      o: ['$y$, con límites que dependen de $x$', '$x$, con límites números', '$x$, con límites que dependen de $y$', '$y$, con límites números'], c: 2,
+      e: 'Tipo II: $\\int_c^d\\!\\int_{h_1(y)}^{h_2(y)} f\\,dx\\,dy$. Adentro se integra $x$, de la curva izquierda $h_1(y)$ a la derecha $h_2(y)$.' },
+    { id: 'r3', q: '$\\int_0^1\\!\\int_0^x (x+y)\\,dy\\,dx$ es:',
+      o: ['$1$', '$3/2$', '$1/4$', '$1/2$'], c: 3,
+      e: 'Adentro: $\\int_0^x (x+y)\\,dy=x\\cdot x+\\tfrac{x^2}{2}=\\tfrac{3x^2}{2}$. Afuera: $\\int_0^1 \\tfrac{3x^2}{2}\\,dx=\\tfrac12$.' },
+    { id: 'r4', q: 'En $\\int_0^1\\!\\int_0^x f\\,dy\\,dx$, la región de integración es:',
+      o: ['El cuadrado $[0,1]\\times[0,1]$', 'El triángulo $0\\le y\\le x\\le 1$', 'El triángulo $0\\le x\\le y\\le 1$', 'El triángulo con $y\\ge 1$'], c: 1,
+      e: 'Para cada $x$ entre 0 y 1, $y$ va de $0$ a $x$: es el triángulo debajo de la recta $y=x$.' },
+    { id: 'r5', q: 'La integral $\\int_0^1\\!\\int_0^x f\\,dy\\,dx$ escrita en el orden $dx\\,dy$ es:',
+      o: ['$\\int_0^1\\!\\int_0^y f\\,dx\\,dy$', '$\\int_0^1\\!\\int_1^y f\\,dx\\,dy$', '$\\int_0^1\\!\\int_y^1 f\\,dx\\,dy$', '$\\int_0^x\\!\\int_0^1 f\\,dx\\,dy$'], c: 2,
+      e: 'La región es $0\\le y\\le x\\le1$. Para cada $y$ entre 0 y 1, $x$ va de $y$ (la recta) hasta 1 (el borde derecho). Los límites de afuera deben ser números.' },
+    { id: 'r6', q: 'El primer paso antes de cambiar el orden de integración es:',
+      o: ['Derivar $f$', 'Cambiar $dx$ por $dy$ sin más', 'Evaluar $f$ en el origen', 'Dibujar la región'], c: 3,
+      e: 'Los límites originales describen una región. Dibujarla te deja leerla en el otro sentido. Intercambiar solo $dx$ y $dy$ sin cambiar límites da una región distinta.' },
+    { id: 'r7', q: 'Si $D_1$ y $D_2$ no se traslapan (solo comparten borde), $\\iint_{D_1\\cup D_2} f\\,dA$ es:',
+      o: ['la suma $\\iint_{D_1}f\\,dA+\\iint_{D_2}f\\,dA$', 'el producto de las dos integrales', 'la diferencia de las dos integrales', 'el mayor de los dos valores'], c: 0,
+      e: 'Es la propiedad de aditividad: se parte la región en pedazos que no se traslapan y se suman las integrales.' },
+    { id: 'r8', q: 'El área de la región entre $y=x^2$ y $y=2x$ se calcula con:',
+      o: ['$\\int_0^2\\!\\int_{2x}^{x^2} dy\\,dx$', '$\\int_0^4\\!\\int_{x^2}^{2x} dy\\,dx$', '$\\int_0^2\\!\\int_0^{x} dy\\,dx$', '$\\int_0^2\\!\\int_{x^2}^{2x} dy\\,dx$'], c: 3,
+      e: 'Las curvas se cortan cuando $x^2=2x$, o sea en $x=0$ y $x=2$. Entre ellas, $2x$ está arriba y $x^2$ abajo, así que $y$ va de $x^2$ a $2x$. El resultado es $4/3$.' }
+  ];
+  var FIRSTS = [
+    { host: 'first', id: 'e1',
+      q: 'Te piden $\\iint_R (x^2+y)\\,dA$ con $R=[0,2]\\times[1,3]$. ¿Qué harías primero?',
+      o: ['Separarla como $\\left(\\int x^2\\,dx\\right)\\left(\\int y\\,dy\\right)$',
+          'Ver que $R$ es un rectángulo con límites constantes y plantear la integral iterada con esos límites',
+          'Multiplicar el área de $R$ por el valor de $f$ en una esquina'],
+      c: 1,
+      e: 'Primero se mira la región: como los límites son números, es un rectángulo y Fubini nos deja iterar. Separar no vale porque $x^2+y$ es una suma, no un producto; y multiplicar por el valor en una esquina solo da una estimación, no el valor exacto.' },
+    { host: 'first2a', id: 'e2a',
+      q: 'Te piden $\\iint_D xy\\,dA$, donde $D$ es la región entre $y=x^2$ y $y=x$. ¿Qué harías primero?',
+      o: ['Integrar $xy$ de 0 a 1 en $x$ y en $y$, como si fuera un rectángulo',
+          'Dibujar $D$ y hallar dónde se cortan las curvas ($x^2=x$)',
+          'Separarla como $\\left(\\int x\\,dx\\right)\\left(\\int y\\,dy\\right)$'],
+      c: 1,
+      e: 'Primero se dibuja la región y se buscan los cortes: $x^2=x$ en $x=0$ y $x=1$. Tratarla como rectángulo ignoraría que $y$ solo va de $x^2$ a $x$, y separar solo funciona sobre rectángulos.' },
+    { host: 'first2b', id: 'e2b',
+      q: 'Te piden $\\int_0^1\\!\\int_x^1 e^{y^2}\\,dy\\,dx$. ¿Qué harías primero?',
+      o: ['Integrar $e^{y^2}$ respecto a $y$ en la integral de adentro',
+          'Dibujar la región y cambiar el orden a $dx\\,dy$',
+          'Cambiar $e^{y^2}$ por $e^{y}$ para simplificar'],
+      c: 1,
+      e: 'La integral de adentro, $\\int e^{y^2}\\,dy$, no tiene antiderivada con funciones elementales: te atoras. Se dibuja la región y se cambia el orden, para que adentro quede $\\int dx$, que es fácil. Cambiar la función ya no sería el mismo problema.' }
+  ];
 
+  // ---------- Utilidades de pregunta ----------
   function typeset(el) {
     if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]);
   }
@@ -679,73 +1169,42 @@ window.MathJax = {
   }
 
   // Predicciones
-  var predHost = document.getElementById('pred');
-  function renderPred() {
-    predHost.innerHTML = '';
-    PRED.forEach(function (q) {
-      paint(predHost, q, state.pred[q.id] ? { ch: state.pred[q.id].ch } : null, 'pred', function (i) {
-        state.pred[q.id] = { ch: i, ok: i === q.c, t: Date.now() };
-        save();
-        renderPred();
+  function makePred(hostId, list) {
+    var host = document.getElementById(hostId);
+    if (!host) return;
+    function render() {
+      host.innerHTML = '';
+      list.forEach(function (q) {
+        paint(host, q, state.pred[q.id] ? { ch: state.pred[q.id].ch } : null, 'pred', function (i) {
+          state.pred[q.id] = { ch: i, ok: i === q.c, t: Date.now() };
+          save();
+          render();
+        });
       });
-    });
-    typeset(predHost);
-  }
-
-  // Mini-quiz
-  var quizHost = document.getElementById('quiz');
-  function renderQuiz() {
-    quizHost.innerHTML = '';
-    var answers = state.quiz.answers;
-    var done = QUIZ.filter(function (q) { return answers[q.id]; }).length;
-    var prog = document.createElement('div');
-    prog.className = 'progress';
-    prog.textContent = 'Pregunta ' + Math.min(done + 1, QUIZ.length) + ' de ' + QUIZ.length;
-    if (done < QUIZ.length) quizHost.appendChild(prog);
-    QUIZ.forEach(function (q) {
-      paint(quizHost, q, answers[q.id] ? { ch: answers[q.id].ch } : null, 'quiz', function (i) {
-        answers[q.id] = { ch: i, ok: i === q.c };
-        record(q.id, i === q.c);
-        var all = QUIZ.every(function (x) { return answers[x.id]; });
-        if (all) {
-          var score = QUIZ.filter(function (x) { return answers[x.id].ok; }).length;
-          state.quiz.attempts.push({ t: Date.now(), s: score, n: QUIZ.length });
-          state.quiz.attempts = state.quiz.attempts.slice(-20);
-        }
-        save();
-        renderQuiz();
-      });
-    });
-    if (done === QUIZ.length) {
-      var att = state.quiz.attempts;
-      var last = att[att.length - 1];
-      var score = QUIZ.filter(function (x) { return answers[x.id].ok; }).length;
-      var best = att.reduce(function (m, a) { return Math.max(m, a.s); }, 0);
-      var msg = score === QUIZ.length ? '¡Perfecto! Vuelve a intentarlo mañana para fijarlo.'
-        : score >= 5 ? 'Muy bien. Repasa las que fallaste y reintenta.'
-        : 'Aún no. Relee las secciones 1 y 2 y vuelve a intentarlo.';
-      var r = document.createElement('div');
-      r.className = 'result';
-      r.innerHTML = '<div class="score">' + score + ' / ' + QUIZ.length + '</div><div>' + msg + '</div>' +
-        '<div class="hist">Intentos: ' + att.length + ' · Mejor: ' + best + ' / ' + QUIZ.length +
-        (last && att.length > 1 ? ' · Anterior: ' + att[att.length - 2].s + ' / ' + QUIZ.length : '') + '</div>';
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn';
-      btn.textContent = 'Reintentar';
-      btn.addEventListener('click', function () {
-        state.quiz.answers = {};
-        save();
-        renderQuiz();
-        quizHost.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-      r.appendChild(btn);
-      quizHost.appendChild(r);
+      typeset(host);
     }
-    typeset(quizHost);
+    render();
   }
 
-  // Repaso espaciado (cajas de Leitner)
+  // "¿Qué harías primero?"
+  function makeFirst(def) {
+    var host = document.getElementById(def.host);
+    if (!host) return;
+    function render() {
+      host.innerHTML = '';
+      paint(host, def, state.pred[def.id] ? { ch: state.pred[def.id].ch } : null, 'first', function (i) {
+        state.pred[def.id] = { ch: i, ok: i === def.c, t: Date.now() };
+        save();
+        render();
+        syncAll();
+      });
+      typeset(host);
+    }
+    render();
+  }
+
+  // ---------- Repaso espaciado (cajas de Leitner) ----------
+  var ALLQ = QUIZ1.concat(QUIZ2);
   var SKEY = 'calcmv:srs';
   var INTERVALS = [1, 3, 7, 14, 30];
   var srs = {};
@@ -765,11 +1224,11 @@ window.MathJax = {
   }
   function dueList() {
     var t = today();
-    return QUIZ.filter(function (q) { return srs[q.id] && srs[q.id].due <= t; });
+    return ALLQ.filter(function (q) { return srs[q.id] && srs[q.id].due <= t; });
   }
   function nextDue() {
     var t = today(), m = null;
-    QUIZ.forEach(function (q) {
+    ALLQ.forEach(function (q) {
       if (srs[q.id] && srs[q.id].due > t && (m === null || srs[q.id].due < m)) m = srs[q.id].due;
     });
     return m === null ? null : m - t;
@@ -783,6 +1242,65 @@ window.MathJax = {
       : seen ? 'Al día ✓' : 'Sin tarjetas aún';
   }
 
+  // ---------- Mini-quiz (uno por lección) ----------
+  function makeQuiz(def) {
+    var host = document.getElementById(def.host);
+    if (!host) return;
+    function render() {
+      host.innerHTML = '';
+      var st = qstore(def.id);
+      var answers = st.answers;
+      var qs = def.qs;
+      var done = qs.filter(function (q) { return answers[q.id]; }).length;
+      var prog = document.createElement('div');
+      prog.className = 'progress';
+      prog.textContent = 'Pregunta ' + Math.min(done + 1, qs.length) + ' de ' + qs.length;
+      if (done < qs.length) host.appendChild(prog);
+      qs.forEach(function (q) {
+        paint(host, q, answers[q.id] ? { ch: answers[q.id].ch } : null, 'quiz', function (i) {
+          answers[q.id] = { ch: i, ok: i === q.c };
+          record(q.id, i === q.c);
+          var all = qs.every(function (x) { return answers[x.id]; });
+          if (all) {
+            var sc = qs.filter(function (x) { return answers[x.id].ok; }).length;
+            st.attempts.push({ t: Date.now(), s: sc, n: qs.length });
+            st.attempts = st.attempts.slice(-20);
+          }
+          save();
+          render();
+        });
+      });
+      if (done === qs.length) {
+        var att = st.attempts;
+        var score = qs.filter(function (x) { return answers[x.id].ok; }).length;
+        var best = att.reduce(function (m, a) { return Math.max(m, a.s); }, 0);
+        var msg = score === qs.length ? '¡Perfecto! Vuelve a intentarlo mañana para fijarlo.'
+          : score >= qs.length - 2 ? 'Muy bien. Repasa las que fallaste y reintenta.'
+          : 'Aún no. Relee la lección y vuelve a intentarlo.';
+        var r = document.createElement('div');
+        r.className = 'result';
+        r.innerHTML = '<div class="score">' + score + ' / ' + qs.length + '</div><div>' + msg + '</div>' +
+          '<div class="hist">Intentos: ' + att.length + ' · Mejor: ' + best + ' / ' + qs.length +
+          (att.length > 1 ? ' · Anterior: ' + att[att.length - 2].s + ' / ' + qs.length : '') + '</div>';
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn';
+        btn.textContent = 'Reintentar';
+        btn.addEventListener('click', function () {
+          st.answers = {};
+          save();
+          render();
+          host.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        r.appendChild(btn);
+        host.appendChild(r);
+      }
+      typeset(host);
+    }
+    render();
+  }
+
+  // ---------- Pantalla de repaso ----------
   var rvHost = document.getElementById('review');
   var queue = [], qi = 0, answered = null, hits = 0, started = 0;
   function startReview() {
@@ -793,8 +1311,6 @@ window.MathJax = {
   }
   function renderReview() {
     rvHost.innerHTML = '';
-    var note = document.createElement('p');
-    note.className = 'hint';
     if (qi < queue.length) {
       var q = queue[qi];
       var prog = document.createElement('div');
@@ -826,7 +1342,7 @@ window.MathJax = {
         r.innerHTML = '<div class="score">Al día ✓</div><div>No tienes nada pendiente hoy.' +
           (nd ? ' Lo siguiente toca ' + when(nd) + '.' : '') + '</div>';
       } else {
-        r.innerHTML = '<div class="score">Aún no hay tarjetas</div><div>Contesta el mini-quiz de la Lección 1 y tus preguntas aparecerán aquí a repasar.</div>';
+        r.innerHTML = '<div class="score">Aún no hay tarjetas</div><div>Contesta el mini-quiz de una lección y tus preguntas aparecerán aquí a repasar.</div>';
       }
       rvHost.appendChild(r);
     }
@@ -839,182 +1355,197 @@ window.MathJax = {
     typeset(rvHost);
   }
 
-  var lessonMain = document.getElementById('lesson-main');
-  var reviewMain = document.getElementById('review-main');
-  var navL1 = document.getElementById('nav-l1');
-  var navRv = document.getElementById('nav-review');
-  function show(v) {
-    lessonMain.hidden = v !== 'lesson';
-    reviewMain.hidden = v !== 'review';
-    navL1.classList.toggle('active', v === 'lesson');
-    navRv.classList.toggle('active', v === 'review');
-    if (v === 'review') startReview();
-    window.scrollTo(0, 0);
-  }
-  navL1.addEventListener('click', function () { show('lesson'); });
-  navRv.addEventListener('click', function () { show('review'); });
-
-  // "¿Qué harías primero?" antes del ejemplo resuelto
-  var FIRST = {
-    id: 'e1',
-    q: 'Te piden $\\iint_R (x^2+y)\\,dA$ con $R=[0,2]\\times[1,3]$. ¿Qué harías primero?',
-    o: ['Separarla como $\\left(\\int x^2\\,dx\\right)\\left(\\int y\\,dy\\right)$',
-        'Ver que $R$ es un rectángulo con límites constantes y plantear la integral iterada con esos límites',
-        'Multiplicar el área de $R$ por el valor de $f$ en una esquina'],
-    c: 1,
-    e: 'Primero se mira la región: como los límites son números, es un rectángulo y Fubini nos deja iterar. Separar no vale porque $x^2+y$ es una suma, no un producto; y multiplicar por el valor en una esquina solo da una estimación, no el valor exacto.'
-  };
-  var firstHost = document.getElementById('first');
-  function renderFirst() {
-    firstHost.innerHTML = '';
-    paint(firstHost, FIRST, state.pred.e1 ? { ch: state.pred.e1.ch } : null, 'first', function (i) {
-      state.pred.e1 = { ch: i, ok: i === FIRST.c, t: Date.now() };
-      save();
-      renderFirst();
-      syncNav();
+  // ---------- Lecciones por pasos ----------
+  var lessons = [];
+  function syncAll() { lessons.forEach(function (l) { l.sync(); }); }
+  function initLesson(mainId, navKey) {
+    var main = document.getElementById(mainId);
+    if (!main) return;
+    var steps = [].slice.call(main.querySelectorAll('.step'));
+    var segsHost = main.querySelector('.segs');
+    var plabel = main.querySelector('.plabel');
+    var prevBtn = main.querySelector('.prev');
+    var nextBtn = main.querySelector('.next');
+    var gateHint = main.querySelector('.gatehint');
+    var nav = { cur: 0, seen: {} };
+    try {
+      var sv = JSON.parse(localStorage.getItem(navKey));
+      if (sv) { nav.cur = Math.min(Math.max(sv.cur | 0, 0), steps.length - 1); nav.seen = sv.seen || {}; }
+    } catch (e) {}
+    var segs = steps.map(function (st, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'seg';
+      b.title = (i + 1) + '. ' + st.getAttribute('data-title');
+      b.setAttribute('aria-label', 'Ir al paso ' + (i + 1) + ': ' + st.getAttribute('data-title'));
+      b.addEventListener('click', function () { goStep(i); });
+      segsHost.appendChild(b);
+      return b;
     });
-    typeset(firstHost);
+    function gateOpen(i) {
+      var g = steps[i].getAttribute('data-gate');
+      return !g || !!state.pred[g];
+    }
+    function sync() {
+      var open = gateOpen(nav.cur);
+      prevBtn.disabled = nav.cur === 0;
+      nextBtn.disabled = nav.cur === steps.length - 1 || !open;
+      gateHint.textContent = open ? '' : 'Elige una opción para continuar';
+    }
+    function goStep(i, noScroll) {
+      i = Math.max(0, Math.min(i, steps.length - 1));
+      for (var k = 0; k < i; k++) if (!gateOpen(k)) { i = k; break; }
+      nav.cur = i;
+      nav.seen[i] = 1;
+      steps.forEach(function (st, k) { st.hidden = k !== i; });
+      var seenCount = 0;
+      segs.forEach(function (b, k) {
+        b.classList.toggle('cur', k === i);
+        b.classList.toggle('seen', !!nav.seen[k] && k !== i);
+        if (nav.seen[k]) seenCount++;
+      });
+      plabel.textContent = 'Paso ' + (i + 1) + ' de ' + steps.length + ' · ' + steps[i].getAttribute('data-title') +
+        ' · ' + Math.round(seenCount / steps.length * 100) + '% visto';
+      sync();
+      try { localStorage.setItem(navKey, JSON.stringify(nav)); } catch (e) {}
+      if (!noScroll) window.scrollTo(0, 0);
+    }
+    prevBtn.addEventListener('click', function () { goStep(nav.cur - 1); });
+    nextBtn.addEventListener('click', function () { goStep(nav.cur + 1); });
+    lessons.push({ sync: sync });
+    goStep(nav.cur, true);
   }
 
-  // Pasos de la lección con barra de progreso
-  var steps = [].slice.call(document.querySelectorAll('#lesson-main .step'));
-  var NKEY = 'calcmv:l1:nav';
-  var nav = { cur: 0, seen: {} };
-  try {
-    var sv = JSON.parse(localStorage.getItem(NKEY));
-    if (sv) { nav.cur = Math.min(Math.max(sv.cur | 0, 0), steps.length - 1); nav.seen = sv.seen || {}; }
-  } catch (e) {}
-  var segsHost = document.getElementById('segs');
-  var plabel = document.getElementById('plabel');
-  var prevBtn = document.getElementById('prev');
-  var nextBtn = document.getElementById('next');
-  var gateHint = document.getElementById('gatehint');
-  var segs = steps.map(function (s, i) {
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'seg';
-    b.title = (i + 1) + '. ' + s.getAttribute('data-title');
-    b.setAttribute('aria-label', 'Ir al paso ' + (i + 1) + ': ' + s.getAttribute('data-title'));
-    b.addEventListener('click', function () { goStep(i); });
-    segsHost.appendChild(b);
-    return b;
-  });
-  function gateOpen(i) {
-    var g = steps[i].getAttribute('data-gate');
-    return !g || !!state.pred[g];
-  }
-  function syncNav() {
-    var i = nav.cur;
-    var open = gateOpen(i);
-    prevBtn.disabled = i === 0;
-    nextBtn.disabled = i === steps.length - 1 || !open;
-    gateHint.textContent = open ? '' : 'Elige una opción para continuar';
-  }
-  function goStep(i) {
-    i = Math.max(0, Math.min(i, steps.length - 1));
-    for (var k = 0; k < i; k++) if (!gateOpen(k)) { i = k; break; }
-    nav.cur = i;
-    nav.seen[i] = 1;
-    steps.forEach(function (s, k) { s.hidden = k !== i; });
-    var seenCount = 0;
-    segs.forEach(function (b, k) {
-      b.classList.toggle('cur', k === i);
-      b.classList.toggle('seen', !!nav.seen[k] && k !== i);
-      if (nav.seen[k]) seenCount++;
-    });
-    plabel.textContent = 'Paso ' + (i + 1) + ' de ' + steps.length + ' · ' + steps[i].getAttribute('data-title') +
-      ' · ' + Math.round(seenCount / steps.length * 100) + '% visto';
-    syncNav();
-    try { localStorage.setItem(NKEY, JSON.stringify(nav)); } catch (e) {}
-    window.scrollTo(0, 0);
-  }
-  prevBtn.addEventListener('click', function () { goStep(nav.cur - 1); });
-  nextBtn.addEventListener('click', function () { goStep(nav.cur + 1); });
-
-  // Tarjetas de fórmula: taparla y recordarla (completar huecos)
+  // ---------- Tarjetas de fórmula: taparla y recordarla (huecos con botones) ----------
   var FKEY = 'calcmv:formulas';
   var fstat = {};
   try { fstat = JSON.parse(localStorage.getItem(FKEY)) || {}; } catch (e) {}
-  function norm(s) { return s.toLowerCase().replace(/[\s\\{}$]/g, ''); }
-  [].forEach.call(document.querySelectorAll('.fcard'), function (card) {
-    var id = card.getAttribute('data-id');
-    var ans = JSON.parse(card.getAttribute('data-ans'));
-    var full = card.querySelector('.fc-full');
-    var drill = card.querySelector('.fc-drill');
-    var inputsHost = card.querySelector('.fc-inputs');
-    var msg = card.querySelector('.fc-msg');
-    var badge = card.querySelector('.fc-badge');
-    var cover = card.querySelector('.fc-cover');
-    var inputs = [], labels = [];
-    ans.forEach(function (a, i) {
-      var l = document.createElement('label');
-      l.className = 'fc-in';
-      var n = document.createElement('span');
-      n.textContent = (i + 1);
-      var inp = document.createElement('input');
-      inp.type = 'text';
-      inp.autocomplete = 'off';
-      inp.autocapitalize = 'off';
-      inp.spellcheck = false;
-      inp.setAttribute('aria-label', 'Hueco ' + (i + 1));
-      inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
-      l.appendChild(n);
-      l.appendChild(inp);
-      inputsHost.appendChild(l);
-      inputs.push(inp);
-      labels.push(l);
-    });
-    function showBadge() {
-      var s = fstat[id];
-      badge.textContent = s && s.ok ? '✓ Recordada ' + s.ok + (s.ok === 1 ? ' vez' : ' veces') : '';
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
     }
-    function saveF() { try { localStorage.setItem(FKEY, JSON.stringify(fstat)); } catch (e) {} }
-    function start() {
-      full.hidden = true;
-      drill.hidden = false;
-      cover.hidden = true;
-      msg.textContent = '';
-      inputs.forEach(function (inp, i) { inp.value = ''; labels[i].className = 'fc-in'; });
-      inputs[0].focus();
-    }
-    function reveal() {
-      full.hidden = false;
-      drill.hidden = true;
-      cover.hidden = false;
-    }
-    function check() {
-      var right = 0;
-      inputs.forEach(function (inp, i) {
-        var ok = ans[i].some(function (a) { return norm(a) === norm(inp.value); });
-        labels[i].className = 'fc-in ' + (ok ? 'good' : 'bad');
-        if (ok) right++;
-      });
-      var s = fstat[id] || { ok: 0, tries: 0 };
-      s.tries++;
-      if (right === ans.length) {
-        s.ok++;
-        msg.textContent = '✅ ¡Perfecto! La recordaste. Ahí está completa.';
-        fstat[id] = s;
-        saveF();
-        showBadge();
-        reveal();
-      } else {
-        msg.textContent = '❌ Acertaste ' + right + ' de ' + ans.length + '. Corrige los marcados con línea punteada o pulsa Revelar.';
-        fstat[id] = s;
-        saveF();
+    return a;
+  }
+  function initCards() {
+    [].forEach.call(document.querySelectorAll('.fcard'), function (card) {
+      var id = card.getAttribute('data-id');
+      var blanks = JSON.parse(card.getAttribute('data-blanks'));
+      var full = card.querySelector('.fc-full');
+      var drill = card.querySelector('.fc-drill');
+      var choicesHost = card.querySelector('.fc-inputs');
+      var msg = card.querySelector('.fc-msg');
+      var badge = card.querySelector('.fc-badge');
+      var cover = card.querySelector('.fc-cover');
+      var picks = [], rows = [];
+      function showBadge() {
+        var st = fstat[id];
+        badge.textContent = st && st.ok ? '✓ Recordada ' + st.ok + (st.ok === 1 ? ' vez' : ' veces') : '';
       }
-    }
-    card.querySelector('.fc-check').addEventListener('click', check);
-    card.querySelector('.fc-reveal').addEventListener('click', function () { msg.textContent = ''; reveal(); });
-    cover.addEventListener('click', start);
-    showBadge();
+      function saveF() { try { localStorage.setItem(FKEY, JSON.stringify(fstat)); } catch (e) {} }
+      function build() {
+        choicesHost.innerHTML = '';
+        picks = blanks.map(function () { return null; });
+        rows = [];
+        blanks.forEach(function (b, i) {
+          var row = document.createElement('div');
+          row.className = 'fc-row';
+          var n = document.createElement('span');
+          n.className = 'fc-n';
+          n.textContent = String(i + 1);
+          row.appendChild(n);
+          shuffle(b.o.slice()).forEach(function (text) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'fc-opt';
+            btn.textContent = text;
+            btn.addEventListener('click', function () {
+              picks[i] = text;
+              [].forEach.call(row.querySelectorAll('.fc-opt'), function (x) { x.classList.toggle('sel', x === btn); });
+              row.className = 'fc-row';
+              n.textContent = String(i + 1);
+            });
+            row.appendChild(btn);
+          });
+          choicesHost.appendChild(row);
+          rows.push({ row: row, n: n });
+        });
+      }
+      function start() {
+        full.hidden = true;
+        drill.hidden = false;
+        cover.hidden = true;
+        msg.textContent = '';
+        build();
+      }
+      function reveal() {
+        full.hidden = false;
+        drill.hidden = true;
+        cover.hidden = false;
+      }
+      function check() {
+        var empty = picks.some(function (p) { return p === null; });
+        if (empty) { msg.textContent = 'Elige una opción en cada hueco antes de revisar.'; return; }
+        var right = 0;
+        blanks.forEach(function (b, i) {
+          var ok = picks[i] === b.a;
+          rows[i].row.className = 'fc-row ' + (ok ? 'good' : 'bad');
+          rows[i].n.textContent = ok ? '✅' : '❌';
+          if (ok) right++;
+        });
+        var st = fstat[id] || { ok: 0, tries: 0 };
+        st.tries++;
+        fstat[id] = st;
+        if (right === blanks.length) {
+          st.ok++;
+          msg.textContent = '✅ ¡Perfecto! La recordaste. Ahí está completa.';
+          saveF();
+          showBadge();
+          reveal();
+        } else {
+          msg.textContent = '❌ Acertaste ' + right + ' de ' + blanks.length + '. Cambia los marcados con ❌ o pulsa Revelar.';
+          saveF();
+        }
+      }
+      card.querySelector('.fc-check').addEventListener('click', check);
+      card.querySelector('.fc-reveal').addEventListener('click', function () { msg.textContent = ''; reveal(); });
+      cover.addEventListener('click', start);
+      showBadge();
+    });
+  }
+
+  // ---------- Vistas ----------
+  var VIEWS = {
+    l1: ['lesson-main', 'nav-l1'],
+    l2: ['lesson2-main', 'nav-l2'],
+    l3: ['lesson3-main', 'nav-l3'],
+    review: ['review-main', 'nav-review']
+  };
+  function show(v) {
+    Object.keys(VIEWS).forEach(function (k) {
+      var m = document.getElementById(VIEWS[k][0]);
+      var b = document.getElementById(VIEWS[k][1]);
+      if (m) m.hidden = k !== v;
+      if (b) b.classList.toggle('active', k === v);
+    });
+    if (v === 'review') startReview();
+    window.scrollTo(0, 0);
+  }
+  Object.keys(VIEWS).forEach(function (k) {
+    var b = document.getElementById(VIEWS[k][1]);
+    if (b) b.addEventListener('click', function () { show(k); });
   });
 
+  // ---------- Arranque ----------
+  initCards();
   updateDue();
-  renderPred();
-  renderFirst();
-  renderQuiz();
-  goStep(nav.cur);
+  makePred('pred', PRED1);
+  makePred('pred2', PRED2);
+  FIRSTS.forEach(makeFirst);
+  makeQuiz({ id: 'l1', host: 'quiz', qs: QUIZ1 });
+  makeQuiz({ id: 'l2', host: 'quiz2', qs: QUIZ2 });
+  initLesson('lesson-main', 'calcmv:l1:nav');
+  initLesson('lesson2-main', 'calcmv:l2:nav');
 })();
 </script>
 </body>
