@@ -162,6 +162,12 @@ window.MathJax = {
   .mk-x { fill: var(--cx); } .mk-y { fill: var(--cy); }
   .svt { font: italic 15px Georgia, "Times New Roman", serif; }
   .tx-x { fill: var(--cx); } .tx-y { fill: var(--cy); } .tx-l { fill: var(--cl); } .tx-z { fill: var(--cz); }
+  .sv-fill2 { fill: var(--brand); fill-opacity: .32; stroke: none; }
+  .sv-tick { stroke: var(--muted); stroke-width: 1.5; }
+  .sv-pt { fill: var(--cl); }
+  .tx-m { fill: var(--muted); }
+  .svt.sm { font-size: 12px; }
+  .lb { paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
   /* huecos con botones */
   .fc-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0; }
   .fc-n { min-width: 1.8em; font-weight: 700; text-align: center; }
@@ -190,12 +196,13 @@ window.MathJax = {
     <div class="group">Integrales dobles</div>
     <button class="nav active" id="nav-l1">1 · Sobre rectángulos<small>Definición, Fubini</small></button>
     <button class="nav" id="nav-l2">2 · Regiones generales<small>Tipo I y tipo II</small></button>
-    <button class="nav soon">3 · Coordenadas polares<small>próximamente</small></button>
-    <button class="nav soon">4 · Aplicaciones<small>Área, masa, centro de masa · próximamente</small></button>
+    <button class="nav" id="nav-l3">3 · Cambiar el orden y partir regiones<small>Área con doble integral</small></button>
+    <button class="nav soon">4 · Coordenadas polares<small>próximamente</small></button>
+    <button class="nav soon">5 · Aplicaciones<small>Masa, centro de masa · próximamente</small></button>
     <div class="group">Integrales triples</div>
-    <button class="nav soon">5 · Sobre cajas y regiones sólidas<small>próximamente</small></button>
-    <button class="nav soon">6 · Cilíndricas y esféricas<small>próximamente</small></button>
-    <button class="nav soon">7 · Jacobiano y cambio de variables<small>próximamente</small></button>
+    <button class="nav soon">6 · Sobre cajas y regiones sólidas<small>próximamente</small></button>
+    <button class="nav soon">7 · Cilíndricas y esféricas<small>próximamente</small></button>
+    <button class="nav soon">8 · Jacobiano y cambio de variables<small>próximamente</small></button>
     <div class="group">Práctica</div>
     <button class="nav" id="nav-review">Repaso del día<small id="due-label">Sin tarjetas aún</small></button>
     <button class="nav soon">Simulacro de examen<small>próximamente</small></button>
@@ -587,7 +594,7 @@ window.MathJax = {
         <li>Mañana abre <b>Repaso del día</b> en la barra lateral: tus preguntas del quiz vuelven justo antes de que las olvides.</li>
         <li>Vuelve a las tarjetas de fórmula y pulsa <b>Taparla y recordarla</b> sin mirar.</li>
       </ul>
-      <p class="hint">Lección 2 (regiones generales): próximamente.</p>
+      <p class="hint">Sigue con la Lección 2 (regiones tipo I y tipo II) en la barra lateral.</p>
     </section>
 
     </div>
@@ -609,22 +616,20 @@ window.MathJax = {
     </div>
 
     <div class="steps">
-
     <!-- 1 -->
     <section class="step" data-title="Resumen">
       <h3>🎯 Qué vas a aprender y para qué sirve</h3>
-      <p class="lead">Cómo integrar sobre regiones que no son rectángulos: triángulos, zonas entre curvas, formas "chuecas".</p>
+      <p class="lead">Cómo integrar sobre regiones que no son rectángulos: triángulos, zonas entre curvas, círculos. Es el tipo de ejercicio del examen: "calcular la integral si $Q$ está limitada por…".</p>
       <p><b>Qué vas a aprender:</b></p>
       <ul>
         <li>Describir una región como <b>tipo I</b> (franjas verticales) o <b>tipo II</b> (franjas horizontales).</li>
+        <li>El método de tus apuntes: <b>graficar</b> la región, hallar las <b>intersecciones</b> y decidir la <b>dirección de barrido</b>.</li>
         <li>Armar la integral iterada: ahora los <span class="c-l">límites</span> de adentro son <b>funciones</b>.</li>
-        <li>Cambiar el orden de integración cuando una de las dos formas es imposible de resolver.</li>
       </ul>
       <p><b>Para qué sirve:</b></p>
       <ul>
-        <li>Casi ninguna región del examen es un rectángulo: esto es lo que más se pregunta de integrales dobles.</li>
-        <li>Con $\iint_D 1\,\cd{dA}$ calculas el <b>área</b> de cualquier región.</li>
-        <li>Es la base de las integrales triples sobre sólidos.</li>
+        <li>Casi ninguna región del examen es un rectángulo: aquí está la mayor parte de los puntos de integrales dobles.</li>
+        <li>Es la base de cambiar el orden y partir regiones (Lección 3) y de las integrales triples sobre sólidos.</li>
       </ul>
       <p class="hint">Mismo método de siempre: una idea por pantalla, colores fijos (mira la leyenda), tarjetas de fórmula y dibujos de la región.</p>
     </section>
@@ -655,7 +660,7 @@ window.MathJax = {
         <tr><td>$\cl{a}\le\cx{x}\le\cl{b}$</td><td>El ancho de la región: <span class="c-x">x</span> va de <span class="c-l">a</span> a <span class="c-l">b</span>. Son números.</td></tr>
         <tr><td>$\cl{g_1}(\cx{x})$</td><td>La curva de <b>abajo</b>: dónde entra la flecha en cada franja.</td></tr>
         <tr><td>$\cl{g_2}(\cx{x})$</td><td>La curva de <b>arriba</b>: dónde sale la flecha.</td></tr>
-        <tr><td>$D$</td><td>La región donde integras.</td></tr>
+        <tr><td>$Q$</td><td>La región donde integras.</td></tr>
       </table></div>
     </section>
 
@@ -663,14 +668,14 @@ window.MathJax = {
     <section class="step" data-title="Tipo I · La fórmula">
       <span class="kicker">Tema 1 · Región tipo I</span>
       <h3>La fórmula</h3>
-      <p>La región es $D=\{(\cx{x},\cy{y})\;:\;\cl{a}\le\cx{x}\le\cl{b},\ \cl{g_1}(\cx{x})\le\cy{y}\le\cl{g_2}(\cx{x})\}$.</p>
+      <p>La región es $Q=\{(\cx{x},\cy{y})\;:\;\cl{a}\le\cx{x}\le\cl{b},\ \cl{g_1}(\cx{x})\le\cy{y}\le\cl{g_2}(\cx{x})\}$.</p>
             <div class="fcard" data-id="tipo1" data-blanks='[{"o": ["g₁(x)", "g₂(x)", "h₁(y)", "h₂(y)"], "a": "g₁(x)"}, {"o": ["g₁(x)", "g₂(x)", "h₁(y)", "h₂(y)"], "a": "g₂(x)"}, {"o": ["x", "y", "z"], "a": "y"}, {"o": ["x", "y", "z"], "a": "x"}]'>
         <div class="fc-head"><span class="fc-name">Región tipo I (franjas verticales)</span><span class="fc-badge"></span></div>
         <div class="fc-msg" aria-live="polite"></div>
-        <div class="fc-full">$$\iint_D \cf{f}\,\cd{dA}=\int_{\cl{a}}^{\cl{b}}\!\int_{\cl{g_1}(\cx{x})}^{\cl{g_2}(\cx{x})}\cf{f}(\cx{x},\cy{y})\,\cy{dy}\,\cx{dx}$$</div>
+        <div class="fc-full">$$\iint_Q \cf{f}\,\cd{dA}=\int_{\cl{a}}^{\cl{b}}\!\int_{\cl{g_1}(\cx{x})}^{\cl{g_2}(\cx{x})}\cf{f}(\cx{x},\cy{y})\,\cy{dy}\,\cx{dx}$$</div>
         <div class="fc-drill" hidden>
           <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
-          <div class="fc-cloze">$$\iint_D \cf{f}\,\cd{dA}=\int_{\cl{a}}^{\cl{b}}\!\int_{\boxed{\,\mathbf{1}\,}}^{\boxed{\,\mathbf{2}\,}}\cf{f}(\cx{x},\cy{y})\,\mathrm{d}\boxed{\,\mathbf{3}\,}\,\mathrm{d}\boxed{\,\mathbf{4}\,}$$</div>
+          <div class="fc-cloze">$$\iint_Q \cf{f}\,\cd{dA}=\int_{\cl{a}}^{\cl{b}}\!\int_{\boxed{\,\mathbf{1}\,}}^{\boxed{\,\mathbf{2}\,}}\cf{f}(\cx{x},\cy{y})\,\mathrm{d}\boxed{\,\mathbf{3}\,}\,\mathrm{d}\boxed{\,\mathbf{4}\,}$$</div>
           <div class="fc-inputs"></div>
           <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
         </div>
@@ -721,14 +726,14 @@ window.MathJax = {
     <section class="step" data-title="Tipo II · La fórmula">
       <span class="kicker">Tema 2 · Región tipo II</span>
       <h3>La fórmula</h3>
-      <p>La región es $D=\{(\cx{x},\cy{y})\;:\;\cl{c}\le\cy{y}\le\cl{d},\ \cl{h_1}(\cy{y})\le\cx{x}\le\cl{h_2}(\cy{y})\}$.</p>
+      <p>La región es $Q=\{(\cx{x},\cy{y})\;:\;\cl{c}\le\cy{y}\le\cl{d},\ \cl{h_1}(\cy{y})\le\cx{x}\le\cl{h_2}(\cy{y})\}$.</p>
             <div class="fcard" data-id="tipo2" data-blanks='[{"o": ["g₁(x)", "g₂(x)", "h₁(y)", "h₂(y)"], "a": "h₁(y)"}, {"o": ["g₁(x)", "g₂(x)", "h₁(y)", "h₂(y)"], "a": "h₂(y)"}, {"o": ["x", "y", "z"], "a": "x"}, {"o": ["x", "y", "z"], "a": "y"}]'>
         <div class="fc-head"><span class="fc-name">Región tipo II (franjas horizontales)</span><span class="fc-badge"></span></div>
         <div class="fc-msg" aria-live="polite"></div>
-        <div class="fc-full">$$\iint_D \cf{f}\,\cd{dA}=\int_{\cl{c}}^{\cl{d}}\!\int_{\cl{h_1}(\cy{y})}^{\cl{h_2}(\cy{y})}\cf{f}(\cx{x},\cy{y})\,\cx{dx}\,\cy{dy}$$</div>
+        <div class="fc-full">$$\iint_Q \cf{f}\,\cd{dA}=\int_{\cl{c}}^{\cl{d}}\!\int_{\cl{h_1}(\cy{y})}^{\cl{h_2}(\cy{y})}\cf{f}(\cx{x},\cy{y})\,\cx{dx}\,\cy{dy}$$</div>
         <div class="fc-drill" hidden>
           <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
-          <div class="fc-cloze">$$\iint_D \cf{f}\,\cd{dA}=\int_{\cl{c}}^{\cl{d}}\!\int_{\boxed{\,\mathbf{1}\,}}^{\boxed{\,\mathbf{2}\,}}\cf{f}(\cx{x},\cy{y})\,\mathrm{d}\boxed{\,\mathbf{3}\,}\,\mathrm{d}\boxed{\,\mathbf{4}\,}$$</div>
+          <div class="fc-cloze">$$\iint_Q \cf{f}\,\cd{dA}=\int_{\cl{c}}^{\cl{d}}\!\int_{\boxed{\,\mathbf{1}\,}}^{\boxed{\,\mathbf{2}\,}}\cf{f}(\cx{x},\cy{y})\,\mathrm{d}\boxed{\,\mathbf{3}\,}\,\mathrm{d}\boxed{\,\mathbf{4}\,}$$</div>
           <div class="fc-inputs"></div>
           <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
         </div>
@@ -754,118 +759,73 @@ window.MathJax = {
     </section>
 
     <!-- 11 -->
-    <section class="step" data-title="Cambiar orden · La idea">
-      <span class="kicker">Tema 3 · Cambiar el orden</span>
-      <h3>La idea: la misma región, cortada al revés</h3>
+    <section class="step" data-title="Método · La idea">
+      <span class="kicker">Tema 3 · El método de graficar</span>
+      <h3>La idea: primero el mapa, después la cuenta</h3>
       <div class="box"><b class="t">En palabras simples</b>
-        Una misma región se puede cortar en tiras verticales o en tiras horizontales, y la cantidad total es la misma. A veces una de las dos formas te deja una integral imposible de resolver y la otra una muy fácil. Entonces dibujas la región y la lees <b>al revés</b>. Ejemplo: el triángulo $0\le\cy{y}\le\cx{x}\le1$.
+        Antes de escribir ninguna integral, <b>dibuja la región</b>. Es como mirar el mapa antes de manejar: te dice por dónde entra y por dónde sale cada franja. Casi todos los errores de límites vienen de saltarse el dibujo. Son tres pasos, y siempre son los mismos: <b>graficar</b>, <b>intersecciones</b>, <b>dirección de barrido</b>.
       </div>
-      <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ft1-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="ft1-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0 294.0,210.0 288.8,210.0 283.6,210.0 278.4,210.0 273.2,210.0 268.0,210.0 262.8,210.0 257.5,210.0 252.3,210.0 247.1,210.0 241.9,210.0 236.7,210.0 231.5,210.0 226.3,210.0 221.1,210.0 215.9,210.0 210.7,210.0 205.5,210.0 200.2,210.0 195.0,210.0 189.8,210.0 184.6,210.0 179.4,210.0 174.2,210.0 169.0,210.0 163.8,210.0 158.6,210.0 153.4,210.0 148.2,210.0 143.0,210.0 137.8,210.0 132.5,210.0 127.3,210.0 122.1,210.0 116.9,210.0 111.7,210.0 106.5,210.0 101.3,210.0 96.1,210.0 90.9,210.0 85.7,210.0 80.5,210.0 75.2,210.0 70.0,210.0 64.8,210.0 59.6,210.0 54.4,210.0 49.2,210.0 44.0,210.0"/><polyline class="sv-l" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0"/><polyline class="sv-l" points="44.0,210.0 49.2,210.0 54.4,210.0 59.6,210.0 64.8,210.0 70.0,210.0 75.2,210.0 80.5,210.0 85.7,210.0 90.9,210.0 96.1,210.0 101.3,210.0 106.5,210.0 111.7,210.0 116.9,210.0 122.1,210.0 127.3,210.0 132.5,210.0 137.8,210.0 143.0,210.0 148.2,210.0 153.4,210.0 158.6,210.0 163.8,210.0 169.0,210.0 174.2,210.0 179.4,210.0 184.6,210.0 189.8,210.0 195.0,210.0 200.2,210.0 205.5,210.0 210.7,210.0 215.9,210.0 221.1,210.0 226.3,210.0 231.5,210.0 236.7,210.0 241.9,210.0 247.1,210.0 252.3,210.0 257.5,210.0 262.8,210.0 268.0,210.0 273.2,210.0 278.4,210.0 283.6,210.0 288.8,210.0 294.0,210.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="44.0" y2="210.0"/><line class="sv-l" x1="294.0" y1="210.0" x2="294.0" y2="30.0"/><line class="sv-dash" x1="44.0" y1="210" x2="44.0" y2="210.0"/><text class="svt tx-l" x="44.0" y="228" text-anchor="middle">0</text><line class="sv-dash" x1="294.0" y1="210" x2="294.0" y2="210.0"/><text class="svt tx-l" x="294.0" y="228" text-anchor="middle">1</text><line class="sv-ary" x1="219.0" y1="210.0" x2="219.0" y2="88.0" marker-end="url(#ft1-my)"/><text class="svt tx-l" x="181.5" y="101.0" text-anchor="middle">y = x</text><text class="svt tx-l" x="181.5" y="230.0" text-anchor="middle">y = 0</text></svg><figcaption>Como tipo I: para cada $\cx{x}$, la $\cy{y}$ va de $\cl{0}$ a $\cl{x}$.</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ft2-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="ft2-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="294.0,210.0 294.0,206.2 294.0,202.5 294.0,198.8 294.0,195.0 294.0,191.2 294.0,187.5 294.0,183.8 294.0,180.0 294.0,176.2 294.0,172.5 294.0,168.8 294.0,165.0 294.0,161.2 294.0,157.5 294.0,153.8 294.0,150.0 294.0,146.2 294.0,142.5 294.0,138.8 294.0,135.0 294.0,131.2 294.0,127.5 294.0,123.8 294.0,120.0 294.0,116.2 294.0,112.5 294.0,108.8 294.0,105.0 294.0,101.2 294.0,97.5 294.0,93.8 294.0,90.0 294.0,86.2 294.0,82.5 294.0,78.8 294.0,75.0 294.0,71.2 294.0,67.5 294.0,63.8 294.0,60.0 294.0,56.2 294.0,52.5 294.0,48.8 294.0,45.0 294.0,41.2 294.0,37.5 294.0,33.8 294.0,30.0 294.0,30.0 288.8,33.8 283.6,37.5 278.4,41.2 273.2,45.0 268.0,48.8 262.8,52.5 257.5,56.2 252.3,60.0 247.1,63.8 241.9,67.5 236.7,71.2 231.5,75.0 226.3,78.8 221.1,82.5 215.9,86.2 210.7,90.0 205.5,93.8 200.2,97.5 195.0,101.2 189.8,105.0 184.6,108.8 179.4,112.5 174.2,116.2 169.0,120.0 163.8,123.8 158.6,127.5 153.4,131.2 148.2,135.0 143.0,138.8 137.8,142.5 132.5,146.2 127.3,150.0 122.1,153.8 116.9,157.5 111.7,161.2 106.5,165.0 101.3,168.8 96.1,172.5 90.9,176.2 85.7,180.0 80.5,183.8 75.2,187.5 70.0,191.2 64.8,195.0 59.6,198.8 54.4,202.5 49.2,206.2 44.0,210.0"/><polyline class="sv-l" points="294.0,210.0 294.0,206.2 294.0,202.5 294.0,198.8 294.0,195.0 294.0,191.2 294.0,187.5 294.0,183.8 294.0,180.0 294.0,176.2 294.0,172.5 294.0,168.8 294.0,165.0 294.0,161.2 294.0,157.5 294.0,153.8 294.0,150.0 294.0,146.2 294.0,142.5 294.0,138.8 294.0,135.0 294.0,131.2 294.0,127.5 294.0,123.8 294.0,120.0 294.0,116.2 294.0,112.5 294.0,108.8 294.0,105.0 294.0,101.2 294.0,97.5 294.0,93.8 294.0,90.0 294.0,86.2 294.0,82.5 294.0,78.8 294.0,75.0 294.0,71.2 294.0,67.5 294.0,63.8 294.0,60.0 294.0,56.2 294.0,52.5 294.0,48.8 294.0,45.0 294.0,41.2 294.0,37.5 294.0,33.8 294.0,30.0"/><polyline class="sv-l" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="294.0" y2="210.0"/><line class="sv-l" x1="294.0" y1="30.0" x2="294.0" y2="30.0"/><line class="sv-dash" x1="44" y1="210.0" x2="44.0" y2="210.0"/><text class="svt tx-l" x="36" y="215.0" text-anchor="end">0</text><line class="sv-dash" x1="44" y1="30.0" x2="294.0" y2="30.0"/><text class="svt tx-l" x="36" y="35.0" text-anchor="end">1</text><line class="sv-arx" x1="144.0" y1="138.0" x2="290.0" y2="138.0" marker-end="url(#ft2-mx)"/><text class="svt tx-l" x="302.0" y="143.0" text-anchor="start">x = 1</text><text class="svt tx-l" x="136.0" y="143.0" text-anchor="end">x = y</text></svg><figcaption>Como tipo II: para cada $\cy{y}$, la $\cx{x}$ va de $\cl{y}$ a $\cl{1}$.</figcaption></figure></div>
     </section>
 
     <!-- 12 -->
-    <section class="step" data-title="Cambiar orden · La fórmula">
-      <span class="kicker">Tema 3 · Cambiar el orden</span>
-      <h3>La receta y la fórmula</h3>
+    <section class="step" data-title="Método · Los 3 pasos">
+      <span class="kicker">Tema 3 · El método de graficar</span>
+      <h3>Los 3 pasos y qué significan</h3>
       <ol>
-        <li><b>Dibuja</b> la región con los límites que te dieron.</li>
-        <li>Mira qué curvas forman el borde y <b>despeja</b> la otra variable (por ejemplo, de $\cy{y}=\cx{x}$ sale $\cx{x}=\cy{y}$).</li>
-        <li>Traza la flecha en el <b>otro sentido</b> y lee dónde entra y dónde sale.</li>
-        <li>Escribe los límites nuevos: afuera, números; adentro, funciones.</li>
+        <li><b>Grafica la región $Q$.</b> Dibuja cada curva que te dan ("limitada por…") y sombrea lo que queda encerrado.</li>
+        <li><b>Intersecciones.</b> Encuentra los puntos donde se cortan las curvas (igualándolas). De ahí salen los <span class="c-l">límites</span> constantes de <b>afuera</b>.</li>
+        <li><b>Dirección de barrido.</b> Decide si la región queda encerrada <b>de abajo hacia arriba</b> (tipo I, $\cy{dy}$ adentro) o <b>de izquierda a derecha</b> (tipo II, $\cx{dx}$ adentro). Las curvas de entrada y salida son los límites de <b>adentro</b>.</li>
       </ol>
-            <div class="fcard" data-id="orden" data-blanks='[{"o": ["0", "1", "x", "y"], "a": "y"}, {"o": ["0", "1", "x", "y"], "a": "1"}]'>
-        <div class="fc-head"><span class="fc-name">Cambiar el orden (el triángulo)</span><span class="fc-badge"></span></div>
+      <div class="symwrap"><table class="sym">
+        <tr><th>Palabra</th><th>En español</th></tr>
+        <tr><td>Intersección</td><td>Un punto donde dos curvas se cortan. Se halla igualándolas, por ejemplo $\cx{x}^2=2\cx{x}+3$.</td></tr>
+        <tr><td>Barrido vertical</td><td>Flecha verde de abajo hacia arriba: región <b>tipo I</b>, integral de adentro en $\cy{y}$.</td></tr>
+        <tr><td>Barrido horizontal</td><td>Flecha azul de izquierda a derecha: región <b>tipo II</b>, integral de adentro en $\cx{x}$.</td></tr>
+      </table></div>
+      <div class="fcard" data-id="barrido" data-blanks='[{"o": ["I", "II"], "a": "I"}, {"o": ["x", "y"], "a": "y"}, {"o": ["I", "II"], "a": "II"}]'>
+        <div class="fc-head"><span class="fc-name">Dirección de barrido</span><span class="fc-badge"></span></div>
         <div class="fc-msg" aria-live="polite"></div>
-        <div class="fc-full">$$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{x}}\cf{f}\,\cy{dy}\,\cx{dx}=\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{y}}^{\cl{1}}\cf{f}\,\cx{dx}\,\cy{dy}$$</div>
+        <div class="fc-full">$$\text{flecha vertical}\Rightarrow\text{tipo I},\ \text{adentro }\cy{dy}\qquad\text{flecha horizontal}\Rightarrow\text{tipo II},\ \text{adentro }\cx{dx}$$</div>
         <div class="fc-drill" hidden>
           <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
-          <div class="fc-cloze">$$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{x}}\cf{f}\,\cy{dy}\,\cx{dx}=\int_{\cl{0}}^{\cl{1}}\!\int_{\boxed{\,\mathbf{1}\,}}^{\boxed{\,\mathbf{2}\,}}\cf{f}\,\cx{dx}\,\cy{dy}$$</div>
+          <div class="fc-cloze">$$\text{flecha vertical}\Rightarrow\text{tipo }\boxed{\,\mathbf{1}\,},\ \text{adentro }\mathrm{d}\boxed{\,\mathbf{2}\,}\qquad\text{flecha horizontal}\Rightarrow\text{tipo }\boxed{\,\mathbf{3}\,}$$</div>
           <div class="fc-inputs"></div>
           <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
         </div>
-        <div class="fc-trick">💡 <b>Truco:</b> dibuja y lee la región <b>al revés</b>. Antes la flecha subía de $\cl{0}$ a $\cl{x}$; ahora cruza de la recta $\cl{x=y}$ hasta el borde $\cl{x=1}$. No basta con intercambiar las letras $dx$ y $dy$.</div>
+        <div class="fc-trick">💡 <b>Truco:</b> la integral de adentro es en la variable que <b>recorre la flecha</b>. Flecha vertical: $\cy{y}$. Flecha horizontal: $\cx{x}$.</div>
         <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
       </div>
     </section>
 
     <!-- 13 -->
-    <section class="step" data-title="Cambiar orden · Clave y error">
-      <span class="kicker">Tema 3 · Cambiar el orden</span>
+    <section class="step" data-title="Método · Clave y error">
+      <span class="kicker">Tema 3 · El método de graficar</span>
       <h3>Lo que debes recordar</h3>
       <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
         <ul>
-          <li>Siempre dibuja la región antes de cambiar el orden.</li>
-          <li>Los límites de afuera quedan en números; los de adentro, en la variable de afuera.</li>
-          <li>Cámbialo cuando la integral de adentro sea imposible (por ejemplo, $\cf{e^{\cy{y}^2}}$ o $\cf{\sin(\cx{x}^3)}$) y al revés sí salga.</li>
+          <li><b>Afuera, números</b> (salen de las intersecciones). <b>Adentro, funciones</b> (salen de las curvas).</li>
+          <li>Para saber cuál curva queda arriba, <b>prueba un valor</b> entre las intersecciones (por ejemplo $\cx{x}=0$) y compara.</li>
+          <li>Elige el barrido que describa la región con <b>una sola fórmula</b> de entrada y una de salida. Si uno sale feo, prueba el otro: la región es la misma.</li>
         </ul>
       </div>
       <div class="box warn"><b class="t">⚠️ Error común</b>
-        Intercambiar solo las letras $\cx{dx}$ y $\cy{dy}$ y dejar los mismos límites. Eso describe <b>otra región</b>: hay que volver a leerla en el dibujo.
+        Escribir los límites sin dibujar. Un círculo como $\cl{x^2+y^2=4}$ son <b>dos curvas</b>: $\cl{y=\sqrt{4-x^2}}$ (arriba) y $\cl{y=-\sqrt{4-x^2}}$ (abajo). Si usas solo una, te falta la mitad de la región.
       </div>
     </section>
 
     <!-- 14 -->
-    <section class="step" data-title="Área y partes · La idea">
-      <span class="kicker">Tema 4 · Área y regiones por partes</span>
-      <h3>La idea: altura 1 y piezas de rompecabezas</h3>
-      <div class="box"><b class="t">En palabras simples</b>
-        Si la "altura" es 1 en todas partes, el volumen es igual al área de la base: así calculas el <b>área</b> de cualquier región. Y si una región es muy complicada (por ejemplo, el borde de arriba cambia de fórmula a la mitad), la partes en pedazos que no se encimen, resuelves cada pedazo y <b>sumas</b>, como armar un rompecabezas.
-      </div>
-    </section>
-
-    <!-- 15 -->
-    <section class="step" data-title="Área y partes · La fórmula">
-      <span class="kicker">Tema 4 · Área y regiones por partes</span>
-      <h3>Símbolos y fórmula</h3>
-      <div class="symwrap"><table class="sym">
-        <tr><th>Símbolo</th><th>En español</th></tr>
-        <tr><td>$\text{Área}(D)$</td><td>El área de la región $D$.</td></tr>
-        <tr><td>$\cd{dA}$</td><td>Un pedacito de <span class="c-d">área</span>.</td></tr>
-        <tr><td>$D_1\cup D_2$</td><td>La región formada al pegar $D_1$ y $D_2$ (sin encimarlas).</td></tr>
-      </table></div>
-            <div class="fcard" data-id="areaD" data-blanks='[{"o": ["1", "f", "dA", "0"], "a": "1"}, {"o": ["+", "−", "×", "÷"], "a": "+"}]'>
-        <div class="fc-head"><span class="fc-name">Área y suma de regiones</span><span class="fc-badge"></span></div>
-        <div class="fc-msg" aria-live="polite"></div>
-        <div class="fc-full">$$\begin{aligned}\text{Área}(D)&=\iint_D 1\,\cd{dA}\\ \iint_{D_1\cup D_2}\cf{f}\,\cd{dA}&=\iint_{D_1}\cf{f}\,\cd{dA}+\iint_{D_2}\cf{f}\,\cd{dA}\end{aligned}$$</div>
-        <div class="fc-drill" hidden>
-          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
-          <div class="fc-cloze">$$\begin{aligned}\text{Área}(D)&=\iint_D \boxed{\,\mathbf{1}\,}\,\cd{dA}\\ \iint_{D_1\cup D_2}\cf{f}\,\cd{dA}&=\iint_{D_1}\cf{f}\,\cd{dA}\ \boxed{\,\mathbf{2}\,}\ \iint_{D_2}\cf{f}\,\cd{dA}\end{aligned}$$</div>
-          <div class="fc-inputs"></div>
-          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
-        </div>
-        <div class="fc-trick">💡 <b>Truco:</b> altura 1 ⇒ el volumen es el área de la base. Y si partes la región en pedazos que no se traslapan, sumas los pedazos.</div>
-        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
-      </div>
-    </section>
-
-    <!-- 16 -->
-    <section class="step" data-title="Área y partes · Clave y error">
-      <span class="kicker">Tema 4 · Área y regiones por partes</span>
-      <h3>Lo que debes recordar</h3>
-      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
-        <ul>
-          <li>$\iint_D 1\,\cd{dA}$ es el área de $D$.</li>
-          <li>Si $D$ no es ni tipo I ni tipo II, pártela en pedazos que sí lo sean y suma.</li>
-        </ul>
-      </div>
-      <div class="box warn"><b class="t">⚠️ Error común</b>
-        Sumar integrales de pedazos que se <b>encimen</b>: esa parte se cuenta dos veces. Los pedazos solo pueden compartir el borde.
-      </div>
-    </section>
-
-    <!-- 17 -->
     <section class="step" data-title="Lo que más cae">
       <div class="exam"><b class="t">⭐ Lo que más cae en examen</b>
         <ol>
-          <li><b>Dibujar la región y trazar la flecha:</b> de ahí salen todos los límites. Sin dibujo, casi siempre te equivocas.</li>
+          <li><b>Graficar y hallar las intersecciones:</b> sin dibujo casi siempre te equivocas en los límites, y las intersecciones son los números de afuera.</li>
           <li><b>Afuera números, adentro funciones:</b> los límites de la integral de afuera son constantes; los de adentro dependen de la variable de afuera.</li>
-          <li><b>Cambiar el orden:</b> no basta intercambiar $\cx{dx}$ y $\cy{dy}$; hay que volver a leer los límites en el dibujo. Se pide cuando la antiderivada es imposible ($\cf{e^{\cy{y}^2}}$, $\cf{\sin(\cx{x}^3)}$).</li>
+          <li><b>Elegir bien el barrido:</b> si una región se escribe fácil en un sentido y fea en el otro, elige el fácil (y mira si la función se integra fácil en ese orden).</li>
         </ol>
       </div>
       <p class="hint">Si solo repasas tres cosas antes del examen, que sean estas.</p>
     </section>
 
-    <!-- 18 -->
+    <!-- 15 -->
     <section class="step" data-title="Ejemplo A · ¿Qué harías?" data-gate="e2a">
       <span class="kicker">Ejemplo resuelto A</span>
       <h3>¿Qué harías primero?</h3>
@@ -873,80 +833,98 @@ window.MathJax = {
       <div id="first2a"></div>
     </section>
 
-    <!-- 19 -->
+    <!-- 16 -->
     <section class="step" data-title="Ejemplo A · Paso 1">
       <span class="kicker">Ejemplo resuelto A · Paso 1 de 3</span>
-      <p class="problem-line">Calcula $\displaystyle\iint_D \cf{\cx{x}\cy{y}}\,\cd{dA}$, donde $D$ está entre $\cl{y=x^2}$ y $\cl{y=x}$.</p>
-      <h3>Dibujar y plantear</h3>
-      <p>Buscamos dónde se cortan las curvas: $\cl{x^2=x}$ da $x(x-1)=0$, o sea $\cx{x}=0$ y $\cx{x}=1$. Entre esos valores, por ejemplo en $x=\tfrac12$, la recta vale $0.5$ y la parábola $0.25$: la recta queda <b>arriba</b>. Entonces la región es tipo I: $\cx{x}$ va de 0 a 1 y $\cy{y}$ va de $\cl{x^2}$ (abajo) a $\cl{x}$ (arriba).</p>
-      <figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="fea-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="fea-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0 294.0,30.0 288.8,37.4 283.6,44.7 278.4,51.8 273.2,58.8 268.0,65.5 262.8,72.2 257.5,78.7 252.3,85.0 247.1,91.2 241.9,97.2 236.7,103.0 231.5,108.8 226.3,114.3 221.1,119.7 215.9,124.9 210.7,130.0 205.5,134.9 200.2,139.7 195.0,144.3 189.8,148.8 184.6,153.0 179.4,157.2 174.2,161.2 169.0,165.0 163.8,168.7 158.6,172.2 153.4,175.5 148.2,178.8 143.0,181.8 137.8,184.7 132.5,187.4 127.3,190.0 122.1,192.4 116.9,194.7 111.7,196.8 106.5,198.8 101.3,200.5 96.1,202.2 90.9,203.7 85.7,205.0 80.5,206.2 75.2,207.2 70.0,208.0 64.8,208.8 59.6,209.3 54.4,209.7 49.2,209.9 44.0,210.0"/><polyline class="sv-l" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0"/><polyline class="sv-l" points="44.0,210.0 49.2,209.9 54.4,209.7 59.6,209.3 64.8,208.8 70.0,208.0 75.2,207.2 80.5,206.2 85.7,205.0 90.9,203.7 96.1,202.2 101.3,200.5 106.5,198.8 111.7,196.8 116.9,194.7 122.1,192.4 127.3,190.0 132.5,187.4 137.8,184.7 143.0,181.8 148.2,178.8 153.4,175.5 158.6,172.2 163.8,168.7 169.0,165.0 174.2,161.2 179.4,157.2 184.6,153.0 189.8,148.8 195.0,144.3 200.2,139.7 205.5,134.9 210.7,130.0 215.9,124.9 221.1,119.7 226.3,114.3 231.5,108.8 236.7,103.0 241.9,97.2 247.1,91.2 252.3,85.0 257.5,78.7 262.8,72.2 268.0,65.5 273.2,58.8 278.4,51.8 283.6,44.7 288.8,37.4 294.0,30.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="44.0" y2="210.0"/><line class="sv-l" x1="294.0" y1="30.0" x2="294.0" y2="30.0"/><line class="sv-dash" x1="44.0" y1="210" x2="44.0" y2="210.0"/><text class="svt tx-l" x="44.0" y="228" text-anchor="middle">0</text><line class="sv-dash" x1="294.0" y1="210" x2="294.0" y2="30.0"/><text class="svt tx-l" x="294.0" y="228" text-anchor="middle">1</text><line class="sv-ary" x1="169.0" y1="165.0" x2="169.0" y2="124.0" marker-end="url(#fea-my)"/><text class="svt tx-l" x="231.5" y="65.0" text-anchor="middle">y = x</text><text class="svt tx-l" x="231.5" y="128.8" text-anchor="middle">y = x²</text></svg><figcaption>La región $D$: arriba la recta $\cl{y=x}$, abajo la parábola $\cl{y=x^2}$, de $\cl{x=0}$ a $\cl{x=1}$.</figcaption></figure>
-      <div class="formula">$$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{x^2}}^{\cl{x}} \cf{\cx{x}\cy{y}}\,\cy{dy}\,\cx{dx}$$</div>
+      <p class="problem-line">Calcula $\displaystyle\iint_Q \cf{\cx{x}\cy{y}}\,\cd{dA}$ si $Q$ está limitada por $\cl{2x+y=4}$, $\cl{x=0}$ y $\cl{y=0}$.</p>
+      <h3>Graficar e intersecciones</h3>
+      <p>Cada ecuación es una recta. <b>Intersecciones:</b> $\cl{x=0}$ con $\cl{2x+y=4}$ da el punto $(0,4)$; $\cl{y=0}$ con $\cl{2x+y=4}$ da $(2,0)$; y los ejes se cortan en $(0,0)$. Es un triángulo.</p>
+      <p><b>Dirección de barrido:</b> de abajo hacia arriba, $\cy{y}$ entra por $\cl{y=0}$ y sale por la recta, que despejada es $\cl{y=4-2x}$. Para recorrer todas las franjas, $\cx{x}$ va de $\cl{0}$ a $\cl{2}$ (el vértice de la derecha).</p>
+<figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ta1-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="ta1-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="28" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44.0" y1="210" x2="44.0" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52.0" y="14">y</text><polygon class="sv-fill" points="44.0,30.0 47.3,33.0 50.7,36.0 54.0,39.0 57.3,42.0 60.7,45.0 64.0,48.0 67.3,51.0 70.7,54.0 74.0,57.0 77.3,60.0 80.7,63.0 84.0,66.0 87.3,69.0 90.7,72.0 94.0,75.0 97.3,78.0 100.7,81.0 104.0,84.0 107.3,87.0 110.7,90.0 114.0,93.0 117.3,96.0 120.7,99.0 124.0,102.0 127.3,105.0 130.7,108.0 134.0,111.0 137.3,114.0 140.7,117.0 144.0,120.0 147.3,123.0 150.7,126.0 154.0,129.0 157.3,132.0 160.7,135.0 164.0,138.0 167.3,141.0 170.7,144.0 174.0,147.0 177.3,150.0 180.7,153.0 184.0,156.0 187.3,159.0 190.7,162.0 194.0,165.0 197.3,168.0 200.7,171.0 204.0,174.0 207.3,177.0 210.7,180.0 214.0,183.0 217.3,186.0 220.7,189.0 224.0,192.0 227.3,195.0 230.7,198.0 234.0,201.0 237.3,204.0 240.7,207.0 244.0,210.0 244.0,210.0 240.7,210.0 237.3,210.0 234.0,210.0 230.7,210.0 227.3,210.0 224.0,210.0 220.7,210.0 217.3,210.0 214.0,210.0 210.7,210.0 207.3,210.0 204.0,210.0 200.7,210.0 197.3,210.0 194.0,210.0 190.7,210.0 187.3,210.0 184.0,210.0 180.7,210.0 177.3,210.0 174.0,210.0 170.7,210.0 167.3,210.0 164.0,210.0 160.7,210.0 157.3,210.0 154.0,210.0 150.7,210.0 147.3,210.0 144.0,210.0 140.7,210.0 137.3,210.0 134.0,210.0 130.7,210.0 127.3,210.0 124.0,210.0 120.7,210.0 117.3,210.0 114.0,210.0 110.7,210.0 107.3,210.0 104.0,210.0 100.7,210.0 97.3,210.0 94.0,210.0 90.7,210.0 87.3,210.0 84.0,210.0 80.7,210.0 77.3,210.0 74.0,210.0 70.7,210.0 67.3,210.0 64.0,210.0 60.7,210.0 57.3,210.0 54.0,210.0 50.7,210.0 47.3,210.0 44.0,210.0"/><polyline class="sv-l" points="44.0,30.0 47.3,33.0 50.7,36.0 54.0,39.0 57.3,42.0 60.7,45.0 64.0,48.0 67.3,51.0 70.7,54.0 74.0,57.0 77.3,60.0 80.7,63.0 84.0,66.0 87.3,69.0 90.7,72.0 94.0,75.0 97.3,78.0 100.7,81.0 104.0,84.0 107.3,87.0 110.7,90.0 114.0,93.0 117.3,96.0 120.7,99.0 124.0,102.0 127.3,105.0 130.7,108.0 134.0,111.0 137.3,114.0 140.7,117.0 144.0,120.0 147.3,123.0 150.7,126.0 154.0,129.0 157.3,132.0 160.7,135.0 164.0,138.0 167.3,141.0 170.7,144.0 174.0,147.0 177.3,150.0 180.7,153.0 184.0,156.0 187.3,159.0 190.7,162.0 194.0,165.0 197.3,168.0 200.7,171.0 204.0,174.0 207.3,177.0 210.7,180.0 214.0,183.0 217.3,186.0 220.7,189.0 224.0,192.0 227.3,195.0 230.7,198.0 234.0,201.0 237.3,204.0 240.7,207.0 244.0,210.0"/><polyline class="sv-l" points="44.0,210.0 47.3,210.0 50.7,210.0 54.0,210.0 57.3,210.0 60.7,210.0 64.0,210.0 67.3,210.0 70.7,210.0 74.0,210.0 77.3,210.0 80.7,210.0 84.0,210.0 87.3,210.0 90.7,210.0 94.0,210.0 97.3,210.0 100.7,210.0 104.0,210.0 107.3,210.0 110.7,210.0 114.0,210.0 117.3,210.0 120.7,210.0 124.0,210.0 127.3,210.0 130.7,210.0 134.0,210.0 137.3,210.0 140.7,210.0 144.0,210.0 147.3,210.0 150.7,210.0 154.0,210.0 157.3,210.0 160.7,210.0 164.0,210.0 167.3,210.0 170.7,210.0 174.0,210.0 177.3,210.0 180.7,210.0 184.0,210.0 187.3,210.0 190.7,210.0 194.0,210.0 197.3,210.0 200.7,210.0 204.0,210.0 207.3,210.0 210.7,210.0 214.0,210.0 217.3,210.0 220.7,210.0 224.0,210.0 227.3,210.0 230.7,210.0 234.0,210.0 237.3,210.0 240.7,210.0 244.0,210.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="44.0" y2="30.0"/><line class="sv-l" x1="244.0" y1="210.0" x2="244.0" y2="210.0"/><line class="sv-dash" x1="44.0" y1="210" x2="44.0" y2="210.0"/><text class="svt tx-l" x="44.0" y="228" text-anchor="middle">0</text><line class="sv-dash" x1="244.0" y1="210" x2="244.0" y2="210.0"/><text class="svt tx-l" x="244.0" y="228" text-anchor="middle">2</text><line class="sv-ary" x1="144.0" y1="207.0" x2="144.0" y2="126.0" marker-end="url(#ta1-my)"/><text class="svt tx-l" x="187.0" y="147.5" text-anchor="start">y = 4 − 2x</text><text class="svt tx-l" x="144.0" y="228.0" text-anchor="middle">y = 0</text></svg><figcaption>Barrido <b>vertical</b>: la flecha verde entra por $\cl{y=0}$ y sale por $\cl{y=4-2x}$. Después $\cx{x}$ va de $\cl{0}$ a $\cl{2}$.</figcaption></figure>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{0}}^{\cl{4-2x}} \cf{\cx{x}\cy{y}}\,\cy{dy}\,\cx{dx}$$</div>
     </section>
 
-    <!-- 20 -->
+    <!-- 17 -->
     <section class="step" data-title="Ejemplo A · Paso 2">
       <span class="kicker">Ejemplo resuelto A · Paso 2 de 3</span>
       <h3>Integral de adentro, en $\cy{y}$</h3>
-      <p>Integramos en $\cy{y}$ con $\cx{x}$ constante: $\cx{x}$ sale como factor y $\int \cy{y}\,\cy{dy}=\cy{y}^2/2$. Evaluamos con los <span class="c-l">límites</span> de $\cy{y}$, que son funciones: arriba $\cl{x}$, abajo $\cl{x^2}$.</p>
-      <div class="formula">$$\int_{\cl{x^2}}^{\cl{x}} \cx{x}\cy{y}\,\cy{dy}=\cx{x}\left[\frac{\cy{y}^2}{2}\right]_{\cy{y}=\cl{x^2}}^{\cy{y}=\cl{x}}=\cx{x}\left(\frac{\cx{x}^2}{2}-\frac{\cx{x}^4}{2}\right)=\frac{\cx{x}^3-\cx{x}^5}{2}$$</div>
-      <p class="hint">Fíjate: ya no queda ninguna $\cy{y}$, solo $\cx{x}$. Eso es lo que debe pasar.</p>
+      <p>Con $\cx{x}$ constante, $\cx{x}$ sale como factor y $\int \cy{y}\,\cy{dy}=\cy{y}^2/2$. Evaluamos con los <span class="c-l">límites</span> de $\cy{y}$, que son funciones: arriba $\cl{4-2x}$, abajo $\cl{0}$.</p>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{4-2x}} \cx{x}\cy{y}\,\cy{dy}=\cx{x}\left[\frac{\cy{y}^2}{2}\right]_{\cy{y}=\cl{0}}^{\cy{y}=\cl{4-2x}}=\frac{\cx{x}(4-2\cx{x})^2}{2}=8\cx{x}-8\cx{x}^2+2\cx{x}^3$$</div>
+      <p class="hint">Ya no queda ninguna $\cy{y}$: solo $\cx{x}$. Eso es lo que debe pasar.</p>
     </section>
 
-    <!-- 21 -->
+    <!-- 18 -->
     <section class="step" data-title="Ejemplo A · Paso 3">
       <span class="kicker">Ejemplo resuelto A · Paso 3 de 3</span>
-      <h3>Integral de afuera, en $\cx{x}$</h3>
-      <p>Ahora los <span class="c-l">límites</span> son números, de 0 a 1. Es una integral normal de una variable.</p>
-      <div class="formula">$$\int_{\cl{0}}^{\cl{1}}\frac{\cx{x}^3-\cx{x}^5}{2}\,\cx{dx}=\frac12\left[\frac{\cx{x}^4}{4}-\frac{\cx{x}^6}{6}\right]_{\cl{0}}^{\cl{1}}=\frac12\left(\frac14-\frac16\right)=\frac{1}{24}$$</div>
-      <div class="ans">Resultado: $\dfrac{1}{24}$</div>
-      <p><b>¿Tiene sentido?</b> El área de $D$ es $\int_0^1 (x-x^2)\,dx=\frac16$. Dividiendo, el valor promedio de $xy$ en la región es $\frac{1/24}{1/6}=\frac14$. En la región $x$ y $y$ valen entre 0 y 1, así que $\frac14$ es razonable.</p>
+      <h3>Integral de afuera y comprobación</h3>
+      <p>Los <span class="c-l">límites</span> son números, de 0 a 2:</p>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{2}}(8\cx{x}-8\cx{x}^2+2\cx{x}^3)\,\cx{dx}=\left[4\cx{x}^2-\frac{8\cx{x}^3}{3}+\frac{\cx{x}^4}{2}\right]_{\cl{0}}^{\cl{2}}=16-\frac{64}{3}+8=\frac{8}{3}$$</div>
+      <div class="ans">Resultado: $\dfrac{8}{3}$</div>
+      <p><b>Comprobación con el otro barrido.</b> Si barremos de izquierda a derecha, la flecha entra por $\cl{x=0}$ y sale por $\cl{x=\frac{4-y}{2}}$, con $\cy{y}$ de $\cl{0}$ a $\cl{4}$. Debe dar lo mismo:</p>
+<figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ta2-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="ta2-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="28" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44.0" y1="210" x2="44.0" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52.0" y="14">y</text><polygon class="sv-fill" points="244.0,210.0 240.7,207.0 237.3,204.0 234.0,201.0 230.7,198.0 227.3,195.0 224.0,192.0 220.7,189.0 217.3,186.0 214.0,183.0 210.7,180.0 207.3,177.0 204.0,174.0 200.7,171.0 197.3,168.0 194.0,165.0 190.7,162.0 187.3,159.0 184.0,156.0 180.7,153.0 177.3,150.0 174.0,147.0 170.7,144.0 167.3,141.0 164.0,138.0 160.7,135.0 157.3,132.0 154.0,129.0 150.7,126.0 147.3,123.0 144.0,120.0 140.7,117.0 137.3,114.0 134.0,111.0 130.7,108.0 127.3,105.0 124.0,102.0 120.7,99.0 117.3,96.0 114.0,93.0 110.7,90.0 107.3,87.0 104.0,84.0 100.7,81.0 97.3,78.0 94.0,75.0 90.7,72.0 87.3,69.0 84.0,66.0 80.7,63.0 77.3,60.0 74.0,57.0 70.7,54.0 67.3,51.0 64.0,48.0 60.7,45.0 57.3,42.0 54.0,39.0 50.7,36.0 47.3,33.0 44.0,30.0 44.0,30.0 44.0,33.0 44.0,36.0 44.0,39.0 44.0,42.0 44.0,45.0 44.0,48.0 44.0,51.0 44.0,54.0 44.0,57.0 44.0,60.0 44.0,63.0 44.0,66.0 44.0,69.0 44.0,72.0 44.0,75.0 44.0,78.0 44.0,81.0 44.0,84.0 44.0,87.0 44.0,90.0 44.0,93.0 44.0,96.0 44.0,99.0 44.0,102.0 44.0,105.0 44.0,108.0 44.0,111.0 44.0,114.0 44.0,117.0 44.0,120.0 44.0,123.0 44.0,126.0 44.0,129.0 44.0,132.0 44.0,135.0 44.0,138.0 44.0,141.0 44.0,144.0 44.0,147.0 44.0,150.0 44.0,153.0 44.0,156.0 44.0,159.0 44.0,162.0 44.0,165.0 44.0,168.0 44.0,171.0 44.0,174.0 44.0,177.0 44.0,180.0 44.0,183.0 44.0,186.0 44.0,189.0 44.0,192.0 44.0,195.0 44.0,198.0 44.0,201.0 44.0,204.0 44.0,207.0 44.0,210.0"/><polyline class="sv-l" points="244.0,210.0 240.7,207.0 237.3,204.0 234.0,201.0 230.7,198.0 227.3,195.0 224.0,192.0 220.7,189.0 217.3,186.0 214.0,183.0 210.7,180.0 207.3,177.0 204.0,174.0 200.7,171.0 197.3,168.0 194.0,165.0 190.7,162.0 187.3,159.0 184.0,156.0 180.7,153.0 177.3,150.0 174.0,147.0 170.7,144.0 167.3,141.0 164.0,138.0 160.7,135.0 157.3,132.0 154.0,129.0 150.7,126.0 147.3,123.0 144.0,120.0 140.7,117.0 137.3,114.0 134.0,111.0 130.7,108.0 127.3,105.0 124.0,102.0 120.7,99.0 117.3,96.0 114.0,93.0 110.7,90.0 107.3,87.0 104.0,84.0 100.7,81.0 97.3,78.0 94.0,75.0 90.7,72.0 87.3,69.0 84.0,66.0 80.7,63.0 77.3,60.0 74.0,57.0 70.7,54.0 67.3,51.0 64.0,48.0 60.7,45.0 57.3,42.0 54.0,39.0 50.7,36.0 47.3,33.0 44.0,30.0"/><polyline class="sv-l" points="44.0,210.0 44.0,207.0 44.0,204.0 44.0,201.0 44.0,198.0 44.0,195.0 44.0,192.0 44.0,189.0 44.0,186.0 44.0,183.0 44.0,180.0 44.0,177.0 44.0,174.0 44.0,171.0 44.0,168.0 44.0,165.0 44.0,162.0 44.0,159.0 44.0,156.0 44.0,153.0 44.0,150.0 44.0,147.0 44.0,144.0 44.0,141.0 44.0,138.0 44.0,135.0 44.0,132.0 44.0,129.0 44.0,126.0 44.0,123.0 44.0,120.0 44.0,117.0 44.0,114.0 44.0,111.0 44.0,108.0 44.0,105.0 44.0,102.0 44.0,99.0 44.0,96.0 44.0,93.0 44.0,90.0 44.0,87.0 44.0,84.0 44.0,81.0 44.0,78.0 44.0,75.0 44.0,72.0 44.0,69.0 44.0,66.0 44.0,63.0 44.0,60.0 44.0,57.0 44.0,54.0 44.0,51.0 44.0,48.0 44.0,45.0 44.0,42.0 44.0,39.0 44.0,36.0 44.0,33.0 44.0,30.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="244.0" y2="210.0"/><line class="sv-l" x1="44.0" y1="30.0" x2="44.0" y2="30.0"/><line class="sv-dash" x1="44.0" y1="210.0" x2="44.0" y2="210.0"/><text class="svt tx-l" x="36.0" y="215.0" text-anchor="end">0</text><line class="sv-dash" x1="44.0" y1="30.0" x2="44.0" y2="30.0"/><text class="svt tx-l" x="36.0" y="35.0" text-anchor="end">4</text><line class="sv-arx" x1="47.0" y1="120.0" x2="138.0" y2="120.0" marker-end="url(#ta2-mx)"/><text class="svt tx-l" x="204.0" y="165.0" text-anchor="start">x = (4 − y)/2</text><text class="svt tx-l" x="52.0" y="183.0" text-anchor="start">x = 0</text></svg><figcaption>Barrido <b>horizontal</b>: la flecha azul entra por $\cl{x=0}$ y sale por $\cl{x=\frac{4-y}{2}}$. Después $\cy{y}$ va de $\cl{0}$ a $\cl{4}$.</figcaption></figure>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{4}}\!\int_{\cl{0}}^{\cl{(4-y)/2}} \cf{\cx{x}\cy{y}}\,\cx{dx}\,\cy{dy}=\int_0^4 \frac{\cy{y}(4-\cy{y})^2}{8}\,\cy{dy}=\frac{8}{3}$$</div>
+      <p><b>¿Tiene sentido?</b> El triángulo tiene área $\frac{2\cdot4}{2}=4$, así que el valor promedio de $\cx{x}\cy{y}$ es $\frac{8/3}{4}=\frac23$. Dentro del triángulo, $\cx{x}\cy{y}$ va de 0 a 2 (su máximo en la frontera está en $(1,2)$), así que $\frac23$ es razonable.</p>
     </section>
 
-    <!-- 22 -->
+    <!-- 19 -->
     <section class="step" data-title="Ejemplo B · ¿Qué harías?" data-gate="e2b">
-      <span class="kicker">Ejemplo resuelto B · Cambiar el orden</span>
+      <span class="kicker">Ejemplo resuelto B</span>
       <h3>¿Qué harías primero?</h3>
-      <p>Esta es la trampa clásica de examen. Elige una opción para continuar.</p>
+      <p>Esta vez la región está entre una parábola y una recta. Elige una opción para continuar.</p>
       <div id="first2b"></div>
     </section>
 
-    <!-- 23 -->
+    <!-- 20 -->
     <section class="step" data-title="Ejemplo B · Paso 1">
       <span class="kicker">Ejemplo resuelto B · Paso 1 de 3</span>
-      <p class="problem-line">Calcula $\displaystyle\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{x}}^{\cl{1}} \cf{e^{\cy{y}^2}}\,\cy{dy}\,\cx{dx}$.</p>
-      <h3>Ver por qué te atoras y dibujar</h3>
-      <p>La integral de adentro es $\int \cf{e^{\cy{y}^2}}\,\cy{dy}$, y esa <b>no</b> tiene antiderivada con funciones elementales. Si intentas resolver en este orden, no sales. Leemos los límites para dibujar: $\cx{x}$ va de 0 a 1 y, para cada $\cx{x}$, $\cy{y}$ va de $\cl{x}$ a $\cl{1}$. Es el triángulo con vértices $(0,0)$, $(0,1)$ y $(1,1)$.</p>
-      <figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="feb1-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="feb1-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="44.0,30.0 49.2,30.0 54.4,30.0 59.6,30.0 64.8,30.0 70.0,30.0 75.2,30.0 80.5,30.0 85.7,30.0 90.9,30.0 96.1,30.0 101.3,30.0 106.5,30.0 111.7,30.0 116.9,30.0 122.1,30.0 127.3,30.0 132.5,30.0 137.8,30.0 143.0,30.0 148.2,30.0 153.4,30.0 158.6,30.0 163.8,30.0 169.0,30.0 174.2,30.0 179.4,30.0 184.6,30.0 189.8,30.0 195.0,30.0 200.2,30.0 205.5,30.0 210.7,30.0 215.9,30.0 221.1,30.0 226.3,30.0 231.5,30.0 236.7,30.0 241.9,30.0 247.1,30.0 252.3,30.0 257.5,30.0 262.8,30.0 268.0,30.0 273.2,30.0 278.4,30.0 283.6,30.0 288.8,30.0 294.0,30.0 294.0,30.0 288.8,33.8 283.6,37.5 278.4,41.2 273.2,45.0 268.0,48.8 262.8,52.5 257.5,56.2 252.3,60.0 247.1,63.8 241.9,67.5 236.7,71.2 231.5,75.0 226.3,78.8 221.1,82.5 215.9,86.2 210.7,90.0 205.5,93.8 200.2,97.5 195.0,101.2 189.8,105.0 184.6,108.8 179.4,112.5 174.2,116.2 169.0,120.0 163.8,123.8 158.6,127.5 153.4,131.2 148.2,135.0 143.0,138.8 137.8,142.5 132.5,146.2 127.3,150.0 122.1,153.8 116.9,157.5 111.7,161.2 106.5,165.0 101.3,168.8 96.1,172.5 90.9,176.2 85.7,180.0 80.5,183.8 75.2,187.5 70.0,191.2 64.8,195.0 59.6,198.8 54.4,202.5 49.2,206.2 44.0,210.0"/><polyline class="sv-l" points="44.0,30.0 49.2,30.0 54.4,30.0 59.6,30.0 64.8,30.0 70.0,30.0 75.2,30.0 80.5,30.0 85.7,30.0 90.9,30.0 96.1,30.0 101.3,30.0 106.5,30.0 111.7,30.0 116.9,30.0 122.1,30.0 127.3,30.0 132.5,30.0 137.8,30.0 143.0,30.0 148.2,30.0 153.4,30.0 158.6,30.0 163.8,30.0 169.0,30.0 174.2,30.0 179.4,30.0 184.6,30.0 189.8,30.0 195.0,30.0 200.2,30.0 205.5,30.0 210.7,30.0 215.9,30.0 221.1,30.0 226.3,30.0 231.5,30.0 236.7,30.0 241.9,30.0 247.1,30.0 252.3,30.0 257.5,30.0 262.8,30.0 268.0,30.0 273.2,30.0 278.4,30.0 283.6,30.0 288.8,30.0 294.0,30.0"/><polyline class="sv-l" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="44.0" y2="30.0"/><line class="sv-l" x1="294.0" y1="30.0" x2="294.0" y2="30.0"/><line class="sv-dash" x1="44.0" y1="210" x2="44.0" y2="210.0"/><text class="svt tx-l" x="44.0" y="228" text-anchor="middle">0</text><line class="sv-dash" x1="294.0" y1="210" x2="294.0" y2="30.0"/><text class="svt tx-l" x="294.0" y="228" text-anchor="middle">1</text><line class="sv-ary" x1="194.0" y1="102.0" x2="194.0" y2="34.0" marker-end="url(#feb1-my)"/><text class="svt tx-l" x="131.5" y="20.0" text-anchor="middle">y = 1</text><text class="svt tx-l" x="131.5" y="167.0" text-anchor="middle">y = x</text></svg><figcaption>Orden original ($dy\,dx$): para cada $\cx{x}$, la $\cy{y}$ va de $\cl{x}$ a $\cl{1}$.</figcaption></figure>
+      <p class="problem-line">Calcula $\displaystyle\iint_Q \cf{\cx{x}}\,\cd{dA}$ si $Q$ está limitada por $\cl{y=x^2}$ y $\cl{y=2x+3}$.</p>
+      <h3>Graficar e intersecciones</h3>
+      <p><b>Intersecciones:</b> igualamos las curvas, $\cx{x}^2=2\cx{x}+3$, o sea $\cx{x}^2-2\cx{x}-3=0$, que factoriza como $(\cx{x}+1)(\cx{x}-3)=0$. Entonces $\cl{x=-1}$ y $\cl{x=3}$: esos son los números de afuera.</p>
+      <p><b>¿Cuál queda arriba?</b> Probamos $\cx{x}=0$: la recta vale 3 y la parábola 0, así que la recta está arriba.</p>
+      <p><b>Dirección de barrido:</b> vertical. De abajo hacia arriba, $\cy{y}$ entra por $\cl{y=x^2}$ y sale por $\cl{y=2x+3}$, con una sola fórmula en cada lado.</p>
+<figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="tb1-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="tb1-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="28" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="120.0" y1="210" x2="120.0" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="128.0" y="14">y</text><polygon class="sv-fill" points="60.0,189.0 64.0,186.2 68.0,183.4 72.0,180.6 76.0,177.8 80.0,175.0 84.0,172.2 88.0,169.4 92.0,166.6 96.0,163.8 100.0,161.0 104.0,158.2 108.0,155.4 112.0,152.6 116.0,149.8 120.0,147.0 124.0,144.2 128.0,141.4 132.0,138.6 136.0,135.8 140.0,133.0 144.0,130.2 148.0,127.4 152.0,124.6 156.0,121.8 160.0,119.0 164.0,116.2 168.0,113.4 172.0,110.6 176.0,107.8 180.0,105.0 184.0,102.2 188.0,99.4 192.0,96.6 196.0,93.8 200.0,91.0 204.0,88.2 208.0,85.4 212.0,82.6 216.0,79.8 220.0,77.0 224.0,74.2 228.0,71.4 232.0,68.6 236.0,65.8 240.0,63.0 244.0,60.2 248.0,57.4 252.0,54.6 256.0,51.8 260.0,49.0 264.0,46.2 268.0,43.4 272.0,40.6 276.0,37.8 280.0,35.0 284.0,32.2 288.0,29.4 292.0,26.6 296.0,23.8 300.0,21.0 300.0,21.0 296.0,29.3 292.0,37.4 288.0,45.4 284.0,53.1 280.0,60.7 276.0,68.0 272.0,75.2 268.0,82.2 264.0,89.0 260.0,95.7 256.0,102.1 252.0,108.4 248.0,114.4 244.0,120.3 240.0,126.0 236.0,131.5 232.0,136.8 228.0,142.0 224.0,146.9 220.0,151.7 216.0,156.2 212.0,160.6 208.0,164.8 204.0,168.8 200.0,172.7 196.0,176.3 192.0,179.8 188.0,183.0 184.0,186.1 180.0,189.0 176.0,191.7 172.0,194.2 168.0,196.6 164.0,198.7 160.0,200.7 156.0,202.4 152.0,204.0 148.0,205.4 144.0,206.6 140.0,207.7 136.0,208.5 132.0,209.2 128.0,209.6 124.0,209.9 120.0,210.0 116.0,209.9 112.0,209.6 108.0,209.2 104.0,208.5 100.0,207.7 96.0,206.6 92.0,205.4 88.0,204.0 84.0,202.4 80.0,200.7 76.0,198.7 72.0,196.6 68.0,194.2 64.0,191.7 60.0,189.0"/><polyline class="sv-l" points="60.0,189.0 64.0,186.2 68.0,183.4 72.0,180.6 76.0,177.8 80.0,175.0 84.0,172.2 88.0,169.4 92.0,166.6 96.0,163.8 100.0,161.0 104.0,158.2 108.0,155.4 112.0,152.6 116.0,149.8 120.0,147.0 124.0,144.2 128.0,141.4 132.0,138.6 136.0,135.8 140.0,133.0 144.0,130.2 148.0,127.4 152.0,124.6 156.0,121.8 160.0,119.0 164.0,116.2 168.0,113.4 172.0,110.6 176.0,107.8 180.0,105.0 184.0,102.2 188.0,99.4 192.0,96.6 196.0,93.8 200.0,91.0 204.0,88.2 208.0,85.4 212.0,82.6 216.0,79.8 220.0,77.0 224.0,74.2 228.0,71.4 232.0,68.6 236.0,65.8 240.0,63.0 244.0,60.2 248.0,57.4 252.0,54.6 256.0,51.8 260.0,49.0 264.0,46.2 268.0,43.4 272.0,40.6 276.0,37.8 280.0,35.0 284.0,32.2 288.0,29.4 292.0,26.6 296.0,23.8 300.0,21.0"/><polyline class="sv-l" points="60.0,189.0 64.0,191.7 68.0,194.2 72.0,196.6 76.0,198.7 80.0,200.7 84.0,202.4 88.0,204.0 92.0,205.4 96.0,206.6 100.0,207.7 104.0,208.5 108.0,209.2 112.0,209.6 116.0,209.9 120.0,210.0 124.0,209.9 128.0,209.6 132.0,209.2 136.0,208.5 140.0,207.7 144.0,206.6 148.0,205.4 152.0,204.0 156.0,202.4 160.0,200.7 164.0,198.7 168.0,196.6 172.0,194.2 176.0,191.7 180.0,189.0 184.0,186.1 188.0,183.0 192.0,179.8 196.0,176.3 200.0,172.7 204.0,168.8 208.0,164.8 212.0,160.6 216.0,156.2 220.0,151.7 224.0,146.9 228.0,142.0 232.0,136.8 236.0,131.5 240.0,126.0 244.0,120.3 248.0,114.4 252.0,108.4 256.0,102.1 260.0,95.7 264.0,89.0 268.0,82.2 272.0,75.2 276.0,68.0 280.0,60.7 284.0,53.1 288.0,45.4 292.0,37.4 296.0,29.3 300.0,21.0"/><line class="sv-l" x1="60.0" y1="189.0" x2="60.0" y2="189.0"/><line class="sv-l" x1="300.0" y1="21.0" x2="300.0" y2="21.0"/><line class="sv-dash" x1="60.0" y1="210" x2="60.0" y2="189.0"/><text class="svt tx-l" x="60.0" y="228" text-anchor="middle">−1</text><line class="sv-dash" x1="300.0" y1="210" x2="300.0" y2="21.0"/><text class="svt tx-l" x="300.0" y="228" text-anchor="middle">3</text><line class="sv-ary" x1="180.0" y1="186.0" x2="180.0" y2="111.0" marker-end="url(#tb1-my)"/><text class="svt tx-l" x="198.0" y="79.8" text-anchor="end">y = 2x + 3</text><text class="svt tx-l" x="270.0" y="126.0" text-anchor="start">y = x²</text></svg><figcaption>Entre las intersecciones $\cl{x=-1}$ y $\cl{x=3}$, la recta $\cl{y=2x+3}$ queda <b>arriba</b> y la parábola $\cl{y=x^2}$ queda <b>abajo</b>.</figcaption></figure>
+      <div class="formula">$$\int_{\cl{-1}}^{\cl{3}}\!\int_{\cl{x^2}}^{\cl{2x+3}} \cf{\cx{x}}\,\cy{dy}\,\cx{dx}$$</div>
+      <p class="hint">¿Por qué no el barrido horizontal? Porque a la izquierda y a la derecha la curva cambia de fórmula según la altura: tendrías que partir la región en dos. Eso se ve en la Lección 3.</p>
     </section>
 
-    <!-- 24 -->
+    <!-- 21 -->
     <section class="step" data-title="Ejemplo B · Paso 2">
       <span class="kicker">Ejemplo resuelto B · Paso 2 de 3</span>
-      <h3>Leer la región al revés</h3>
-      <p>Ahora cortamos en franjas horizontales. La $\cy{y}$ de afuera recorre toda la región, de 0 a 1. Para cada $\cy{y}$, la flecha horizontal entra por el borde izquierdo $\cl{x=0}$ y sale por la recta $\cl{x=y}$ (porque la región está donde $x\le y$). Así el orden nuevo es $\cx{dx}$ adentro y $\cy{dy}$ afuera.</p>
-      <figure class="fig"><svg class="fig-svg" viewBox="0 0 340 250" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="feb2-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="feb2-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="44" y1="210" x2="326" y2="210"/><line class="sv-ax" x1="44" y1="210" x2="44" y2="14"/><text class="svt tx-x" x="322" y="228">x</text><text class="svt tx-y" x="52" y="14">y</text><polygon class="sv-fill" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0 44.0,30.0 44.0,33.8 44.0,37.5 44.0,41.2 44.0,45.0 44.0,48.8 44.0,52.5 44.0,56.2 44.0,60.0 44.0,63.8 44.0,67.5 44.0,71.2 44.0,75.0 44.0,78.8 44.0,82.5 44.0,86.2 44.0,90.0 44.0,93.8 44.0,97.5 44.0,101.2 44.0,105.0 44.0,108.8 44.0,112.5 44.0,116.2 44.0,120.0 44.0,123.8 44.0,127.5 44.0,131.2 44.0,135.0 44.0,138.8 44.0,142.5 44.0,146.2 44.0,150.0 44.0,153.8 44.0,157.5 44.0,161.2 44.0,165.0 44.0,168.8 44.0,172.5 44.0,176.2 44.0,180.0 44.0,183.8 44.0,187.5 44.0,191.2 44.0,195.0 44.0,198.8 44.0,202.5 44.0,206.2 44.0,210.0"/><polyline class="sv-l" points="44.0,210.0 49.2,206.2 54.4,202.5 59.6,198.8 64.8,195.0 70.0,191.2 75.2,187.5 80.5,183.8 85.7,180.0 90.9,176.2 96.1,172.5 101.3,168.8 106.5,165.0 111.7,161.2 116.9,157.5 122.1,153.8 127.3,150.0 132.5,146.2 137.8,142.5 143.0,138.8 148.2,135.0 153.4,131.2 158.6,127.5 163.8,123.8 169.0,120.0 174.2,116.2 179.4,112.5 184.6,108.8 189.8,105.0 195.0,101.2 200.2,97.5 205.5,93.8 210.7,90.0 215.9,86.2 221.1,82.5 226.3,78.8 231.5,75.0 236.7,71.2 241.9,67.5 247.1,63.8 252.3,60.0 257.5,56.2 262.8,52.5 268.0,48.8 273.2,45.0 278.4,41.2 283.6,37.5 288.8,33.8 294.0,30.0"/><polyline class="sv-l" points="44.0,210.0 44.0,206.2 44.0,202.5 44.0,198.8 44.0,195.0 44.0,191.2 44.0,187.5 44.0,183.8 44.0,180.0 44.0,176.2 44.0,172.5 44.0,168.8 44.0,165.0 44.0,161.2 44.0,157.5 44.0,153.8 44.0,150.0 44.0,146.2 44.0,142.5 44.0,138.8 44.0,135.0 44.0,131.2 44.0,127.5 44.0,123.8 44.0,120.0 44.0,116.2 44.0,112.5 44.0,108.8 44.0,105.0 44.0,101.2 44.0,97.5 44.0,93.8 44.0,90.0 44.0,86.2 44.0,82.5 44.0,78.8 44.0,75.0 44.0,71.2 44.0,67.5 44.0,63.8 44.0,60.0 44.0,56.2 44.0,52.5 44.0,48.8 44.0,45.0 44.0,41.2 44.0,37.5 44.0,33.8 44.0,30.0"/><line class="sv-l" x1="44.0" y1="210.0" x2="44.0" y2="210.0"/><line class="sv-l" x1="44.0" y1="30.0" x2="294.0" y2="30.0"/><line class="sv-dash" x1="44" y1="210.0" x2="44.0" y2="210.0"/><text class="svt tx-l" x="36" y="215.0" text-anchor="end">0</text><line class="sv-dash" x1="44" y1="30.0" x2="44.0" y2="30.0"/><text class="svt tx-l" x="36" y="35.0" text-anchor="end">1</text><line class="sv-arx" x1="44.0" y1="111.0" x2="177.5" y2="111.0" marker-end="url(#feb2-mx)"/><text class="svt tx-l" x="207.0" y="103.4" text-anchor="start">x = y</text><text class="svt tx-l" x="36.0" y="103.4" text-anchor="end">x = 0</text></svg><figcaption>Orden nuevo ($dx\,dy$): para cada $\cy{y}$, la $\cx{x}$ va de $\cl{0}$ a $\cl{y}$.</figcaption></figure>
-      <div class="formula">$$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{y}} \cf{e^{\cy{y}^2}}\,\cx{dx}\,\cy{dy}$$</div>
+      <h3>Integral de adentro, en $\cy{y}$</h3>
+      <p>La función $\cf{\cx{x}}$ no tiene $\cy{y}$, así que es constante en esta integral: da "$\cx{x}$ por el largo de la franja", es decir, $\cx{x}\,(\text{arriba}-\text{abajo})$.</p>
+      <div class="formula">$$\int_{\cl{x^2}}^{\cl{2x+3}} \cx{x}\,\cy{dy}=\cx{x}\Big[\cy{y}\Big]_{\cy{y}=\cl{x^2}}^{\cy{y}=\cl{2x+3}}=\cx{x}\left(2\cx{x}+3-\cx{x}^2\right)=2\cx{x}^2+3\cx{x}-\cx{x}^3$$</div>
     </section>
 
-    <!-- 25 -->
+    <!-- 22 -->
     <section class="step" data-title="Ejemplo B · Paso 3">
       <span class="kicker">Ejemplo resuelto B · Paso 3 de 3</span>
-      <h3>Resolver con el orden nuevo</h3>
-      <p>Adentro integramos en $\cx{x}$. Como $\cf{e^{\cy{y}^2}}$ no tiene $\cx{x}$, es una constante y la integral es solo "constante por el largo", $\cy{y}-0$. Luego afuera sale con un cambio de variable $u=\cy{y}^2$ directo.</p>
-      <div class="formula">$$\int_{\cl{0}}^{\cl{y}} \cf{e^{\cy{y}^2}}\,\cx{dx}=\cy{y}\,\cf{e^{\cy{y}^2}}\qquad\Longrightarrow\qquad \int_{\cl{0}}^{\cl{1}}\cy{y}\,\cf{e^{\cy{y}^2}}\,\cy{dy}=\left[\frac{\cf{e^{\cy{y}^2}}}{2}\right]_{\cl{0}}^{\cl{1}}=\frac{e-1}{2}$$</div>
-      <div class="ans">Resultado: $\dfrac{e-1}{2}\approx 0.859$</div>
-      <p class="hint">Moraleja: el mismo problema, en el orden correcto, se vuelve fácil.</p>
+      <h3>Integral de afuera, en $\cx{x}$</h3>
+      <p>Ahora los <span class="c-l">límites</span> son números: de $-1$ a $3$. Cuidado al evaluar en $-1$ (los signos).</p>
+      <div class="formula">$$\int_{\cl{-1}}^{\cl{3}}(2\cx{x}^2+3\cx{x}-\cx{x}^3)\,\cx{dx}=\left[\frac{2\cx{x}^3}{3}+\frac{3\cx{x}^2}{2}-\frac{\cx{x}^4}{4}\right]_{\cl{-1}}^{\cl{3}}=\frac{45}{4}-\frac{7}{12}=\frac{32}{3}$$</div>
+      <div class="ans">Resultado: $\dfrac{32}{3}$</div>
+      <p><b>¿Tiene sentido?</b> El área de $Q$ también es $\frac{32}{3}$ (la integral de $2x+3-x^2$). Dividiendo, el valor promedio de $\cx{x}$ es $1$, justo el punto medio entre $-1$ y $3$. La región es simétrica respecto a $\cx{x}=1$, así que eso es lo esperado.</p>
     </section>
 
-    <!-- 26 -->
+    <!-- 23 -->
     <section class="step" data-title="Ejercicios">
       <h3><span class="step-num">★</span>Ejercicios</h3>
-      <p class="hint">Dibuja siempre la región primero. Intenta sin ver la solución; abre la pista solo si te atoras.</p>
+      <p class="hint">Sigue los 3 pasos: graficar, intersecciones, barrido. Intenta sin ver la solución; abre la pista solo si te atoras.</p>
 
       <div class="problem">
-        <span class="lvl">NIVEL 1 · Triángulo, tipo I</span>
-        <p>Calcula $\displaystyle\iint_D (\cx{x}+\cy{y})\,\cd{dA}$, donde $D$ es el triángulo con vértices $(0,0)$, $(1,0)$ y $(1,1)$.</p>
-        <details><summary>Pista</summary><div class="inner">Dibuja el triángulo: para cada $\cx{x}$ entre 0 y 1, la $\cy{y}$ va de $\cl{0}$ (el eje) hasta $\cl{x}$ (la recta $y=x$).</div></details>
+        <span class="lvl">NIVEL 0 · Repaso del rectángulo</span>
+        <p>Calcula $\displaystyle\iint_Q \cf{\dfrac{1}{\cx{x}(\cx{x}+2)}\cdot\dfrac{1}{\cy{y}\ln \cy{y}}}\,\cx{dx}\,\cy{dy}$ si $Q=[\cl{1},\cl{2}]\times[\cl{2},\cl{3}]$.</p>
+        <details><summary>Pista</summary><div class="inner">Es un rectángulo y la función es un producto: sepárala. Para la parte de $\cx{x}$ usa fracciones parciales: $\frac{1}{x(x+2)}=\frac12\left(\frac1x-\frac1{x+2}\right)$. Para la de $\cy{y}$ usa $u=\ln \cy{y}$.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          Separamos: $\displaystyle\left(\int_{\cl{1}}^{\cl{2}}\frac{\cx{dx}}{\cx{x}(\cx{x}+2)}\right)\left(\int_{\cl{2}}^{\cl{3}}\frac{\cy{dy}}{\cy{y}\ln \cy{y}}\right)$.<br>
+          Con $\cx{x}$: $\frac12\Big[\ln\cx{x}-\ln(\cx{x}+2)\Big]_1^2=\frac12\big[(\ln2-\ln4)-(0-\ln3)\big]=\frac12\ln\frac32$.<br>
+          Con $\cy{y}$: $u=\ln\cy{y}$, $du=\frac{\cy{dy}}{\cy{y}}$, queda $\Big[\ln(\ln\cy{y})\Big]_2^3=\ln\frac{\ln 3}{\ln 2}$.
+          <div class="ans">Resultado: $\dfrac12\ln\dfrac32\,\ln\dfrac{\ln 3}{\ln 2}\approx 0.093$</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 1 · Triángulo, barrido vertical</span>
+        <p>Calcula $\displaystyle\iint_Q (\cx{x}+\cy{y})\,\cd{dA}$ si $Q$ está limitada por $\cl{y=0}$, $\cl{x=1}$ y $\cl{y=x}$.</p>
+        <details><summary>Pista</summary><div class="inner">Dibuja el triángulo con vértices $(0,0)$, $(1,0)$ y $(1,1)$. Para cada $\cx{x}$ entre 0 y 1, la $\cy{y}$ va de $\cl{0}$ (el eje) hasta $\cl{x}$ (la recta $y=x$).</div></details>
         <details><summary>Ver solución</summary><div class="inner">
           Región tipo I: $\cl{0}\le\cx{x}\le\cl{1}$, $\cl{0}\le\cy{y}\le\cl{x}$.
           $$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{x}} (\cx{x}+\cy{y})\,\cy{dy}\,\cx{dx}$$
@@ -956,35 +934,51 @@ window.MathJax = {
       </div>
 
       <div class="problem">
-        <span class="lvl">NIVEL 2 · Área entre curvas</span>
-        <p>Calcula el área de la región entre $\cl{y=x^2}$ y $\cl{y=2x}$.</p>
-        <details><summary>Pista</summary><div class="inner">El área es $\iint_D 1\,\cd{dA}$. Primero encuentra dónde se cortan las curvas: $x^2=2x$. Luego decide cuál queda arriba.</div></details>
+        <span class="lvl">NIVEL 2 · Entre una parábola y una recta</span>
+        <p>Calcula $\displaystyle\iint_Q \cx{x}\cy{y}\,\cd{dA}$ si $Q$ está limitada por $\cl{y=x^2}$ y $\cl{y=x}$.</p>
+        <details><summary>Pista</summary><div class="inner">Intersecciones: $x^2=x$ da $x=0$ y $x=1$. Prueba $x=\tfrac12$: la recta vale $0.5$ y la parábola $0.25$, así que la recta queda arriba.</div></details>
         <details><summary>Ver solución</summary><div class="inner">
-          $x^2=2x$ da $\cx{x}=0$ y $\cx{x}=2$. Entre esos valores, por ejemplo $x=1$: la recta vale 2 y la parábola 1, así que la recta queda arriba.
-          $$\text{Área}=\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{x^2}}^{\cl{2x}} 1\,\cy{dy}\,\cx{dx}=\int_0^2 (2\cx{x}-\cx{x}^2)\,\cx{dx}=\Big[\cx{x}^2-\tfrac{\cx{x}^3}{3}\Big]_0^2=4-\tfrac83$$
-          <div class="ans">Resultado: $\tfrac43$</div></div></details>
+          Tipo I: $\cl{0}\le\cx{x}\le\cl{1}$, $\cl{x^2}\le\cy{y}\le\cl{x}$.
+          $$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{x^2}}^{\cl{x}} \cx{x}\cy{y}\,\cy{dy}\,\cx{dx}$$
+          Adentro: $\cx{x}\left[\tfrac{\cy{y}^2}{2}\right]_{\cl{x^2}}^{\cl{x}}=\cx{x}\left(\tfrac{\cx{x}^2}{2}-\tfrac{\cx{x}^4}{2}\right)=\tfrac{\cx{x}^3-\cx{x}^5}{2}$.<br>
+          Afuera: $\tfrac12\left[\tfrac{\cx{x}^4}{4}-\tfrac{\cx{x}^6}{6}\right]_0^1=\tfrac12\left(\tfrac14-\tfrac16\right)=\tfrac1{24}$.
+          <div class="ans">Resultado: $\tfrac1{24}$</div></div></details>
       </div>
 
       <div class="problem">
-        <span class="lvl">NIVEL 3 · Cambiar el orden (trampa de examen)</span>
-        <p>Calcula $\displaystyle\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{\sqrt{y}}}^{\cl{1}} \cf{\sin(\cx{x}^3)}\,\cx{dx}\,\cy{dy}$.</p>
-        <details><summary>Pista</summary><div class="inner">$\int \sin(x^3)\,dx$ no se puede hacer. Dibuja la región: $0\le y\le 1$ y $\sqrt{y}\le x\le 1$. Elevando al cuadrado, el borde izquierdo es $y=x^2$. Intenta ahora $dy$ adentro.</div></details>
+        <span class="lvl">NIVEL 3 · El círculo y la simetría (trampa)</span>
+        <p>Calcula $\displaystyle\iint_Q \cx{x}\cy{y}\,\cf{e^{\cy{y}}}\,\cd{dA}$ si $Q$ está limitada por $\cl{x^2+y^2=4}$ (el círculo de radio 2 y su interior).</p>
+        <details><summary>Pista</summary><div class="inner">Barrido horizontal: para cada $\cy{y}$ entre $-2$ y $2$, la $\cx{x}$ va de $-\sqrt{4-y^2}$ a $\sqrt{4-y^2}$. Integra primero en $\cx{x}$ y fíjate en los límites.</div></details>
         <details><summary>Ver solución</summary><div class="inner">
-          Para cada $\cx{x}$ entre 0 y 1, la $\cy{y}$ va de $\cl{0}$ a $\cl{x^2}$ (la región queda entre el eje y la parábola). Orden nuevo:
-          $$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{x^2}} \cf{\sin(\cx{x}^3)}\,\cy{dy}\,\cx{dx}=\int_0^1 \cx{x}^2\sin(\cx{x}^3)\,\cx{dx}$$
-          Con $u=\cx{x}^3$, $du=3\cx{x}^2\,dx$: queda $\Big[-\tfrac{\cos(\cx{x}^3)}{3}\Big]_0^1=\tfrac{1-\cos 1}{3}$.
-          <div class="ans">Resultado: $\dfrac{1-\cos 1}{3}\approx 0.153$</div></div></details>
+          El círculo toca los ejes en $\pm2$, así que $\cy{y}$ va de $\cl{-2}$ a $\cl{2}$. Tipo II:
+          $$\int_{\cl{-2}}^{\cl{2}}\!\int_{\cl{-\sqrt{4-y^2}}}^{\cl{\sqrt{4-y^2}}} \cx{x}\cy{y}\,e^{\cy{y}}\,\cx{dx}\,\cy{dy}$$
+          Adentro, $\cy{y}e^{\cy{y}}$ es constante: $\cy{y}e^{\cy{y}}\left[\tfrac{\cx{x}^2}{2}\right]_{-\sqrt{4-y^2}}^{\sqrt{4-y^2}}=\cy{y}e^{\cy{y}}\cdot\tfrac{(4-y^2)-(4-y^2)}{2}=0$.<br>
+          Los límites son opuestos y $\cx{x}$ es una función impar, así que cada franja da 0 y la integral completa es 0. No hace falta calcular la de afuera.
+          <div class="ans">Resultado: $0$</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 3 · Reto con integración por partes</span>
+        <p>Calcula $\displaystyle\iint_Q \cf{e^{\cx{x}}\cy{y}}\,\cd{dA}$ si $Q$ está limitada por $\cl{y=x^2}$ y $\cl{y=4}$.</p>
+        <details><summary>Pista</summary><div class="inner">Intersecciones: $x^2=4$ da $x=-2$ y $x=2$. Barrido vertical: $\cy{y}$ de $\cl{x^2}$ a $\cl{4}$. Al final aparece $\int x^4e^x\,dx$, que se hace por partes (o con $e^x(x^4-4x^3+12x^2-24x+24)$).</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          Tipo I: $\cl{-2}\le\cx{x}\le\cl{2}$, $\cl{x^2}\le\cy{y}\le\cl{4}$.
+          $$\int_{\cl{-2}}^{\cl{2}}\!\int_{\cl{x^2}}^{\cl{4}} e^{\cx{x}}\cy{y}\,\cy{dy}\,\cx{dx}$$
+          Adentro: $e^{\cx{x}}\left[\tfrac{\cy{y}^2}{2}\right]_{\cl{x^2}}^{\cl{4}}=e^{\cx{x}}\,\tfrac{16-\cx{x}^4}{2}$.<br>
+          Afuera: $\tfrac12\left(16\int_{-2}^{2}e^{\cx{x}}\,\cx{dx}-\int_{-2}^{2}\cx{x}^4e^{\cx{x}}\,\cx{dx}\right)$, con $\int_{-2}^{2}e^{\cx{x}}\,\cx{dx}=e^2-e^{-2}$ y $\Big[e^{\cx{x}}(\cx{x}^4-4\cx{x}^3+12\cx{x}^2-24\cx{x}+24)\Big]_{-2}^{2}=8e^2-168e^{-2}$.<br>
+          Resta: $\tfrac12\left(16e^2-16e^{-2}-8e^2+168e^{-2}\right)=\tfrac12\left(8e^2+152e^{-2}\right)$.
+          <div class="ans">Resultado: $4e^2+\dfrac{76}{e^2}\approx 39.84$</div></div></details>
       </div>
     </section>
 
-    <!-- 27 -->
+    <!-- 24 -->
     <section class="step" id="quiz2-sec" data-title="Mini-quiz">
       <h3><span class="step-num">?</span>Mini-quiz</h3>
       <p class="hint">Responde de memoria. Recibes retroalimentación al instante, se guarda tu resultado y estas preguntas entran al repaso espaciado.</p>
       <div id="quiz2"></div>
     </section>
 
-    <!-- 28 -->
+    <!-- 25 -->
     <section class="step" data-title="Lo siguiente">
       <h3>✅ Terminaste la Lección 2</h3>
       <p>Para que se quede en la memoria:</p>
@@ -993,7 +987,428 @@ window.MathJax = {
         <li>Vuelve a las tarjetas de fórmula y pulsa <b>Taparla y recordarla</b> sin mirar.</li>
         <li>Dibuja a mano una región tipo I y una tipo II, y escribe sus límites.</li>
       </ul>
-      <p class="hint">Lección 3 (coordenadas polares): próximamente.</p>
+      <p class="hint">Sigue con la Lección 3 (cambiar el orden y partir regiones) en la barra lateral.</p>
+    </section>
+
+    </div>
+
+    <div class="stepnav">
+      <button type="button" class="btn ghost prev">← Anterior</button>
+      <span class="hint gatehint"></span>
+      <button type="button" class="btn next">Siguiente →</button>
+    </div>
+  </main>
+
+  <main id="lesson3-main" hidden>
+    <span class="tag">Lección 3 · Integrales dobles</span>
+    <h2 class="title">Cambiar el orden y partir regiones</h2>
+
+    <div class="lprog">
+      <div class="segs"></div>
+      <div class="plabel"></div>
+    </div>
+
+    <div class="steps">
+    <!-- 1 -->
+    <section class="step" data-title="Resumen">
+      <h3>🎯 Qué vas a aprender y para qué sirve</h3>
+      <p class="lead">Una integral doble se puede escribir de dos maneras sobre la misma región: con $\cy{dy}$ adentro o con $\cx{dx}$ adentro. Aquí aprendes a pasar de una a la otra, y qué hacer cuando una de las dos obliga a partir la región.</p>
+      <p><b>Qué vas a aprender:</b></p>
+      <ul>
+        <li><b>Cambiar el orden</b> de integración: dibujar la región desde los <span class="c-l">límites</span> y volver a describirla con el otro barrido.</li>
+        <li><b>Cuándo conviene:</b> cuando la integral de adentro no se puede hacer (como $\cf{e^{\cy{y}^2}}$ respecto a $\cy{y}$).</li>
+        <li><b>Partir regiones</b> en piezas cuando la curva de entrada o de salida cambia de fórmula, y sumar las integrales.</li>
+        <li>El <b>área</b> de una región con una doble integral: $\iint_Q \cd{dA}$.</li>
+      </ul>
+      <p><b>Para qué sirve:</b></p>
+      <ul>
+        <li>Es el problema 1 y el 11 de tu problemario, y aparece en casi todos los exámenes: "calcula cambiando el orden" o "verifica que estas integrales son iguales".</li>
+        <li>Es la base de poner límites en las integrales triples (Lección 6): ahí hay 6 órdenes en vez de 2.</li>
+      </ul>
+      <p class="hint">Mismo método de siempre: una idea por pantalla, colores fijos (mira la leyenda), tarjetas de fórmula y dibujos con los dos barridos.</p>
+    </section>
+
+    <!-- 2 -->
+    <section class="step" data-title="Predice">
+      <h3>🔮 Antes de empezar: predice</h3>
+      <p class="hint">Responde con tu intuición, sin mirar nada más. No importa si fallas: equivocarte antes de ver la teoría hace que la recuerdes mejor.</p>
+      <div id="pred3"></div>
+    </section>
+
+    <!-- 3 -->
+    <section class="step" data-title="Cambiar el orden · La idea">
+      <span class="kicker">Tema 1 · Cambiar el orden de integración</span>
+      <h3>La idea: la región es la misma, cambia el cuchillo</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        Ya sabes cortar el pastel con el cuchillo <b>vertical</b> (tiras de abajo hacia arriba, $\cy{dy}$ adentro) o con el <b>horizontal</b> (tiras de izquierda a derecha, $\cx{dx}$ adentro). Cambiar el orden es solo eso: <b>el pastel no cambia</b>, cambia con qué cuchillo lo cortas. Por eso el valor de la integral es el mismo; lo que cambia son los <span class="c-l">límites</span> y las letras $\cx{dx}$, $\cy{dy}$.
+      </div>
+      <p>Si solo intercambiaras los números de lugar, estarías integrando sobre <b>otra región</b>. Por eso el primer paso es siempre dibujar.</p>
+    </section>
+
+    <!-- 4 -->
+    <section class="step" data-title="Cambiar el orden · Dibujo">
+      <span class="kicker">Tema 1 · Cambiar el orden de integración</span>
+      <h3>Una región, dos barridos</h3>
+      <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="t4v-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="t4v-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="185.9" x2="270.8" y2="185.9"/><line class="sv-ax" x1="60.1" y1="210.0" x2="60.1" y2="10.0"/><text class="svt tx-x" x="266.8" y="201.9">x</text><text class="svt tx-y" x="67.1" y="18.0">y</text><line class="sv-tick" x1="193.9" y1="182.9" x2="193.9" y2="188.9"/><text class="svt sm tx-m lb" x="193.9" y="200.9" text-anchor="middle">1</text><line class="sv-tick" x1="57.1" y1="52.1" x2="63.1" y2="52.1"/><text class="svt sm tx-m lb" x="54.1" y="56.1" text-anchor="end">1</text><polygon class="sv-fill" points="60.1,185.9 193.9,52.1 60.1,52.1"/><polygon class="sv-l" points="60.1,185.9 193.9,52.1 60.1,52.1"/><line class="sv-ary" x1="106.9" y1="139.1" x2="106.9" y2="52.1" marker-end="url(#t4v-my)"/><text class="svt lb tx-l" x="168.4" y="123.0" text-anchor="start">y = x</text><text class="svt lb tx-l" x="127.0" y="45.1" text-anchor="middle">y = 1</text></svg><figcaption>Región $0\le x\le y\le 1$. Barrido vertical: la flecha verde sube ($\cy{dy}$ adentro). Entra por $\cl{y=x}$ y sale por $\cl{y=1}$.</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="t4h-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="t4h-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="185.9" x2="270.8" y2="185.9"/><line class="sv-ax" x1="60.1" y1="210.0" x2="60.1" y2="10.0"/><text class="svt tx-x" x="266.8" y="201.9">x</text><text class="svt tx-y" x="67.1" y="18.0">y</text><line class="sv-tick" x1="193.9" y1="182.9" x2="193.9" y2="188.9"/><text class="svt sm tx-m lb" x="193.9" y="200.9" text-anchor="middle">1</text><line class="sv-tick" x1="57.1" y1="52.1" x2="63.1" y2="52.1"/><text class="svt sm tx-m lb" x="54.1" y="56.1" text-anchor="end">1</text><polygon class="sv-fill" points="60.1,185.9 193.9,52.1 60.1,52.1"/><polygon class="sv-l" points="60.1,185.9 193.9,52.1 60.1,52.1"/><line class="sv-arx" x1="60.1" y1="99.0" x2="147.0" y2="99.0" marker-end="url(#t4h-mx)"/><text class="svt lb tx-l" x="168.4" y="123.0" text-anchor="start">x = y</text><text class="svt lb tx-l" x="127.0" y="45.1" text-anchor="middle">y = 1</text></svg><figcaption>La misma región. Barrido horizontal: la flecha azul va de izquierda a derecha ($\cx{dx}$ adentro). Entra por $\cl{x=0}$ y sale por $\cl{x=y}$.</figcaption></figure></div>
+      <div class="symwrap"><table class="sym">
+        <tr><th></th><th>Barrido vertical</th><th>Barrido horizontal</th></tr>
+        <tr><td>Integral</td><td>$\displaystyle\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{x}}^{\cl{1}}\cf{f}\,\cy{dy}\,\cx{dx}$</td><td>$\displaystyle\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{y}}\cf{f}\,\cx{dx}\,\cy{dy}$</td></tr>
+        <tr><td>Afuera (números)</td><td>$\cx{x}$ de 0 a 1</td><td>$\cy{y}$ de 0 a 1</td></tr>
+        <tr><td>Adentro (funciones)</td><td>$\cy{y}$ de $\cl{x}$ a $\cl{1}$</td><td>$\cx{x}$ de $\cl{0}$ a $\cl{y}$</td></tr>
+      </table></div>
+      <p class="hint">Fíjate: los números de afuera de un orden son los <b>extremos</b> de la región en esa variable. Los de adentro salen de <b>despejar</b> las mismas curvas.</p>
+    </section>
+
+    <!-- 5 -->
+    <section class="step" data-title="Cambiar el orden · Receta">
+      <span class="kicker">Tema 1 · Cambiar el orden de integración</span>
+      <h3>La receta en 4 pasos</h3>
+      <ol>
+        <li><b>Lee la región</b> de los <span class="c-l">límites</span> que te dan, como desigualdades (por ejemplo $0\le\cx{x}\le2$ y $\cl{x^2}\le\cy{y}\le\cl{4}$).</li>
+        <li><b>Dibújala</b>: grafica cada curva de frontera y sombrea.</li>
+        <li><b>Mira la región con el otro cuchillo.</b> Los extremos de la nueva variable de afuera son sus números (por ejemplo $\cy{y}$ de 0 a 4); luego <b>despeja</b> cada curva para la variable de adentro ($\cl{y=x^2}$ se vuelve $\cl{x=\sqrt{y}}$).</li>
+        <li><b>Escribe la nueva integral</b>, con la nueva variable de afuera y las nuevas funciones por dentro. Comprueba con una tira de prueba: ¿entra y sale por donde dice?</li>
+      </ol>
+      <div class="fcard" data-id="cambioorden" data-blanks='[{"o": ["2", "4", "16"], "a": "4"}, {"o": ["0", "−√y", "x²"], "a": "0"}, {"o": ["√y", "y²", "4"], "a": "√y"}, {"o": ["x", "y"], "a": "x"}]'>
+        <div class="fc-head"><span class="fc-name">Cambiar el orden (ejemplo)</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{x^2}}^{\cl{4}}\cf{f}\,\cy{dy}\,\cx{dx}=\int_{\cl{0}}^{\cl{4}}\!\int_{\cl{0}}^{\cl{\sqrt{y}}}\cf{f}\,\cx{dx}\,\cy{dy}$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{x^2}}^{\cl{4}}\cf{f}\,\cy{dy}\,\cx{dx}=\int_{\cl{0}}^{\boxed{\,\mathbf{1}\,}}\!\int_{\boxed{\,\mathbf{2}\,}}^{\boxed{\,\mathbf{3}\,}}\cf{f}\,\mathrm{d}\boxed{\,\mathbf{4}\,}\,\mathrm{d}\cy{y}$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> lo de afuera son los <b>extremos</b> de la región en la nueva variable; lo de adentro, las <b>mismas curvas despejadas</b>. Si $\cl{y=x^2}$ y $\cx{x}\ge0$, entonces $\cl{x=\sqrt{y}}$.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="step" data-title="Cambiar el orden · Clave y error">
+      <span class="kicker">Tema 1 · Cambiar el orden de integración</span>
+      <h3>Lo que debes recordar</h3>
+      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
+        <ul>
+          <li>La <b>región</b> y el <b>valor</b> no cambian; cambian los <span class="c-l">límites</span> y el orden de $\cx{dx}$, $\cy{dy}$.</li>
+          <li>Siempre: <b>afuera, números</b>; <b>adentro, funciones</b> de la variable de afuera.</li>
+          <li>Después de despejar, revisa con un punto: toma una tira, mira dónde entra y dónde sale, y compara con tus límites.</li>
+        </ul>
+      </div>
+      <div class="box warn"><b class="t">⚠️ Error común</b>
+        Cambiar $\int_0^2\!\int_{x^2}^{4}\,dy\,dx$ por $\int_{x^2}^{4}\!\int_0^2\,dx\,dy$, es decir, intercambiar los límites sin dibujar. Eso mete $\cx{x}$ en el límite de afuera de una integral en $\cy{y}$ (¡el resultado no sería un número!) y además describe otra región. El orden nuevo se obtiene <b>mirando el dibujo</b>, no intercambiando números.
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="step" data-title="Por qué cambiar">
+      <span class="kicker">Tema 2 · Cuándo conviene cambiar</span>
+      <h3>Cuando la integral de adentro no sale</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        Hay funciones que <b>no se pueden integrar</b> con sustitución ni por partes (no tienen antiderivada con funciones normales). Si te tocan adentro, la integral se atora. Pero si cambias el orden, la variable que estorbaba pasa a ser constante y la otra sí se integra fácil. Es la trampa favorita de los exámenes.
+      </div>
+      <div class="symwrap"><table class="sym">
+        <tr><th>Integral que se atora</th><th>Por qué</th></tr>
+        <tr><td>$\displaystyle\int e^{\cy{y}^2}\,\cy{dy}$</td><td>No tiene antiderivada normal en $\cy{y}$. (En $\cx{x}$, el factor $\cx{x}$ sí se integra.)</td></tr>
+        <tr><td>$\displaystyle\int e^{\cx{x}^2}\,\cx{dx}$, $\displaystyle\int\cos(\cx{x}^2)\,\cx{dx}$</td><td>Igual: el $\cx{x}^2$ dentro, sin un $\cx{x}$ afuera que lo ayude.</td></tr>
+        <tr><td>$\displaystyle\int \cx{x}\,e^{\cy{y}^2}\,\cx{dx}$</td><td>Esta sí sale: $\cx{x}$ se integra y $e^{\cy{y}^2}$ es constante respecto a $\cx{x}$.</td></tr>
+      </table></div>
+      <p><b>Regla:</b> si adentro aparece algo como $e^{u^2}$ o $\cos(u^2)$ <b>sin</b> la derivada de $u^2$ multiplicando, cambia el orden.</p>
+    </section>
+
+    <!-- 8 -->
+    <section class="step" data-title="Partir · La idea">
+      <span class="kicker">Tema 3 · Partir regiones</span>
+      <h3>La idea: cuando el cuchillo cambia de borde</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        A veces, al cortar en tiras, la <b>orilla por donde entra</b> (o por donde sale) la tira cambia de fórmula a la mitad: por ejemplo, la parte izquierda de un triángulo "sube" y la derecha "baja". Entonces una sola fórmula no alcanza. Solución: <b>parte la región en piezas</b> donde sí alcanza una fórmula, calcula cada pieza y <b>suma</b>. Con el otro cuchillo, muchas veces no hace falta partir.
+      </div>
+      <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 196" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="t8v-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="t8v-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="154.6" x2="330.0" y2="154.6"/><line class="sv-ax" x1="61.1" y1="178.5" x2="61.1" y2="10.0"/><text class="svt tx-x" x="326.0" y="170.6">x</text><text class="svt tx-y" x="68.1" y="18.0">y</text><line class="sv-tick" x1="166.8" y1="151.6" x2="166.8" y2="157.6"/><text class="svt sm tx-m lb" x="166.8" y="169.6" text-anchor="middle">2</text><line class="sv-tick" x1="272.5" y1="151.6" x2="272.5" y2="157.6"/><text class="svt sm tx-m lb" x="272.5" y="169.6" text-anchor="middle">4</text><line class="sv-tick" x1="58.1" y1="49.0" x2="64.1" y2="49.0"/><text class="svt sm tx-m lb" x="55.1" y="53.0" text-anchor="end">2</text><polygon class="sv-fill" points="61.1,154.6 272.5,154.6 166.8,49.0"/><polygon class="sv-l" points="61.1,154.6 272.5,154.6 166.8,49.0"/><polyline class="sv-dash" points="166.8,154.6 166.8,49.0"/><line class="sv-ary" x1="114.0" y1="154.6" x2="114.0" y2="103.9" marker-end="url(#t8v-my)"/><line class="sv-ary" x1="219.6" y1="154.6" x2="219.6" y2="103.9" marker-end="url(#t8v-my)"/><text class="svt lb tx-l" x="107.3" y="95.8" text-anchor="end">y = x</text><text class="svt lb tx-l" x="226.3" y="95.8" text-anchor="start">y = 4 − x</text><text class="svt lb tx-m" x="145.7" y="147.6" text-anchor="middle">Q₁</text><text class="svt lb tx-m" x="187.9" y="147.6" text-anchor="middle">Q₂</text></svg><figcaption>Barrido vertical: la flecha verde sube ($\cy{dy}$ adentro). La curva de arriba cambia de fórmula en $\cx{x}=2$ (línea punteada): hay que partir en $Q_1$ y $Q_2$.</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 196" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="t8h-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="t8h-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="154.6" x2="330.0" y2="154.6"/><line class="sv-ax" x1="61.1" y1="178.5" x2="61.1" y2="10.0"/><text class="svt tx-x" x="326.0" y="170.6">x</text><text class="svt tx-y" x="68.1" y="18.0">y</text><line class="sv-tick" x1="166.8" y1="151.6" x2="166.8" y2="157.6"/><text class="svt sm tx-m lb" x="166.8" y="169.6" text-anchor="middle">2</text><line class="sv-tick" x1="272.5" y1="151.6" x2="272.5" y2="157.6"/><text class="svt sm tx-m lb" x="272.5" y="169.6" text-anchor="middle">4</text><line class="sv-tick" x1="58.1" y1="49.0" x2="64.1" y2="49.0"/><text class="svt sm tx-m lb" x="55.1" y="53.0" text-anchor="end">2</text><polygon class="sv-fill" points="61.1,154.6 272.5,154.6 166.8,49.0"/><polygon class="sv-l" points="61.1,154.6 272.5,154.6 166.8,49.0"/><line class="sv-arx" x1="114.0" y1="101.8" x2="214.3" y2="101.8" marker-end="url(#t8h-mx)"/><text class="svt lb tx-l" x="107.3" y="95.8" text-anchor="end">x = y</text><text class="svt lb tx-l" x="226.3" y="95.8" text-anchor="start">x = 4 − y</text></svg><figcaption>Barrido horizontal: la flecha azul va de izquierda a derecha ($\cx{dx}$ adentro). Entra siempre por $\cl{x=y}$ y sale siempre por $\cl{x=4-y}$: una sola pieza.</figcaption></figure></div>
+      <p class="hint">Triángulo de vértices $(0,0)$, $(4,0)$ y $(2,2)$. Con barrido vertical necesitas 2 integrales; con el horizontal, una.</p>
+    </section>
+
+    <!-- 9 -->
+    <section class="step" data-title="Partir · La fórmula">
+      <span class="kicker">Tema 3 · Partir regiones</span>
+      <h3>La fórmula: la región como suma de piezas</h3>
+      <p>Si $Q$ es la unión de piezas $Q_1$ y $Q_2$ que no se traslapan, la integral se parte igual. Es la propiedad de tus apuntes: $\iint_Q=\iint_{Q_1}+\dots+\iint_{Q_n}$.</p>
+      <div class="fcard" data-id="partir" data-blanks='[{"o": ["+", "−", "×"], "a": "+"}, {"o": ["donde cambia la fórmula de una curva", "en el origen", "justo a la mitad"], "a": "donde cambia la fórmula de una curva"}]'>
+        <div class="fc-head"><span class="fc-name">Partir una región</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\iint_Q \cf{f}\,\cd{dA}=\iint_{Q_1}\cf{f}\,\cd{dA}+\iint_{Q_2}\cf{f}\,\cd{dA}\qquad(\text{se corta donde cambia la fórmula de una curva})$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Elige la opción correcta en cada hueco (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\iint_Q \cf{f}\,\cd{dA}=\iint_{Q_1}\cf{f}\,\cd{dA}\ \boxed{\,\mathbf{1}\,}\ \iint_{Q_2}\cf{f}\,\cd{dA}\qquad(\text{se corta }\boxed{\,\mathbf{2}\,})$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> el corte es una línea (casi siempre vertical u horizontal) que pasa por el <b>vértice</b> donde la curva de entrada o de salida cambia. Cada pieza lleva su propia integral iterada.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="step" data-title="Partir · Clave y error">
+      <span class="kicker">Tema 3 · Partir regiones</span>
+      <h3>Lo que debes recordar</h3>
+      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
+        <ul>
+          <li>Primero elige el barrido que <b>no obligue a partir</b>. Si ninguno sirve, parte.</li>
+          <li>Los puntos de corte salen de los <b>vértices</b>: donde se cruzan dos curvas de frontera.</li>
+          <li>Cada pieza tiene sus propios límites. Al final, <b>suma</b> los resultados.</li>
+          <li>Partir también va al revés: si te dan dos integrales sumadas sobre piezas, puedes <b>unirlas</b> en una sola con el otro orden.</li>
+        </ul>
+      </div>
+      <div class="box warn"><b class="t">⚠️ Error común</b>
+        Olvidar una pieza, o cortar en el lugar equivocado (por ejemplo en el punto medio en vez de en el vértice). Para comprobar, <b>suma las áreas</b> de las piezas: debe dar el área de la región completa.
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section class="step" data-title="Lo que más cae">
+      <div class="exam"><b class="t">⭐ Lo que más cae en examen</b>
+        <ol>
+          <li><b>La trampa $e^{y^2}$ o $\cos(x^2)$:</b> si la integral de adentro no sale, cambia el orden (después de dibujar).</li>
+          <li><b>Dibujar la región desde los límites:</b> te dan las integrales y tú debes ver qué región es. Sin dibujo es casi imposible cambiar el orden bien.</li>
+          <li><b>Partir (o unir) piezas:</b> sumar dos integrales en una sola, y saber en qué punto se corta.</li>
+        </ol>
+      </div>
+      <p class="hint">Si solo repasas tres cosas antes del examen, que sean estas.</p>
+    </section>
+
+    <!-- 12 -->
+    <section class="step" data-title="Ejemplo A · ¿Qué harías?" data-gate="e3a">
+      <span class="kicker">Ejemplo resuelto A</span>
+      <h3>¿Qué harías primero?</h3>
+      <p>Mira bien la función antes de elegir. Elige una opción para continuar.</p>
+      <div id="first3a"></div>
+    </section>
+
+    <!-- 13 -->
+    <section class="step" data-title="Ejemplo A · Paso 1">
+      <span class="kicker">Ejemplo resuelto A · Paso 1 de 3</span>
+      <p class="problem-line">Calcula $\displaystyle\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{x^2}}^{\cl{4}} \cf{\cx{x}\,e^{\cy{y}^2}}\,\cy{dy}\,\cx{dx}$.</p>
+      <h3>Dibujar y cambiar el orden</h3>
+      <p><b>1. ¿Se puede así?</b> Adentro hay que hacer $\int e^{\cy{y}^2}\,\cy{dy}$, que <b>no tiene antiderivada normal</b>. Hay que cambiar el orden.</p>
+      <p><b>2. La región.</b> Los límites dicen: $0\le\cx{x}\le2$ y $\cl{x^2}\le\cy{y}\le\cl{4}$. Es la zona entre la parábola $\cl{y=x^2}$ (abajo) y la recta $\cl{y=4}$ (arriba), a la derecha del eje $\cy{y}$. Se tocan en $(2,4)$.</p>
+      <p><b>3. El otro cuchillo.</b> Con el barrido horizontal, $\cy{y}$ recorre toda la región, de $\cl{0}$ (el punto de abajo de la parábola) a $\cl{4}$. Para cada $\cy{y}$, la tira entra por el eje ($\cl{x=0}$) y sale por la parábola, que despejada es $\cl{x=\sqrt{y}}$.</p>
+      <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ea1-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="ea1-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="187.1" x2="167.4" y2="187.1"/><line class="sv-ax" x1="49.3" y1="210.0" x2="49.3" y2="10.0"/><text class="svt tx-x" x="163.4" y="203.1">x</text><text class="svt tx-y" x="56.3" y="18.0">y</text><line class="sv-tick" x1="86.6" y1="184.1" x2="86.6" y2="190.1"/><text class="svt sm tx-m lb" x="86.6" y="202.1" text-anchor="middle">1</text><line class="sv-tick" x1="123.8" y1="184.1" x2="123.8" y2="190.1"/><text class="svt sm tx-m lb" x="123.8" y="202.1" text-anchor="middle">2</text><line class="sv-tick" x1="46.3" y1="112.6" x2="52.3" y2="112.6"/><text class="svt sm tx-m lb" x="43.3" y="116.6" text-anchor="end">2</text><line class="sv-tick" x1="46.3" y1="38.1" x2="52.3" y2="38.1"/><text class="svt sm tx-m lb" x="43.3" y="42.1" text-anchor="end">4</text><polygon class="sv-fill" points="49.3,187.1 51.4,187.0 53.5,186.6 55.5,186.1 57.6,185.3 59.7,184.2 61.7,183.0 63.8,181.5 65.9,179.7 67.9,177.8 70.0,175.6 72.1,173.2 74.2,170.5 76.2,167.7 78.3,164.6 80.4,161.2 82.4,157.7 84.5,153.9 86.6,149.8 88.6,145.6 90.7,141.1 92.8,136.4 94.8,131.4 96.9,126.3 99.0,120.9 101.1,115.2 103.1,109.4 105.2,103.3 107.3,97.0 109.3,90.4 111.4,83.6 113.5,76.6 115.5,69.4 117.6,61.9 119.7,54.2 121.8,46.2 123.8,38.1 123.8,38.1 121.8,38.1 119.7,38.1 117.6,38.1 115.5,38.1 113.5,38.1 111.4,38.1 109.3,38.1 107.3,38.1 105.2,38.1 103.1,38.1 101.1,38.1 99.0,38.1 96.9,38.1 94.8,38.1 92.8,38.1 90.7,38.1 88.6,38.1 86.6,38.1 84.5,38.1 82.4,38.1 80.4,38.1 78.3,38.1 76.2,38.1 74.2,38.1 72.1,38.1 70.0,38.1 67.9,38.1 65.9,38.1 63.8,38.1 61.7,38.1 59.7,38.1 57.6,38.1 55.5,38.1 53.5,38.1 51.4,38.1 49.3,38.1"/><polyline class="sv-l" points="49.3,187.1 51.4,187.0 53.5,186.6 55.5,186.1 57.6,185.3 59.7,184.2 61.7,183.0 63.8,181.5 65.9,179.7 67.9,177.8 70.0,175.6 72.1,173.2 74.2,170.5 76.2,167.7 78.3,164.6 80.4,161.2 82.4,157.7 84.5,153.9 86.6,149.8 88.6,145.6 90.7,141.1 92.8,136.4 94.8,131.4 96.9,126.3 99.0,120.9 101.1,115.2 103.1,109.4 105.2,103.3 107.3,97.0 109.3,90.4 111.4,83.6 113.5,76.6 115.5,69.4 117.6,61.9 119.7,54.2 121.8,46.2 123.8,38.1"/><polyline class="sv-l" points="49.3,38.1 123.8,38.1"/><polyline class="sv-l" points="49.3,187.1 49.3,38.1"/><line class="sv-ary" x1="94.0" y1="133.5" x2="94.0" y2="38.1" marker-end="url(#ea1-my)"/><text class="svt lb tx-l" x="122.5" y="101.4" text-anchor="start">y = x²</text><text class="svt lb tx-l" x="86.6" y="31.1" text-anchor="middle">y = 4</text></svg><figcaption>Como te la dan: $\cx{x}$ de 0 a 2 y $\cy{y}$ de $\cl{x^2}$ a $\cl{4}$. Barrido vertical: la flecha verde sube ($\cy{dy}$ adentro).</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ea2-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="ea2-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="187.1" x2="167.4" y2="187.1"/><line class="sv-ax" x1="49.3" y1="210.0" x2="49.3" y2="10.0"/><text class="svt tx-x" x="163.4" y="203.1">x</text><text class="svt tx-y" x="56.3" y="18.0">y</text><line class="sv-tick" x1="86.6" y1="184.1" x2="86.6" y2="190.1"/><text class="svt sm tx-m lb" x="86.6" y="202.1" text-anchor="middle">1</text><line class="sv-tick" x1="123.8" y1="184.1" x2="123.8" y2="190.1"/><text class="svt sm tx-m lb" x="123.8" y="202.1" text-anchor="middle">2</text><line class="sv-tick" x1="46.3" y1="112.6" x2="52.3" y2="112.6"/><text class="svt sm tx-m lb" x="43.3" y="116.6" text-anchor="end">2</text><line class="sv-tick" x1="46.3" y1="38.1" x2="52.3" y2="38.1"/><text class="svt sm tx-m lb" x="43.3" y="42.1" text-anchor="end">4</text><polygon class="sv-fill" points="49.3,187.1 51.4,187.0 53.5,186.6 55.5,186.1 57.6,185.3 59.7,184.2 61.7,183.0 63.8,181.5 65.9,179.7 67.9,177.8 70.0,175.6 72.1,173.2 74.2,170.5 76.2,167.7 78.3,164.6 80.4,161.2 82.4,157.7 84.5,153.9 86.6,149.8 88.6,145.6 90.7,141.1 92.8,136.4 94.8,131.4 96.9,126.3 99.0,120.9 101.1,115.2 103.1,109.4 105.2,103.3 107.3,97.0 109.3,90.4 111.4,83.6 113.5,76.6 115.5,69.4 117.6,61.9 119.7,54.2 121.8,46.2 123.8,38.1 123.8,38.1 121.8,38.1 119.7,38.1 117.6,38.1 115.5,38.1 113.5,38.1 111.4,38.1 109.3,38.1 107.3,38.1 105.2,38.1 103.1,38.1 101.1,38.1 99.0,38.1 96.9,38.1 94.8,38.1 92.8,38.1 90.7,38.1 88.6,38.1 86.6,38.1 84.5,38.1 82.4,38.1 80.4,38.1 78.3,38.1 76.2,38.1 74.2,38.1 72.1,38.1 70.0,38.1 67.9,38.1 65.9,38.1 63.8,38.1 61.7,38.1 59.7,38.1 57.6,38.1 55.5,38.1 53.5,38.1 51.4,38.1 49.3,38.1"/><polyline class="sv-l" points="49.3,187.1 51.4,187.0 53.5,186.6 55.5,186.1 57.6,185.3 59.7,184.2 61.7,183.0 63.8,181.5 65.9,179.7 67.9,177.8 70.0,175.6 72.1,173.2 74.2,170.5 76.2,167.7 78.3,164.6 80.4,161.2 82.4,157.7 84.5,153.9 86.6,149.8 88.6,145.6 90.7,141.1 92.8,136.4 94.8,131.4 96.9,126.3 99.0,120.9 101.1,115.2 103.1,109.4 105.2,103.3 107.3,97.0 109.3,90.4 111.4,83.6 113.5,76.6 115.5,69.4 117.6,61.9 119.7,54.2 121.8,46.2 123.8,38.1"/><polyline class="sv-l" points="49.3,38.1 123.8,38.1"/><polyline class="sv-l" points="49.3,187.1 49.3,38.1"/><line class="sv-arx" x1="49.3" y1="103.3" x2="105.2" y2="103.3" marker-end="url(#ea2-mx)"/><text class="svt lb tx-l" x="122.5" y="101.4" text-anchor="start">x = √y</text><text class="svt lb tx-l" x="86.6" y="31.1" text-anchor="middle">y = 4</text></svg><figcaption>Cambiando el orden: $\cy{y}$ de 0 a 4 y $\cx{x}$ de $\cl{0}$ a $\cl{\sqrt{y}}$. Barrido horizontal: la flecha azul va de izquierda a derecha ($\cx{dx}$ adentro).</figcaption></figure></div>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{x^2}}^{\cl{4}} \cf{\cx{x}\,e^{\cy{y}^2}}\,\cy{dy}\,\cx{dx}=\int_{\cl{0}}^{\cl{4}}\!\int_{\cl{0}}^{\cl{\sqrt{y}}} \cf{\cx{x}\,e^{\cy{y}^2}}\,\cx{dx}\,\cy{dy}$$</div>
+    </section>
+
+    <!-- 14 -->
+    <section class="step" data-title="Ejemplo A · Paso 2">
+      <span class="kicker">Ejemplo resuelto A · Paso 2 de 3</span>
+      <h3>Integral de adentro, en $\cx{x}$</h3>
+      <p>Ahora $e^{\cy{y}^2}$ es una constante (no tiene $\cx{x}$). Solo se integra $\cx{x}$:</p>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{\sqrt{y}}} \cx{x}\,e^{\cy{y}^2}\,\cx{dx}=e^{\cy{y}^2}\left[\frac{\cx{x}^2}{2}\right]_{\cx{x}=\cl{0}}^{\cx{x}=\cl{\sqrt{y}}}=e^{\cy{y}^2}\cdot\frac{\cy{y}}{2}=\frac{\cy{y}\,e^{\cy{y}^2}}{2}$$</div>
+      <p class="hint">Ya no queda ninguna $\cx{x}$, solo $\cy{y}$. Y apareció un $\cy{y}$ multiplicando a $e^{\cy{y}^2}$: justo la derivada de $\cy{y}^2$ (salvo un 2). Eso es lo que hace que ahora sí se pueda por sustitución.</p>
+    </section>
+
+    <!-- 15 -->
+    <section class="step" data-title="Ejemplo A · Paso 3">
+      <span class="kicker">Ejemplo resuelto A · Paso 3 de 3</span>
+      <h3>Integral de afuera, en $\cy{y}$</h3>
+      <p>Sustitución: $u=\cy{y}^2$, $du=2\cy{y}\,\cy{dy}$, así que $\cy{y}\,\cy{dy}=\tfrac12\,du$. Los límites cambian: $\cy{y}=0\to u=0$ y $\cy{y}=4\to u=16$.</p>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{4}}\frac{\cy{y}\,e^{\cy{y}^2}}{2}\,\cy{dy}=\frac14\int_{0}^{16}e^{u}\,du=\frac{e^{16}-1}{4}$$</div>
+      <div class="ans">Resultado: $\dfrac{e^{16}-1}{4}\approx 2.22\times10^{6}$</div>
+      <p><b>¿Tiene sentido?</b> Sí: es positivo, y enorme, porque $e^{\cy{y}^2}$ llega a $e^{16}\approx8.9\times10^{6}$ en la parte de arriba de la región. Recuerda: con $\cy{dy}$ adentro esto <b>no se podía</b>; el cambio de orden fue lo que lo permitió.</p>
+    </section>
+
+    <!-- 16 -->
+    <section class="step" data-title="Ejemplo B · ¿Qué harías?" data-gate="e3b">
+      <span class="kicker">Ejemplo resuelto B</span>
+      <h3>¿Qué harías primero?</h3>
+      <p>Esta vez te dan la región entre cuatro rectas. Elige una opción para continuar.</p>
+      <div id="first3b"></div>
+    </section>
+
+    <!-- 17 -->
+    <section class="step" data-title="Ejemplo B · Paso 1">
+      <span class="kicker">Ejemplo resuelto B · Paso 1 de 4</span>
+      <p class="problem-line">Calcula $\displaystyle\iint_Q \cf{\cx{x}\cy{y}^2}\,\cd{dA}$ si $Q$ está limitada por $\cl{y=x}$, $\cl{y=x-4}$, $\cl{y=0}$ y $\cl{y=2}$.</p>
+      <h3>Graficar y elegir el barrido</h3>
+      <p><b>Vértices</b> (intersecciones): $\cl{y=x}$ con $\cl{y=0}$ da $(0,0)$; $\cl{y=x}$ con $\cl{y=2}$ da $(2,2)$; $\cl{y=x-4}$ con $\cl{y=0}$ da $(4,0)$; $\cl{y=x-4}$ con $\cl{y=2}$ da $(6,2)$. Es un <b>paralelogramo</b>.</p>
+      <p><b>Elegir el barrido.</b> Con el horizontal, la tira siempre entra por la recta $\cl{x=y}$ (despejando $\cl{y=x}$) y sale por $\cl{x=y+4}$ (despejando $\cl{y=x-4}$): una sola fórmula. Con el vertical, la entrada y la salida cambian en $\cx{x}=2$ y en $\cx{x}=4$: <b>3 piezas</b>. Elegimos el horizontal y luego comprobamos con el otro.</p>
+      <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 144" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="eb1-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="eb1-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="103.1" x2="330.0" y2="103.1"/><line class="sv-ax" x1="60.2" y1="126.3" x2="60.2" y2="10.0"/><text class="svt tx-x" x="326.0" y="119.1">x</text><text class="svt tx-y" x="67.2" y="18.0">y</text><line class="sv-tick" x1="127.7" y1="100.1" x2="127.7" y2="106.1"/><text class="svt sm tx-m lb" x="127.7" y="118.1" text-anchor="middle">2</text><line class="sv-tick" x1="262.7" y1="100.1" x2="262.7" y2="106.1"/><text class="svt sm tx-m lb" x="262.7" y="118.1" text-anchor="middle">6</text><line class="sv-tick" x1="57.2" y1="35.6" x2="63.2" y2="35.6"/><text class="svt sm tx-m lb" x="54.2" y="39.6" text-anchor="end">2</text><polygon class="sv-fill" points="60.2,103.1 195.2,103.1 262.7,35.6 127.7,35.6"/><polygon class="sv-l" points="60.2,103.1 195.2,103.1 262.7,35.6 127.7,35.6"/><line class="sv-arx" x1="94.0" y1="69.3" x2="228.9" y2="69.3" marker-end="url(#eb1-mx)"/><text class="svt lb tx-l" x="76.8" y="62.6" text-anchor="end">x = y</text><text class="svt lb tx-l" x="248.1" y="62.6" text-anchor="start">x = y + 4</text><circle class="sv-pt" cx="60.2" cy="103.1" r="3"/><text class="svt lb tx-m sm" x="56.2" y="117.1" text-anchor="end">(0, 0)</text><circle class="sv-pt" cx="195.2" cy="103.1" r="3"/><text class="svt lb tx-m sm" x="199.2" y="117.1" text-anchor="start">(4, 0)</text><circle class="sv-pt" cx="262.7" cy="35.6" r="3"/><text class="svt lb tx-m sm" x="266.7" y="31.6" text-anchor="start">(6, 2)</text><circle class="sv-pt" cx="127.7" cy="35.6" r="3"/><text class="svt lb tx-m sm" x="123.7" y="29.6" text-anchor="end">(2, 2)</text></svg><figcaption>Barrido horizontal: entra por $\cl{x=y}$ y sale por $\cl{x=y+4}$ en todas las franjas. <b>Una sola pieza.</b></figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 144" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="eb2-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="eb2-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="103.1" x2="330.0" y2="103.1"/><line class="sv-ax" x1="60.2" y1="126.3" x2="60.2" y2="10.0"/><text class="svt tx-x" x="326.0" y="119.1">x</text><text class="svt tx-y" x="67.2" y="18.0">y</text><line class="sv-tick" x1="127.7" y1="100.1" x2="127.7" y2="106.1"/><text class="svt sm tx-m lb" x="127.7" y="118.1" text-anchor="middle">2</text><line class="sv-tick" x1="195.2" y1="100.1" x2="195.2" y2="106.1"/><text class="svt sm tx-m lb" x="195.2" y="118.1" text-anchor="middle">4</text><line class="sv-tick" x1="262.7" y1="100.1" x2="262.7" y2="106.1"/><text class="svt sm tx-m lb" x="262.7" y="118.1" text-anchor="middle">6</text><line class="sv-tick" x1="57.2" y1="35.6" x2="63.2" y2="35.6"/><text class="svt sm tx-m lb" x="54.2" y="39.6" text-anchor="end">2</text><polygon class="sv-fill" points="60.2,103.1 127.7,35.6 127.7,103.1"/><polygon class="sv-fill2" points="127.7,103.1 127.7,35.6 195.2,35.6 195.2,103.1"/><polygon class="sv-fill" points="195.2,103.1 262.7,35.6 195.2,35.6"/><polygon class="sv-l" points="60.2,103.1 195.2,103.1 262.7,35.6 127.7,35.6"/><polyline class="sv-dash" points="127.7,103.1 127.7,35.6"/><polyline class="sv-dash" points="195.2,103.1 195.2,35.6"/><line class="sv-ary" x1="94.0" y1="103.1" x2="94.0" y2="70.7" marker-end="url(#eb2-my)"/><line class="sv-ary" x1="161.4" y1="103.1" x2="161.4" y2="37.0" marker-end="url(#eb2-my)"/><line class="sv-ary" x1="235.7" y1="62.6" x2="235.7" y2="37.0" marker-end="url(#eb2-my)"/><text class="svt lb tx-m" x="115.9" y="96.1" text-anchor="middle">Q₁</text><text class="svt lb tx-m" x="178.3" y="96.1" text-anchor="middle">Q₂</text><text class="svt lb tx-m" x="208.7" y="44.0" text-anchor="middle">Q₃</text></svg><figcaption>Barrido vertical: la entrada y la salida cambian en $\cx{x}=2$ y en $\cx{x}=4$. <b>Tres piezas.</b></figcaption></figure></div>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{y}}^{\cl{y+4}} \cf{\cx{x}\cy{y}^2}\,\cx{dx}\,\cy{dy}$$</div>
+    </section>
+
+    <!-- 18 -->
+    <section class="step" data-title="Ejemplo B · Paso 2">
+      <span class="kicker">Ejemplo resuelto B · Paso 2 de 4</span>
+      <h3>Integral de adentro, en $\cx{x}$</h3>
+      <p>$\cy{y}^2$ es constante en esta integral y sale como factor. Evaluamos $\cx{x}^2/2$ con los límites, que son funciones de $\cy{y}$:</p>
+      <div class="formula">$$\int_{\cl{y}}^{\cl{y+4}} \cx{x}\cy{y}^2\,\cx{dx}=\cy{y}^2\left[\frac{\cx{x}^2}{2}\right]_{\cx{x}=\cl{y}}^{\cx{x}=\cl{y+4}}=\cy{y}^2\cdot\frac{(\cy{y}+4)^2-\cy{y}^2}{2}=\cy{y}^2\cdot\frac{8\cy{y}+16}{2}=4\cy{y}^3+8\cy{y}^2$$</div>
+      <p class="hint">Ya no queda ninguna $\cx{x}$. Cuidado al desarrollar $(\cy{y}+4)^2=\cy{y}^2+8\cy{y}+16$.</p>
+    </section>
+
+    <!-- 19 -->
+    <section class="step" data-title="Ejemplo B · Paso 3">
+      <span class="kicker">Ejemplo resuelto B · Paso 3 de 4</span>
+      <h3>Integral de afuera, en $\cy{y}$</h3>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{2}}(4\cy{y}^3+8\cy{y}^2)\,\cy{dy}=\left[\cy{y}^4+\frac{8\cy{y}^3}{3}\right]_{\cl{0}}^{\cl{2}}=16+\frac{64}{3}=\frac{112}{3}$$</div>
+      <div class="ans">Resultado: $\dfrac{112}{3}\approx 37.3$</div>
+      <p><b>¿Tiene sentido?</b> El área del paralelogramo es base por altura $=4\cdot2=8$, así que el valor promedio de $\cx{x}\cy{y}^2$ es $\frac{112/3}{8}=\frac{14}{3}\approx4.7$. En la fila de arriba ($\cy{y}=2$) la función vale $4\cx{x}$ con $\cx{x}$ de 2 a 6, y abajo vale casi 0: un promedio de 4.7 es razonable.</p>
+    </section>
+
+    <!-- 20 -->
+    <section class="step" data-title="Ejemplo B · Comprobación">
+      <span class="kicker">Ejemplo resuelto B · Paso 4 de 4</span>
+      <h3>Comprobación con el otro barrido: 3 piezas</h3>
+      <p>Con $\cy{dy}$ adentro hay que partir en $Q_1$ ($0\le\cx{x}\le2$), $Q_2$ ($2\le\cx{x}\le4$) y $Q_3$ ($4\le\cx{x}\le6$):</p>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{0}}^{\cl{x}}\cx{x}\cy{y}^2\,\cy{dy}\,\cx{dx}+\int_{\cl{2}}^{\cl{4}}\!\int_{\cl{0}}^{\cl{2}}\cx{x}\cy{y}^2\,\cy{dy}\,\cx{dx}+\int_{\cl{4}}^{\cl{6}}\!\int_{\cl{x-4}}^{\cl{2}}\cx{x}\cy{y}^2\,\cy{dy}\,\cx{dx}$$</div>
+      <div class="symwrap"><table class="sym">
+        <tr><th>Pieza</th><th>Cuenta</th><th>Valor</th></tr>
+        <tr><td>$Q_1$</td><td>$\displaystyle\int_0^2\cx{x}\cdot\frac{\cx{x}^3}{3}\,\cx{dx}=\Big[\tfrac{\cx{x}^5}{15}\Big]_0^2$</td><td>$\dfrac{32}{15}$</td></tr>
+        <tr><td>$Q_2$</td><td>$\displaystyle\int_2^4\cx{x}\cdot\frac{8}{3}\,\cx{dx}=\frac83\Big[\tfrac{\cx{x}^2}{2}\Big]_2^4$</td><td>$16$</td></tr>
+        <tr><td>$Q_3$</td><td>$\displaystyle\int_4^6\cx{x}\cdot\frac{8-(\cx{x}-4)^3}{3}\,\cx{dx}$, con $u=\cx{x}-4$: $\tfrac13\int_0^2(u+4)(8-u^3)\,du$</td><td>$\dfrac{96}{5}$</td></tr>
+      </table></div>
+      <div class="formula">$$\frac{32}{15}+16+\frac{96}{5}=\frac{32+240+288}{15}=\frac{560}{15}=\frac{112}{3}\ \checkmark$$</div>
+      <p><b>Mismo resultado.</b> Por eso elegir el barrido que no parte ahorra una cuenta larga (y muchos errores).</p>
+    </section>
+
+    <!-- 21 -->
+    <section class="step" data-title="Área con doble integral">
+      <span class="kicker">Tema 4 · Área con doble integral</span>
+      <h3>El área: la integral de $f=1$</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        Si la altura es 1 en todas partes, el "volumen" sobre la región es base por 1, o sea el <b>área</b>. Por eso $\iint_Q \cd{dA}=\text{Área}(Q)$. Para calcularla usas exactamente los mismos pasos: dibujar, elegir barrido, y partir si hace falta.
+      </div>
+      <p class="problem-line">Calcula el área de $Q$, limitada por $\cl{y=|x|}$ y $\cl{y=4}$.</p>
+      <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 181" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar1-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="ar1-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="141.4" x2="330.0" y2="141.4"/><line class="sv-ax" x1="177.4" y1="162.6" x2="177.4" y2="10.0"/><text class="svt tx-x" x="326.0" y="157.4">x</text><text class="svt tx-y" x="184.4" y="18.0">y</text><line class="sv-tick" x1="71.7" y1="138.4" x2="71.7" y2="144.4"/><text class="svt sm tx-m lb" x="71.7" y="156.4" text-anchor="middle">−4</text><line class="sv-tick" x1="283.0" y1="138.4" x2="283.0" y2="144.4"/><text class="svt sm tx-m lb" x="283.0" y="156.4" text-anchor="middle">4</text><line class="sv-tick" x1="174.4" y1="35.8" x2="180.4" y2="35.8"/><text class="svt sm tx-m lb" x="171.4" y="39.8" text-anchor="end">4</text><polygon class="sv-fill" points="71.7,35.8 177.4,141.4 283.0,35.8"/><polygon class="sv-l" points="71.7,35.8 177.4,141.4 283.0,35.8"/><polyline class="sv-dash" points="177.4,141.4 177.4,35.8"/><line class="sv-ary" x1="124.5" y1="88.6" x2="124.5" y2="36.8" marker-end="url(#ar1-my)"/><line class="sv-ary" x1="230.2" y1="88.6" x2="230.2" y2="36.8" marker-end="url(#ar1-my)"/><text class="svt lb tx-l" x="117.9" y="99.2" text-anchor="end">y = −x</text><text class="svt lb tx-l" x="236.8" y="99.2" text-anchor="start">y = x</text><text class="svt lb tx-l" x="254.0" y="28.8" text-anchor="middle">y = 4</text></svg><figcaption>Barrido vertical: la curva de abajo, $\cl{y=|x|}$, cambia de fórmula en $\cx{x}=0$. <b>Dos piezas.</b></figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 181" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar2-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="ar2-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="141.4" x2="330.0" y2="141.4"/><line class="sv-ax" x1="177.4" y1="162.6" x2="177.4" y2="10.0"/><text class="svt tx-x" x="326.0" y="157.4">x</text><text class="svt tx-y" x="184.4" y="18.0">y</text><line class="sv-tick" x1="71.7" y1="138.4" x2="71.7" y2="144.4"/><text class="svt sm tx-m lb" x="71.7" y="156.4" text-anchor="middle">−4</text><line class="sv-tick" x1="283.0" y1="138.4" x2="283.0" y2="144.4"/><text class="svt sm tx-m lb" x="283.0" y="156.4" text-anchor="middle">4</text><line class="sv-tick" x1="174.4" y1="35.8" x2="180.4" y2="35.8"/><text class="svt sm tx-m lb" x="171.4" y="39.8" text-anchor="end">4</text><polygon class="sv-fill" points="71.7,35.8 177.4,141.4 283.0,35.8"/><polygon class="sv-l" points="71.7,35.8 177.4,141.4 283.0,35.8"/><line class="sv-arx" x1="124.5" y1="88.6" x2="229.1" y2="88.6" marker-end="url(#ar2-mx)"/><text class="svt lb tx-l" x="117.9" y="99.2" text-anchor="end">x = −y</text><text class="svt lb tx-l" x="236.8" y="99.2" text-anchor="start">x = y</text><text class="svt lb tx-l" x="254.0" y="28.8" text-anchor="middle">y = 4</text></svg><figcaption>Barrido horizontal: de $\cl{x=-y}$ a $\cl{x=y}$, con $\cy{y}$ de 0 a 4. <b>Una pieza.</b></figcaption></figure></div>
+      <p><b>Vertical (2 piezas):</b> $\displaystyle\int_{\cl{-4}}^{\cl{0}}\!\int_{\cl{-x}}^{\cl{4}}\cy{dy}\,\cx{dx}+\int_{\cl{0}}^{\cl{4}}\!\int_{\cl{x}}^{\cl{4}}\cy{dy}\,\cx{dx}=8+8=16$.</p>
+      <p><b>Horizontal (1 pieza):</b> $\displaystyle\int_{\cl{0}}^{\cl{4}}\!\int_{\cl{-y}}^{\cl{y}}\cx{dx}\,\cy{dy}=\int_0^4 2\cy{y}\,\cy{dy}=16$.</p>
+      <div class="ans">Área $=16$</div>
+      <p class="hint">Comprobación con geometría: triángulo de base 8 y altura 4, área $\frac{8\cdot4}{2}=16$.</p>
+    </section>
+
+    <!-- 22 -->
+    <section class="step" data-title="Ejercicios">
+      <h3><span class="step-num">★</span>Ejercicios</h3>
+      <p class="hint">Son los problemas 1 y 11 de tu problemario (el $x\,e^{y^2}$ del problema 1 es el Ejemplo A). Primero dibuja y plantea tú; abre la pista solo si te atoras, y la solución al final.</p>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 1 · Problemario 1 · Cambiar el orden</span>
+        <p>Calcula $\displaystyle\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{y/2}}^{\cl{1}} \cf{e^{\cx{x}^2}}\,\cx{dx}\,\cy{dy}$.</p>
+        <details><summary>Pista</summary><div class="inner">$e^{x^2}$ no se integra en $\cx{x}$. Dibuja: $\cy{y}$ va de 0 a 2 y $\cx{x}$ de $y/2$ a 1. Es un triángulo; mira qué recta es $\cl{x=y/2}$ si despejas $\cy{y}$ y entre qué valores se mueve $\cx{x}$.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          <b>Región:</b> $0\le\cy{y}\le2$ y $\cl{y/2}\le\cx{x}\le\cl{1}$. Vértices: $(0,0)$, $(1,0)$ y $(1,2)$. El borde izquierdo $\cl{x=y/2}$ es la recta $\cl{y=2x}$.
+          <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x1h-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x1h-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="184.7" x2="181.3" y2="184.7"/><line class="sv-ax" x1="53.8" y1="210.0" x2="53.8" y2="10.0"/><text class="svt tx-x" x="177.3" y="200.7">x</text><text class="svt tx-y" x="60.8" y="18.0">y</text><line class="sv-tick" x1="122.9" y1="181.7" x2="122.9" y2="187.7"/><text class="svt sm tx-m lb" x="122.9" y="199.7" text-anchor="middle">1</text><line class="sv-tick" x1="50.8" y1="115.6" x2="56.8" y2="115.6"/><text class="svt sm tx-m lb" x="47.8" y="119.6" text-anchor="end">1</text><line class="sv-tick" x1="50.8" y1="46.5" x2="56.8" y2="46.5"/><text class="svt sm tx-m lb" x="47.8" y="50.5" text-anchor="end">2</text><polygon class="sv-fill" points="53.8,184.7 122.9,184.7 122.9,46.5"/><polygon class="sv-l" points="53.8,184.7 122.9,184.7 122.9,46.5"/><line class="sv-arx" x1="88.4" y1="115.6" x2="121.5" y2="115.6" marker-end="url(#x1h-mx)"/><text class="svt lb tx-l" x="80.9" y="109.6" text-anchor="end">x = y/2</text><text class="svt lb tx-l" x="130.9" y="115.6" text-anchor="start">x = 1</text></svg><figcaption>Como te la dan ($\cx{dx}$ adentro): $\cy{y}$ de 0 a 2.</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x1v-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x1v-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="184.7" x2="181.3" y2="184.7"/><line class="sv-ax" x1="53.8" y1="210.0" x2="53.8" y2="10.0"/><text class="svt tx-x" x="177.3" y="200.7">x</text><text class="svt tx-y" x="60.8" y="18.0">y</text><line class="sv-tick" x1="122.9" y1="181.7" x2="122.9" y2="187.7"/><text class="svt sm tx-m lb" x="122.9" y="199.7" text-anchor="middle">1</text><line class="sv-tick" x1="50.8" y1="115.6" x2="56.8" y2="115.6"/><text class="svt sm tx-m lb" x="47.8" y="119.6" text-anchor="end">1</text><line class="sv-tick" x1="50.8" y1="46.5" x2="56.8" y2="46.5"/><text class="svt sm tx-m lb" x="47.8" y="50.5" text-anchor="end">2</text><polygon class="sv-fill" points="53.8,184.7 122.9,184.7 122.9,46.5"/><polygon class="sv-l" points="53.8,184.7 122.9,184.7 122.9,46.5"/><line class="sv-ary" x1="95.3" y1="184.7" x2="95.3" y2="103.9" marker-end="url(#x1v-my)"/><text class="svt lb tx-l" x="80.9" y="109.6" text-anchor="end">y = 2x</text></svg><figcaption>Cambiado ($\cy{dy}$ adentro): $\cx{x}$ de 0 a 1.</figcaption></figure></div>
+          <b>Nuevo orden:</b> $\cx{x}$ de $\cl{0}$ a $\cl{1}$ y, para cada $\cx{x}$, $\cy{y}$ de $\cl{0}$ a $\cl{2x}$:
+          $$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{2x}} e^{\cx{x}^2}\,\cy{dy}\,\cx{dx}$$
+          <b>Adentro:</b> $e^{\cx{x}^2}$ es constante en $\cy{y}$: $e^{\cx{x}^2}\cdot\cl{2x}$.<br>
+          <b>Afuera:</b> $u=\cx{x}^2$, $du=2\cx{x}\,\cx{dx}$: $\displaystyle\int_0^1 2\cx{x}\,e^{\cx{x}^2}\,\cx{dx}=\Big[e^{\cx{x}^2}\Big]_0^1=e-1$.
+          <div class="ans">Resultado: $e-1\approx1.718$</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 1 · Problemario 1 · Cambiar el orden</span>
+        <p>Calcula $\displaystyle\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{2y}}^{\cl{2}} \cf{\cos(\cx{x}^2)}\,\cx{dx}\,\cy{dy}$.</p>
+        <details><summary>Pista</summary><div class="inner">$\cos(x^2)$ tampoco se integra en $\cx{x}$. La región: $\cy{y}$ de 0 a 1 y $\cx{x}$ de $2y$ a $2$. Triángulo con vértices $(0,0)$, $(2,0)$ y $(2,1)$. Despeja $\cl{x=2y}$ para $\cy{y}$.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          <b>Región:</b> $0\le\cy{y}\le1$, $\cl{2y}\le\cx{x}\le\cl{2}$. El borde izquierdo $\cl{x=2y}$ es la recta $\cl{y=x/2}$.
+          <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 191" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x2h-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x2h-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="143.3" x2="330.0" y2="143.3"/><line class="sv-ax" x1="66.2" y1="173.1" x2="66.2" y2="10.0"/><text class="svt tx-x" x="326.0" y="159.3">x</text><text class="svt tx-y" x="73.2" y="18.0">y</text><line class="sv-tick" x1="153.8" y1="140.3" x2="153.8" y2="146.3"/><text class="svt sm tx-m lb" x="153.8" y="158.3" text-anchor="middle">1</text><line class="sv-tick" x1="241.3" y1="140.3" x2="241.3" y2="146.3"/><text class="svt sm tx-m lb" x="241.3" y="158.3" text-anchor="middle">2</text><line class="sv-tick" x1="63.2" y1="55.8" x2="69.2" y2="55.8"/><text class="svt sm tx-m lb" x="60.2" y="59.8" text-anchor="end">1</text><polygon class="sv-fill" points="66.2,143.3 241.3,143.3 241.3,55.8"/><polygon class="sv-l" points="66.2,143.3 241.3,143.3 241.3,55.8"/><line class="sv-arx" x1="153.8" y1="99.5" x2="237.8" y2="99.5" marker-end="url(#x2h-mx)"/><text class="svt lb tx-l" x="141.0" y="93.5" text-anchor="end">x = 2y</text><text class="svt lb tx-l" x="249.3" y="99.5" text-anchor="start">x = 2</text></svg><figcaption>Como te la dan: $\cy{y}$ de 0 a 1.</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 191" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x2v-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x2v-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="143.3" x2="330.0" y2="143.3"/><line class="sv-ax" x1="66.2" y1="173.1" x2="66.2" y2="10.0"/><text class="svt tx-x" x="326.0" y="159.3">x</text><text class="svt tx-y" x="73.2" y="18.0">y</text><line class="sv-tick" x1="153.8" y1="140.3" x2="153.8" y2="146.3"/><text class="svt sm tx-m lb" x="153.8" y="158.3" text-anchor="middle">1</text><line class="sv-tick" x1="241.3" y1="140.3" x2="241.3" y2="146.3"/><text class="svt sm tx-m lb" x="241.3" y="158.3" text-anchor="middle">2</text><line class="sv-tick" x1="63.2" y1="55.8" x2="69.2" y2="55.8"/><text class="svt sm tx-m lb" x="60.2" y="59.8" text-anchor="end">1</text><polygon class="sv-fill" points="66.2,143.3 241.3,143.3 241.3,55.8"/><polygon class="sv-l" points="66.2,143.3 241.3,143.3 241.3,55.8"/><line class="sv-ary" x1="171.3" y1="143.3" x2="171.3" y2="92.5" marker-end="url(#x2v-my)"/><text class="svt lb tx-l" x="141.0" y="97.9" text-anchor="end">y = x/2</text></svg><figcaption>Cambiado: $\cx{x}$ de 0 a 2.</figcaption></figure></div>
+          <b>Nuevo orden:</b> $\cx{x}$ de $\cl{0}$ a $\cl{2}$, $\cy{y}$ de $\cl{0}$ a $\cl{x/2}$:
+          $$\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{0}}^{\cl{x/2}} \cos(\cx{x}^2)\,\cy{dy}\,\cx{dx}$$
+          <b>Adentro:</b> $\cos(\cx{x}^2)\cdot\dfrac{\cx{x}}{2}$.<br>
+          <b>Afuera:</b> $u=\cx{x}^2$: $\displaystyle\int_0^2\frac{\cx{x}}{2}\cos(\cx{x}^2)\,\cx{dx}=\Big[\tfrac14\sin(\cx{x}^2)\Big]_0^2=\dfrac{\sin 4}{4}$.
+          <div class="ans">Resultado: $\dfrac{\sin 4}{4}\approx-0.189$</div>
+          <p class="hint">Es negativo y está bien: $4$ rad está entre $\pi$ y $2\pi$, donde el seno es negativo.</p></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 2 · Problemario 1 · Partir y comprobar</span>
+        <p>Calcula $\displaystyle\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{y/2}}^{\cl{3-y}} \cf{3\cx{x}}\,\cx{dx}\,\cy{dy}$ y compruébalo escribiéndola con $\cy{dy}$ adentro.</p>
+        <details><summary>Pista</summary><div class="inner">Para $\cy{y}=0$, $\cx{x}$ va de 0 a 3; para $\cy{y}=2$, de $1$ a $1$. Es el triángulo $(0,0)$, $(3,0)$, $(1,2)$. Con $\cy{dy}$ adentro, la entrada es $\cl{y=0}$ pero la salida cambia en $\cx{x}=1$: son 2 piezas.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x3h-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x3h-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="182.3" x2="325.2" y2="182.3"/><line class="sv-ax" x1="59.7" y1="210.0" x2="59.7" y2="10.0"/><text class="svt tx-x" x="321.2" y="198.3">x</text><text class="svt tx-y" x="66.7" y="18.0">y</text><line class="sv-tick" x1="125.2" y1="179.3" x2="125.2" y2="185.3"/><text class="svt sm tx-m lb" x="125.2" y="197.3" text-anchor="middle">1</text><line class="sv-tick" x1="190.7" y1="179.3" x2="190.7" y2="185.3"/><text class="svt sm tx-m lb" x="190.7" y="197.3" text-anchor="middle">2</text><line class="sv-tick" x1="256.2" y1="179.3" x2="256.2" y2="185.3"/><text class="svt sm tx-m lb" x="256.2" y="197.3" text-anchor="middle">3</text><line class="sv-tick" x1="56.7" y1="116.8" x2="62.7" y2="116.8"/><text class="svt sm tx-m lb" x="53.7" y="120.8" text-anchor="end">1</text><line class="sv-tick" x1="56.7" y1="51.3" x2="62.7" y2="51.3"/><text class="svt sm tx-m lb" x="53.7" y="55.3" text-anchor="end">2</text><polygon class="sv-fill" points="59.7,182.3 256.2,182.3 125.2,51.3"/><polygon class="sv-l" points="59.7,182.3 256.2,182.3 125.2,51.3"/><line class="sv-arx" x1="92.4" y1="116.8" x2="190.7" y2="116.8" marker-end="url(#x3h-mx)"/><text class="svt lb tx-l" x="87.4" y="111.8" text-anchor="end">x = y/2</text><text class="svt lb tx-l" x="196.7" y="111.8" text-anchor="start">x = 3 − y</text></svg><figcaption>Como te la dan: una sola pieza.</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x3v-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x3v-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="182.3" x2="325.2" y2="182.3"/><line class="sv-ax" x1="59.7" y1="210.0" x2="59.7" y2="10.0"/><text class="svt tx-x" x="321.2" y="198.3">x</text><text class="svt tx-y" x="66.7" y="18.0">y</text><line class="sv-tick" x1="125.2" y1="179.3" x2="125.2" y2="185.3"/><text class="svt sm tx-m lb" x="125.2" y="197.3" text-anchor="middle">1</text><line class="sv-tick" x1="190.7" y1="179.3" x2="190.7" y2="185.3"/><text class="svt sm tx-m lb" x="190.7" y="197.3" text-anchor="middle">2</text><line class="sv-tick" x1="256.2" y1="179.3" x2="256.2" y2="185.3"/><text class="svt sm tx-m lb" x="256.2" y="197.3" text-anchor="middle">3</text><line class="sv-tick" x1="56.7" y1="116.8" x2="62.7" y2="116.8"/><text class="svt sm tx-m lb" x="53.7" y="120.8" text-anchor="end">1</text><line class="sv-tick" x1="56.7" y1="51.3" x2="62.7" y2="51.3"/><text class="svt sm tx-m lb" x="53.7" y="55.3" text-anchor="end">2</text><polygon class="sv-fill" points="59.7,182.3 125.2,182.3 125.2,51.3"/><polygon class="sv-fill2" points="125.2,182.3 256.2,182.3 125.2,51.3"/><polygon class="sv-l" points="59.7,182.3 256.2,182.3 125.2,51.3"/><polyline class="sv-dash" points="125.2,182.3 125.2,51.3"/><line class="sv-ary" x1="99.0" y1="182.3" x2="99.0" y2="105.7" marker-end="url(#x3v-my)"/><line class="sv-ary" x1="190.7" y1="182.3" x2="190.7" y2="118.8" marker-end="url(#x3v-my)"/><text class="svt lb tx-l" x="87.4" y="111.8" text-anchor="end">y = 2x</text><text class="svt lb tx-l" x="196.7" y="111.8" text-anchor="start">y = 3 − x</text><text class="svt lb tx-m" x="108.8" y="175.3" text-anchor="middle">Q₁</text><text class="svt lb tx-m" x="164.5" y="175.3" text-anchor="middle">Q₂</text></svg><figcaption>Con $\cy{dy}$ adentro: dos piezas, cortadas en $\cx{x}=1$.</figcaption></figure></div>
+          <b>Como te la dan</b> (una pieza): adentro, $\displaystyle\int_{y/2}^{3-y}3\cx{x}\,\cx{dx}=\tfrac32\left[(3-\cy{y})^2-\tfrac{\cy{y}^2}{4}\right]=\tfrac32\left(9-6\cy{y}+\tfrac34\cy{y}^2\right)$. Afuera: $\tfrac32\displaystyle\int_0^2\left(9-6\cy{y}+\tfrac34\cy{y}^2\right)\cy{dy}=\tfrac32(18-12+2)=12$.<br>
+          <b>Con $\cy{dy}$ adentro</b> (dos piezas, corte en $\cx{x}=1$; las rectas son $\cl{y=2x}$ y $\cl{y=3-x}$):
+          $$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{2x}}3\cx{x}\,\cy{dy}\,\cx{dx}+\int_{\cl{1}}^{\cl{3}}\!\int_{\cl{0}}^{\cl{3-x}}3\cx{x}\,\cy{dy}\,\cx{dx}=\int_0^1 6\cx{x}^2\,\cx{dx}+\int_1^3 3\cx{x}(3-\cx{x})\,\cx{dx}=2+10=12\ \checkmark$$
+          <div class="ans">Resultado: $12$</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 2 · Problemario 1 · Unir dos integrales en una</span>
+        <p>Calcula $\displaystyle\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{0}}^{\cl{x}} \cf{3}\,\cy{dy}\,\cx{dx}+\int_{\cl{1}}^{\cl{2}}\!\int_{\cl{0}}^{\cl{2-x}} \cf{3}\,\cy{dy}\,\cx{dx}$ escribiéndola como <b>una sola</b> integral iterada.</p>
+        <details><summary>Pista</summary><div class="inner">Dibuja las dos piezas juntas: sobre $[0,1]$ la tira llega hasta $\cl{y=x}$; sobre $[1,2]$, hasta $\cl{y=2-x}$. Juntas forman el triángulo $(0,0)$, $(2,0)$, $(1,1)$. Mira la región con tiras horizontales.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 191" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x4v-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x4v-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="143.3" x2="330.0" y2="143.3"/><line class="sv-ax" x1="66.2" y1="173.1" x2="66.2" y2="10.0"/><text class="svt tx-x" x="326.0" y="159.3">x</text><text class="svt tx-y" x="73.2" y="18.0">y</text><line class="sv-tick" x1="153.8" y1="140.3" x2="153.8" y2="146.3"/><text class="svt sm tx-m lb" x="153.8" y="158.3" text-anchor="middle">1</text><line class="sv-tick" x1="241.3" y1="140.3" x2="241.3" y2="146.3"/><text class="svt sm tx-m lb" x="241.3" y="158.3" text-anchor="middle">2</text><line class="sv-tick" x1="63.2" y1="55.8" x2="69.2" y2="55.8"/><text class="svt sm tx-m lb" x="60.2" y="59.8" text-anchor="end">1</text><polygon class="sv-fill" points="66.2,143.3 153.8,143.3 153.8,55.8"/><polygon class="sv-fill2" points="153.8,143.3 241.3,143.3 153.8,55.8"/><polygon class="sv-l" points="66.2,143.3 241.3,143.3 153.8,55.8"/><polyline class="sv-dash" points="153.8,143.3 153.8,55.8"/><line class="sv-ary" x1="110.0" y1="143.3" x2="110.0" y2="103.0" marker-end="url(#x4v-my)"/><line class="sv-ary" x1="197.5" y1="143.3" x2="197.5" y2="103.0" marker-end="url(#x4v-my)"/><text class="svt lb tx-l" x="97.2" y="93.5" text-anchor="end">y = x</text><text class="svt lb tx-l" x="210.3" y="93.5" text-anchor="start">y = 2 − x</text></svg><figcaption>Como te la dan: dos piezas, cortadas en $\cx{x}=1$.</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 191" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x4h-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x4h-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="143.3" x2="330.0" y2="143.3"/><line class="sv-ax" x1="66.2" y1="173.1" x2="66.2" y2="10.0"/><text class="svt tx-x" x="326.0" y="159.3">x</text><text class="svt tx-y" x="73.2" y="18.0">y</text><line class="sv-tick" x1="153.8" y1="140.3" x2="153.8" y2="146.3"/><text class="svt sm tx-m lb" x="153.8" y="158.3" text-anchor="middle">1</text><line class="sv-tick" x1="241.3" y1="140.3" x2="241.3" y2="146.3"/><text class="svt sm tx-m lb" x="241.3" y="158.3" text-anchor="middle">2</text><line class="sv-tick" x1="63.2" y1="55.8" x2="69.2" y2="55.8"/><text class="svt sm tx-m lb" x="60.2" y="59.8" text-anchor="end">1</text><polygon class="sv-fill" points="66.2,143.3 241.3,143.3 153.8,55.8"/><polygon class="sv-l" points="66.2,143.3 241.3,143.3 153.8,55.8"/><line class="sv-arx" x1="110.0" y1="99.5" x2="194.0" y2="99.5" marker-end="url(#x4h-mx)"/><text class="svt lb tx-l" x="97.2" y="93.5" text-anchor="end">x = y</text><text class="svt lb tx-l" x="210.3" y="93.5" text-anchor="start">x = 2 − y</text></svg><figcaption>Con $\cx{dx}$ adentro: una sola pieza.</figcaption></figure></div>
+          <b>Región:</b> triángulo con vértices $(0,0)$, $(2,0)$ y $(1,1)$, limitado por $\cl{y=0}$, $\cl{y=x}$ y $\cl{y=2-x}$.<br>
+          <b>Con tiras horizontales:</b> $\cy{y}$ de $\cl{0}$ a $\cl{1}$; entra por $\cl{x=y}$ y sale por $\cl{x=2-y}$:
+          $$\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{y}}^{\cl{2-y}} 3\,\cx{dx}\,\cy{dy}=\int_0^1 3(2-2\cy{y})\,\cy{dy}=3\Big[2\cy{y}-\cy{y}^2\Big]_0^1=3$$
+          Comprobación: el triángulo tiene área $\frac{2\cdot1}{2}=1$ y $f=3$, así que el volumen es $3\cdot1=3$ ✓.
+          <div class="ans">Resultado: $3$</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 3 · Problemario 1 · Dos piezas en una</span>
+        <p>Escribe como una sola integral iterada y calcula: $\displaystyle\int_{\cl{0}}^{\cl{4}}\!\int_{\cl{-\sqrt{y}}}^{\cl{\sqrt{y}}} \cf{3\cy{y}}\,\cx{dx}\,\cy{dy}+\int_{\cl{4}}^{\cl{8}}\!\int_{\cl{-\sqrt{8-y}}}^{\cl{\sqrt{8-y}}} \cf{3\cy{y}}\,\cx{dx}\,\cy{dy}$.</p>
+        <details><summary>Pista</summary><div class="inner">Despeja: $\cl{x=\pm\sqrt{y}}$ es la parábola $\cl{y=x^2}$, y $\cl{x=\pm\sqrt{8-y}}$ es $\cl{y=8-x^2}$. Se cortan donde $x^2=8-x^2$. La región queda entre las dos parábolas.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 238" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x5h-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x5h-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="201.5" x2="293.4" y2="201.5"/><line class="sv-ax" x1="154.5" y1="220.0" x2="154.5" y2="10.0"/><text class="svt tx-x" x="289.4" y="217.5">x</text><text class="svt tx-y" x="161.5" y="18.0">y</text><line class="sv-tick" x1="82.9" y1="198.5" x2="82.9" y2="204.5"/><text class="svt sm tx-m lb" x="82.9" y="216.5" text-anchor="middle">−2</text><line class="sv-tick" x1="226.1" y1="198.5" x2="226.1" y2="204.5"/><text class="svt sm tx-m lb" x="226.1" y="216.5" text-anchor="middle">2</text><line class="sv-tick" x1="151.5" y1="117.3" x2="157.5" y2="117.3"/><text class="svt sm tx-m lb" x="148.5" y="121.3" text-anchor="end">4</text><line class="sv-tick" x1="151.5" y1="33.1" x2="157.5" y2="33.1"/><text class="svt sm tx-m lb" x="148.5" y="37.1" text-anchor="end">8</text><polygon class="sv-fill" points="154.5,201.5 142.6,199.1 137.7,196.8 133.9,194.5 130.7,192.1 127.9,189.8 125.3,187.4 123.0,185.1 120.8,182.8 118.7,180.4 116.8,178.1 115.0,175.7 113.2,173.4 111.5,171.1 109.9,168.7 108.3,166.4 106.8,164.0 105.3,161.7 103.9,159.4 102.5,157.0 101.2,154.7 99.9,152.4 98.6,150.0 97.3,147.7 96.1,145.3 94.9,143.0 93.7,140.7 92.5,138.3 91.4,136.0 90.3,133.6 89.2,131.3 88.1,129.0 87.0,126.6 86.0,124.3 85.0,121.9 83.9,119.6 82.9,117.3 226.1,117.3 225.1,119.6 224.1,121.9 223.1,124.3 222.0,126.6 220.9,129.0 219.9,131.3 218.8,133.6 217.7,136.0 216.5,138.3 215.4,140.7 214.2,143.0 213.0,145.3 211.7,147.7 210.5,150.0 209.2,152.4 207.9,154.7 206.5,157.0 205.1,159.4 203.7,161.7 202.2,164.0 200.7,166.4 199.2,168.7 197.5,171.1 195.9,173.4 194.1,175.7 192.3,178.1 190.3,180.4 188.3,182.8 186.1,185.1 183.7,187.4 181.2,189.8 178.4,192.1 175.2,194.5 171.4,196.8 166.5,199.1 154.5,201.5"/><polygon class="sv-fill2" points="82.9,117.3 83.9,114.9 85.0,112.6 86.0,110.2 87.0,107.9 88.1,105.6 89.2,103.2 90.3,100.9 91.4,98.5 92.5,96.2 93.7,93.9 94.9,91.5 96.1,89.2 97.3,86.9 98.6,84.5 99.9,82.2 101.2,79.8 102.5,77.5 103.9,75.2 105.3,72.8 106.8,70.5 108.3,68.1 109.9,65.8 111.5,63.5 113.2,61.1 115.0,58.8 116.8,56.4 118.7,54.1 120.8,51.8 123.0,49.4 125.3,47.1 127.9,44.7 130.7,42.4 133.9,40.1 137.7,37.7 142.6,35.4 154.5,33.1 154.5,33.1 166.5,35.4 171.4,37.7 175.2,40.1 178.4,42.4 181.2,44.7 183.7,47.1 186.1,49.4 188.3,51.8 190.3,54.1 192.3,56.4 194.1,58.8 195.9,61.1 197.5,63.5 199.2,65.8 200.7,68.1 202.2,70.5 203.7,72.8 205.1,75.2 206.5,77.5 207.9,79.8 209.2,82.2 210.5,84.5 211.7,86.9 213.0,89.2 214.2,91.5 215.4,93.9 216.5,96.2 217.7,98.5 218.8,100.9 219.9,103.2 220.9,105.6 222.0,107.9 223.1,110.2 224.1,112.6 225.1,114.9 226.1,117.3"/><polyline class="sv-l" points="82.9,117.3 86.9,126.4 90.9,134.9 94.9,143.0 98.9,150.5 102.8,157.5 106.8,164.0 110.8,170.0 114.8,175.5 118.7,180.4 122.7,184.8 126.7,188.7 130.7,192.1 134.6,195.0 138.6,197.3 142.6,199.1 146.6,200.4 150.5,201.2 154.5,201.5 158.5,201.2 162.5,200.4 166.5,199.1 170.4,197.3 174.4,195.0 178.4,192.1 182.4,188.7 186.3,184.8 190.3,180.4 194.3,175.5 198.3,170.0 202.2,164.0 206.2,157.5 210.2,150.5 214.2,143.0 218.2,134.9 222.1,126.4 226.1,117.3"/><polyline class="sv-l" points="82.9,117.3 86.9,108.2 90.9,99.6 94.9,91.5 98.9,84.0 102.8,77.0 106.8,70.5 110.8,64.5 114.8,59.0 118.7,54.1 122.7,49.7 126.7,45.8 130.7,42.4 134.6,39.6 138.6,37.2 142.6,35.4 146.6,34.1 150.5,33.3 154.5,33.1 158.5,33.3 162.5,34.1 166.5,35.4 170.4,37.2 174.4,39.6 178.4,42.4 182.4,45.8 186.3,49.7 190.3,54.1 194.3,59.0 198.3,64.5 202.2,70.5 206.2,77.0 210.2,84.0 214.2,91.5 218.2,99.6 222.1,108.2 226.1,117.3"/><polyline class="sv-dash" points="61.5,117.3 247.6,117.3"/><line class="sv-arx" x1="86.5" y1="159.4" x2="221.1" y2="159.4" marker-end="url(#x5h-mx)"/><line class="sv-arx" x1="111.6" y1="64.6" x2="196.0" y2="64.6" marker-end="url(#x5h-mx)"/><text class="svt lb tx-m sm" x="253.2" y="131.3" text-anchor="start">Q₁ (abajo)</text><text class="svt lb tx-m sm" x="253.2" y="111.3" text-anchor="start">Q₂ (arriba)</text></svg><figcaption>Como te la dan: dos piezas, cortadas en $\cy{y}=4$.</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 238" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x5v-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x5v-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="201.5" x2="293.4" y2="201.5"/><line class="sv-ax" x1="154.5" y1="220.0" x2="154.5" y2="10.0"/><text class="svt tx-x" x="289.4" y="217.5">x</text><text class="svt tx-y" x="161.5" y="18.0">y</text><line class="sv-tick" x1="82.9" y1="198.5" x2="82.9" y2="204.5"/><text class="svt sm tx-m lb" x="82.9" y="216.5" text-anchor="middle">−2</text><line class="sv-tick" x1="226.1" y1="198.5" x2="226.1" y2="204.5"/><text class="svt sm tx-m lb" x="226.1" y="216.5" text-anchor="middle">2</text><line class="sv-tick" x1="151.5" y1="117.3" x2="157.5" y2="117.3"/><text class="svt sm tx-m lb" x="148.5" y="121.3" text-anchor="end">4</text><line class="sv-tick" x1="151.5" y1="33.1" x2="157.5" y2="33.1"/><text class="svt sm tx-m lb" x="148.5" y="37.1" text-anchor="end">8</text><polygon class="sv-fill" points="82.9,117.3 86.9,126.4 90.9,134.9 94.9,143.0 98.9,150.5 102.8,157.5 106.8,164.0 110.8,170.0 114.8,175.5 118.7,180.4 122.7,184.8 126.7,188.7 130.7,192.1 134.6,195.0 138.6,197.3 142.6,199.1 146.6,200.4 150.5,201.2 154.5,201.5 158.5,201.2 162.5,200.4 166.5,199.1 170.4,197.3 174.4,195.0 178.4,192.1 182.4,188.7 186.3,184.8 190.3,180.4 194.3,175.5 198.3,170.0 202.2,164.0 206.2,157.5 210.2,150.5 214.2,143.0 218.2,134.9 222.1,126.4 226.1,117.3 226.1,117.3 222.1,108.2 218.2,99.6 214.2,91.5 210.2,84.0 206.2,77.0 202.2,70.5 198.3,64.5 194.3,59.0 190.3,54.1 186.3,49.7 182.4,45.8 178.4,42.4 174.4,39.6 170.4,37.2 166.5,35.4 162.5,34.1 158.5,33.3 154.5,33.1 150.5,33.3 146.6,34.1 142.6,35.4 138.6,37.2 134.6,39.6 130.7,42.4 126.7,45.8 122.7,49.7 118.7,54.1 114.8,59.0 110.8,64.5 106.8,70.5 102.8,77.0 98.9,84.0 94.9,91.5 90.9,99.6 86.9,108.2 82.9,117.3"/><polyline class="sv-l" points="82.9,117.3 86.9,126.4 90.9,134.9 94.9,143.0 98.9,150.5 102.8,157.5 106.8,164.0 110.8,170.0 114.8,175.5 118.7,180.4 122.7,184.8 126.7,188.7 130.7,192.1 134.6,195.0 138.6,197.3 142.6,199.1 146.6,200.4 150.5,201.2 154.5,201.5 158.5,201.2 162.5,200.4 166.5,199.1 170.4,197.3 174.4,195.0 178.4,192.1 182.4,188.7 186.3,184.8 190.3,180.4 194.3,175.5 198.3,170.0 202.2,164.0 206.2,157.5 210.2,150.5 214.2,143.0 218.2,134.9 222.1,126.4 226.1,117.3"/><polyline class="sv-l" points="82.9,117.3 86.9,108.2 90.9,99.6 94.9,91.5 98.9,84.0 102.8,77.0 106.8,70.5 110.8,64.5 114.8,59.0 118.7,54.1 122.7,49.7 126.7,45.8 130.7,42.4 134.6,39.6 138.6,37.2 142.6,35.4 146.6,34.1 150.5,33.3 154.5,33.1 158.5,33.3 162.5,34.1 166.5,35.4 170.4,37.2 174.4,39.6 178.4,42.4 182.4,45.8 186.3,49.7 190.3,54.1 194.3,59.0 198.3,64.5 202.2,70.5 206.2,77.0 210.2,84.0 214.2,91.5 218.2,99.6 222.1,108.2 226.1,117.3"/><line class="sv-ary" x1="190.3" y1="180.4" x2="190.3" y2="55.2" marker-end="url(#x5v-my)"/><text class="svt lb tx-l" x="200.1" y="194.4" text-anchor="start">y = x²</text><text class="svt lb tx-l" x="200.1" y="51.1" text-anchor="start">y = 8 − x²</text></svg><figcaption>Con $\cy{dy}$ adentro: una sola pieza, $\cx{x}$ de $-2$ a $2$.</figcaption></figure></div>
+          <b>Intersecciones:</b> $x^2=8-x^2\Rightarrow x=\pm2$, en $y=4$. Por eso la región se corta en $\cy{y}=4$ con tiras horizontales. Con tiras verticales basta <b>una pieza</b>: $\cx{x}$ de $-2$ a $2$, $\cy{y}$ de $\cl{x^2}$ a $\cl{8-x^2}$.
+          $$\int_{\cl{-2}}^{\cl{2}}\!\int_{\cl{x^2}}^{\cl{8-x^2}} 3\cy{y}\,\cy{dy}\,\cx{dx}$$
+          <b>Adentro:</b> $\tfrac32\left[(8-\cx{x}^2)^2-\cx{x}^4\right]=\tfrac32(64-16\cx{x}^2)=96-24\cx{x}^2$.<br>
+          <b>Afuera:</b> $\displaystyle\int_{-2}^{2}(96-24\cx{x}^2)\,\cx{dx}=\Big[96\cx{x}-8\cx{x}^3\Big]_{-2}^{2}=2(192-64)=256$.
+          <div class="ans">Resultado: $256$</div>
+          <p class="hint">Comprobación: las dos piezas originales dan $\frac{384}{5}+\frac{896}{5}=256$.</p></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 2 · Problemario 11 · ¿Se cumple?</span>
+        <p>Muestra si se cumple: $\displaystyle\int_{\cl{0}}^{\cl{4}}\!\int_{\cl{y/2}}^{\cl{2}} \cf{f}(\cx{x},\cy{y})\,\cx{dx}\,\cy{dy}=\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{0}}^{\cl{2x}} \cf{f}(\cx{x},\cy{y})\,\cy{dy}\,\cx{dx}$.</p>
+        <details><summary>Pista</summary><div class="inner">No calcules nada: dibuja la región de cada lado. Si es la misma, se cumple; si no, no. Despeja $\cl{x=y/2}$ para $\cy{y}$.</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x6h-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x6h-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="187.4" x2="170.6" y2="187.4"/><line class="sv-ax" x1="51.0" y1="210.0" x2="51.0" y2="10.0"/><text class="svt tx-x" x="166.6" y="203.4">x</text><text class="svt tx-y" x="58.0" y="18.0">y</text><line class="sv-tick" x1="87.5" y1="184.4" x2="87.5" y2="190.4"/><text class="svt sm tx-m lb" x="87.5" y="202.4" text-anchor="middle">1</text><line class="sv-tick" x1="124.0" y1="184.4" x2="124.0" y2="190.4"/><text class="svt sm tx-m lb" x="124.0" y="202.4" text-anchor="middle">2</text><line class="sv-tick" x1="48.0" y1="114.3" x2="54.0" y2="114.3"/><text class="svt sm tx-m lb" x="45.0" y="118.3" text-anchor="end">2</text><line class="sv-tick" x1="48.0" y1="41.2" x2="54.0" y2="41.2"/><text class="svt sm tx-m lb" x="45.0" y="45.2" text-anchor="end">4</text><polygon class="sv-fill" points="51.0,187.4 124.0,187.4 124.0,41.2"/><polygon class="sv-l" points="51.0,187.4 124.0,187.4 124.0,41.2"/><line class="sv-arx" x1="87.5" y1="114.3" x2="122.6" y2="114.3" marker-end="url(#x6h-mx)"/><text class="svt lb tx-l" x="83.5" y="108.3" text-anchor="end">x = y/2</text><text class="svt lb tx-l" x="132.0" y="114.3" text-anchor="start">x = 2</text></svg><figcaption>Lado izquierdo ($\cx{dx}$ adentro).</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x6v-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x6v-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="187.4" x2="170.6" y2="187.4"/><line class="sv-ax" x1="51.0" y1="210.0" x2="51.0" y2="10.0"/><text class="svt tx-x" x="166.6" y="203.4">x</text><text class="svt tx-y" x="58.0" y="18.0">y</text><line class="sv-tick" x1="87.5" y1="184.4" x2="87.5" y2="190.4"/><text class="svt sm tx-m lb" x="87.5" y="202.4" text-anchor="middle">1</text><line class="sv-tick" x1="124.0" y1="184.4" x2="124.0" y2="190.4"/><text class="svt sm tx-m lb" x="124.0" y="202.4" text-anchor="middle">2</text><line class="sv-tick" x1="48.0" y1="114.3" x2="54.0" y2="114.3"/><text class="svt sm tx-m lb" x="45.0" y="118.3" text-anchor="end">2</text><line class="sv-tick" x1="48.0" y1="41.2" x2="54.0" y2="41.2"/><text class="svt sm tx-m lb" x="45.0" y="45.2" text-anchor="end">4</text><polygon class="sv-fill" points="51.0,187.4 124.0,187.4 124.0,41.2"/><polygon class="sv-l" points="51.0,187.4 124.0,187.4 124.0,41.2"/><line class="sv-ary" x1="94.8" y1="187.4" x2="94.8" y2="101.9" marker-end="url(#x6v-my)"/><text class="svt lb tx-l" x="85.3" y="104.7" text-anchor="end">y = 2x</text></svg><figcaption>Lado derecho ($\cy{dy}$ adentro). Misma región.</figcaption></figure></div>
+          <b>Izquierda:</b> $0\le\cy{y}\le4$ y $\cl{y/2}\le\cx{x}\le\cl{2}$. Está entre la recta $\cl{x=y/2}$ (o sea $\cl{y=2x}$) y la recta $\cl{x=2}$, sobre el eje $\cx{x}$: triángulo $(0,0)$, $(2,0)$, $(2,4)$.<br>
+          <b>Derecha:</b> $0\le\cx{x}\le2$ y $\cl{0}\le\cy{y}\le\cl{2x}$: el mismo triángulo.
+          <div class="ans">Sí se cumple: es la misma región con el otro orden.</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 3 · Problemario 11 · ¿Se cumple?</span>
+        <p>Muestra si se cumple: $\displaystyle\int_{\cl{-1}}^{\cl{1}}\!\int_{\cl{-\sqrt{1-x^2}}}^{\cl{1-x^2}} \cf{f}\,\cy{dy}\,\cx{dx}=\int_{\cl{-1}}^{\cl{0}}\!\int_{\cl{-\sqrt{1-y^2}}}^{\cl{\sqrt{1-y^2}}} \cf{f}\,\cx{dx}\,\cy{dy}+\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{-\sqrt{1-y}}}^{\cl{\sqrt{1-y}}} \cf{f}\,\cx{dx}\,\cy{dy}$.</p>
+        <details><summary>Pista</summary><div class="inner">Izquierda: entre el semicírculo de abajo $\cl{y=-\sqrt{1-x^2}}$ y la parábola $\cl{y=1-x^2}$. Despeja $\cx{x}$ en cada curva: $\cl{x=\pm\sqrt{1-y^2}}$ (círculo) y $\cl{x=\pm\sqrt{1-y}}$ (parábola). ¿En qué altura cambia cuál de las dos es el borde?</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x7v-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x7v-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="113.8" x2="287.5" y2="113.8"/><line class="sv-ax" x1="148.6" y1="210.0" x2="148.6" y2="10.0"/><text class="svt tx-x" x="283.5" y="129.8">x</text><text class="svt tx-y" x="155.6" y="18.0">y</text><line class="sv-tick" x1="80.7" y1="110.8" x2="80.7" y2="116.8"/><text class="svt sm tx-m lb" x="80.7" y="128.8" text-anchor="middle">−1</text><line class="sv-tick" x1="216.4" y1="110.8" x2="216.4" y2="116.8"/><text class="svt sm tx-m lb" x="216.4" y="128.8" text-anchor="middle">1</text><line class="sv-tick" x1="145.6" y1="181.6" x2="151.6" y2="181.6"/><text class="svt sm tx-m lb" x="142.6" y="185.6" text-anchor="end">−1</text><line class="sv-tick" x1="145.6" y1="45.9" x2="151.6" y2="45.9"/><text class="svt sm tx-m lb" x="142.6" y="49.9" text-anchor="end">1</text><polygon class="sv-fill" points="80.7,113.8 83.5,133.2 86.4,140.9 89.2,146.6 92.0,151.3 94.9,155.2 97.7,158.7 100.5,161.7 103.3,164.4 106.2,166.8 109.0,168.9 111.8,170.8 114.6,172.6 117.5,174.1 120.3,175.5 123.1,176.7 126.0,177.8 128.8,178.7 131.6,179.5 134.4,180.2 137.3,180.7 140.1,181.1 142.9,181.4 145.7,181.6 148.6,181.6 151.4,181.6 154.2,181.4 157.1,181.1 159.9,180.7 162.7,180.2 165.5,179.5 168.4,178.7 171.2,177.8 174.0,176.7 176.8,175.5 179.7,174.1 182.5,172.6 185.3,170.8 188.2,168.9 191.0,166.8 193.8,164.4 196.6,161.7 199.5,158.7 202.3,155.2 205.1,151.3 207.9,146.6 210.8,140.9 213.6,133.2 216.4,113.8 216.4,113.8 212.7,106.5 208.9,99.5 205.1,93.1 201.3,87.0 197.6,81.3 193.8,76.1 190.0,71.3 186.3,66.9 182.5,62.9 178.7,59.3 175.0,56.2 171.2,53.5 167.4,51.2 163.7,49.3 159.9,47.8 156.1,46.8 152.3,46.1 148.6,45.9 144.8,46.1 141.0,46.8 137.3,47.8 133.5,49.3 129.7,51.2 126.0,53.5 122.2,56.2 118.4,59.3 114.6,62.9 110.9,66.9 107.1,71.3 103.3,76.1 99.6,81.3 95.8,87.0 92.0,93.1 88.3,99.5 84.5,106.5 80.7,113.8"/><polyline class="sv-l" points="80.7,113.8 83.5,133.2 86.4,140.9 89.2,146.6 92.0,151.3 94.9,155.2 97.7,158.7 100.5,161.7 103.3,164.4 106.2,166.8 109.0,168.9 111.8,170.8 114.6,172.6 117.5,174.1 120.3,175.5 123.1,176.7 126.0,177.8 128.8,178.7 131.6,179.5 134.4,180.2 137.3,180.7 140.1,181.1 142.9,181.4 145.7,181.6 148.6,181.6 151.4,181.6 154.2,181.4 157.1,181.1 159.9,180.7 162.7,180.2 165.5,179.5 168.4,178.7 171.2,177.8 174.0,176.7 176.8,175.5 179.7,174.1 182.5,172.6 185.3,170.8 188.2,168.9 191.0,166.8 193.8,164.4 196.6,161.7 199.5,158.7 202.3,155.2 205.1,151.3 207.9,146.6 210.8,140.9 213.6,133.2 216.4,113.8"/><polyline class="sv-l" points="80.7,113.8 84.5,106.5 88.3,99.5 92.0,93.1 95.8,87.0 99.6,81.3 103.3,76.1 107.1,71.3 110.9,66.9 114.6,62.9 118.4,59.3 122.2,56.2 126.0,53.5 129.7,51.2 133.5,49.3 137.3,47.8 141.0,46.8 144.8,46.1 148.6,45.9 152.3,46.1 156.1,46.8 159.9,47.8 163.7,49.3 167.4,51.2 171.2,53.5 175.0,56.2 178.7,59.3 182.5,62.9 186.3,66.9 190.0,71.3 193.8,76.1 197.6,81.3 201.3,87.0 205.1,93.1 208.9,99.5 212.7,106.5 216.4,113.8"/><line class="sv-ary" x1="182.5" y1="172.6" x2="182.5" y2="64.9" marker-end="url(#x7v-my)"/><text class="svt lb tx-l" x="190.5" y="51.5" text-anchor="start">y = 1 − x²</text><text class="svt lb tx-l" x="191.9" y="186.6" text-anchor="start">y = −√(1−x²)</text></svg><figcaption>Lado izquierdo: una pieza, $\cx{x}$ de $-1$ a $1$.</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x7h-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x7h-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="113.8" x2="287.5" y2="113.8"/><line class="sv-ax" x1="148.6" y1="210.0" x2="148.6" y2="10.0"/><text class="svt tx-x" x="283.5" y="129.8">x</text><text class="svt tx-y" x="155.6" y="18.0">y</text><line class="sv-tick" x1="80.7" y1="110.8" x2="80.7" y2="116.8"/><text class="svt sm tx-m lb" x="80.7" y="128.8" text-anchor="middle">−1</text><line class="sv-tick" x1="216.4" y1="110.8" x2="216.4" y2="116.8"/><text class="svt sm tx-m lb" x="216.4" y="128.8" text-anchor="middle">1</text><line class="sv-tick" x1="145.6" y1="181.6" x2="151.6" y2="181.6"/><text class="svt sm tx-m lb" x="142.6" y="185.6" text-anchor="end">−1</text><line class="sv-tick" x1="145.6" y1="45.9" x2="151.6" y2="45.9"/><text class="svt sm tx-m lb" x="142.6" y="49.9" text-anchor="end">1</text><polygon class="sv-fill" points="148.6,181.6 134.8,180.2 129.2,178.8 125.0,177.4 121.5,176.0 118.4,174.6 115.7,173.2 113.3,171.7 111.1,170.3 109.0,168.9 107.1,167.5 105.3,166.1 103.7,164.7 102.1,163.3 100.7,161.9 99.3,160.4 98.0,159.0 96.8,157.6 95.6,156.2 94.5,154.8 93.5,153.4 92.5,152.0 91.5,150.5 90.6,149.1 89.8,147.7 89.0,146.3 88.3,144.9 87.6,143.5 86.9,142.1 86.3,140.6 85.7,139.2 85.1,137.8 84.6,136.4 84.1,135.0 83.7,133.6 83.3,132.2 82.9,130.8 82.5,129.3 82.2,127.9 81.9,126.5 81.7,125.1 81.4,123.7 81.2,122.3 81.1,120.9 81.0,119.4 80.8,118.0 80.8,116.6 80.7,115.2 80.7,113.8 216.4,113.8 216.4,115.2 216.4,116.6 216.3,118.0 216.2,119.4 216.1,120.9 215.9,122.3 215.7,123.7 215.5,125.1 215.2,126.5 214.9,127.9 214.6,129.3 214.3,130.8 213.9,132.2 213.5,133.6 213.0,135.0 212.5,136.4 212.0,137.8 211.5,139.2 210.9,140.6 210.3,142.1 209.6,143.5 208.9,144.9 208.1,146.3 207.3,147.7 206.5,149.1 205.6,150.5 204.7,152.0 203.7,153.4 202.6,154.8 201.5,156.2 200.4,157.6 199.1,159.0 197.8,160.4 196.5,161.9 195.0,163.3 193.5,164.7 191.8,166.1 190.0,167.5 188.1,168.9 186.1,170.3 183.9,171.7 181.4,173.2 178.7,174.6 175.7,176.0 172.2,177.4 168.0,178.8 162.4,180.2 148.6,181.6"/><polygon class="sv-fill2" points="80.7,113.8 81.7,111.9 82.6,110.0 83.6,108.1 84.6,106.2 85.6,104.4 86.6,102.5 87.7,100.6 88.7,98.7 89.8,96.8 90.9,94.9 92.0,93.1 93.2,91.2 94.3,89.3 95.5,87.4 96.7,85.5 98.0,83.6 99.3,81.7 100.6,79.9 101.9,78.0 103.3,76.1 104.8,74.2 106.3,72.3 107.8,70.4 109.4,68.5 111.1,66.7 112.8,64.8 114.6,62.9 116.6,61.0 118.6,59.1 120.9,57.2 123.3,55.4 126.0,53.5 129.0,51.6 132.6,49.7 137.3,47.8 148.6,45.9 148.6,45.9 159.9,47.8 164.6,49.7 168.2,51.6 171.2,53.5 173.9,55.4 176.3,57.2 178.5,59.1 180.6,61.0 182.5,62.9 184.3,64.8 186.1,66.7 187.7,68.5 189.3,70.4 190.9,72.3 192.4,74.2 193.8,76.1 195.2,78.0 196.6,79.9 197.9,81.7 199.1,83.6 200.4,85.5 201.6,87.4 202.8,89.3 204.0,91.2 205.1,93.1 206.2,94.9 207.3,96.8 208.4,98.7 209.5,100.6 210.5,102.5 211.5,104.4 212.5,106.2 213.5,108.1 214.5,110.0 215.5,111.9 216.4,113.8"/><polyline class="sv-l" points="80.7,113.8 83.5,133.2 86.4,140.9 89.2,146.6 92.0,151.3 94.9,155.2 97.7,158.7 100.5,161.7 103.3,164.4 106.2,166.8 109.0,168.9 111.8,170.8 114.6,172.6 117.5,174.1 120.3,175.5 123.1,176.7 126.0,177.8 128.8,178.7 131.6,179.5 134.4,180.2 137.3,180.7 140.1,181.1 142.9,181.4 145.7,181.6 148.6,181.6 151.4,181.6 154.2,181.4 157.1,181.1 159.9,180.7 162.7,180.2 165.5,179.5 168.4,178.7 171.2,177.8 174.0,176.7 176.8,175.5 179.7,174.1 182.5,172.6 185.3,170.8 188.2,168.9 191.0,166.8 193.8,164.4 196.6,161.7 199.5,158.7 202.3,155.2 205.1,151.3 207.9,146.6 210.8,140.9 213.6,133.2 216.4,113.8"/><polyline class="sv-l" points="80.7,113.8 84.5,106.5 88.3,99.5 92.0,93.1 95.8,87.0 99.6,81.3 103.3,76.1 107.1,71.3 110.9,66.9 114.6,62.9 118.4,59.3 122.2,56.2 126.0,53.5 129.7,51.2 133.5,49.3 137.3,47.8 141.0,46.8 144.8,46.1 148.6,45.9 152.3,46.1 156.1,46.8 159.9,47.8 163.7,49.3 167.4,51.2 171.2,53.5 175.0,56.2 178.7,59.3 182.5,62.9 186.3,66.9 190.0,71.3 193.8,76.1 197.6,81.3 201.3,87.0 205.1,93.1 208.9,99.5 212.7,106.5 216.4,113.8"/><polyline class="sv-dash" points="53.6,113.8 243.6,113.8"/><line class="sv-arx" x1="86.4" y1="140.9" x2="208.0" y2="140.9" marker-end="url(#x7h-mx)"/><line class="sv-arx" x1="100.6" y1="79.9" x2="193.8" y2="79.9" marker-end="url(#x7h-mx)"/><text class="svt lb tx-m" x="227.2" y="107.8" text-anchor="start">Q₂</text><text class="svt lb tx-m" x="227.2" y="129.8" text-anchor="start">Q₁</text></svg><figcaption>Lado derecho: dos piezas, $Q_1$ y $Q_2$, cortadas en $\cy{y}=0$.</figcaption></figure></div>
+          <b>Izquierda:</b> $\cx{x}$ de $-1$ a $1$; abajo el semicírculo inferior, arriba la parábola. Ambas valen 0 en $\cx{x}=\pm1$, así que se tocan ahí.<br>
+          <b>Con tiras horizontales:</b> para $-1\le\cy{y}\le0$ los lados son el círculo, $\cx{x}=\pm\sqrt{1-y^2}$. Para $0\le\cy{y}\le1$ los lados son la parábola, $\cx{x}=\pm\sqrt{1-y}$. El cambio es en $\cy{y}=0$, justo donde terminan los límites de la primera integral.
+          <div class="ans">Sí se cumple: las dos integrales de la derecha cubren cada una su pieza.</div></div></details>
+      </div>
+
+      <div class="problem">
+        <span class="lvl">NIVEL 3 · Problemario 11 · ¿Se cumple? (tres piezas)</span>
+        <p>Muestra si se cumple: $\displaystyle\int_{\cl{0}}^{\cl{1}}\!\int_{\cl{-\sqrt{y/2}}}^{\cl{\sqrt{y/2}}}\!\cf{f}\,\cx{dx}\,\cy{dy}+\int_{\cl{1}}^{\cl{2}}\!\int_{\cl{-\sqrt{y/2}}}^{\cl{-\sqrt{y-1}}}\!\cf{f}\,\cx{dx}\,\cy{dy}+\int_{\cl{1}}^{\cl{2}}\!\int_{\cl{\sqrt{y-1}}}^{\cl{\sqrt{y/2}}}\!\cf{f}\,\cx{dx}\,\cy{dy}=\int_{\cl{-1}}^{\cl{1}}\!\int_{\cl{2x^2}}^{\cl{1+x^2}}\!\cf{f}\,\cy{dy}\,\cx{dx}$.</p>
+        <details><summary>Pista</summary><div class="inner">Dibuja la derecha: entre $\cl{y=2x^2}$ (abajo) y $\cl{y=1+x^2}$ (arriba). Se cortan donde $2x^2=1+x^2$. Luego pregúntate: con tiras horizontales, ¿qué pasa por encima de $\cy{y}=1$, donde la curva $1+x^2$ ya "estorba" en el centro?</div></details>
+        <details><summary>Ver solución</summary><div class="inner">
+          <div class="figpair"><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x8h-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x8h-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="180.9" x2="296.3" y2="180.9"/><line class="sv-ax" x1="152.6" y1="210.0" x2="152.6" y2="10.0"/><text class="svt tx-x" x="292.3" y="196.9">x</text><text class="svt tx-y" x="159.6" y="18.0">y</text><line class="sv-tick" x1="82.2" y1="177.9" x2="82.2" y2="183.9"/><text class="svt sm tx-m lb" x="82.2" y="195.9" text-anchor="middle">−1</text><line class="sv-tick" x1="223.0" y1="177.9" x2="223.0" y2="183.9"/><text class="svt sm tx-m lb" x="223.0" y="195.9" text-anchor="middle">1</text><line class="sv-tick" x1="149.6" y1="110.5" x2="155.6" y2="110.5"/><text class="svt sm tx-m lb" x="146.6" y="114.5" text-anchor="end">1</text><line class="sv-tick" x1="149.6" y1="40.1" x2="155.6" y2="40.1"/><text class="svt sm tx-m lb" x="146.6" y="44.1" text-anchor="end">2</text><polygon class="sv-fill" points="152.6,180.9 144.3,178.9 140.9,177.0 138.2,175.0 136.0,173.1 134.0,171.1 132.3,169.2 130.7,167.2 129.1,165.3 127.7,163.3 126.4,161.3 125.1,159.4 123.9,157.4 122.7,155.5 121.6,153.5 120.5,151.6 119.4,149.6 118.4,147.7 117.4,145.7 116.4,143.7 115.5,141.8 114.6,139.8 113.7,137.9 112.8,135.9 112.0,134.0 111.1,132.0 110.3,130.1 109.5,128.1 108.7,126.2 107.9,124.2 107.2,122.2 106.4,120.3 105.7,118.3 105.0,116.4 104.2,114.4 103.5,112.5 102.8,110.5 202.4,110.5 201.7,112.5 201.0,114.4 200.2,116.4 199.5,118.3 198.8,120.3 198.0,122.2 197.3,124.2 196.5,126.2 195.7,128.1 194.9,130.1 194.1,132.0 193.2,134.0 192.4,135.9 191.5,137.9 190.6,139.8 189.7,141.8 188.7,143.7 187.8,145.7 186.8,147.7 185.8,149.6 184.7,151.6 183.6,153.5 182.5,155.5 181.3,157.4 180.1,159.4 178.8,161.3 177.5,163.3 176.0,165.3 174.5,167.2 172.9,169.2 171.1,171.1 169.2,173.1 167.0,175.0 164.3,177.0 160.9,178.9 152.6,180.9"/><polygon class="sv-fill2" points="102.8,110.5 102.1,108.6 101.5,106.6 100.8,104.7 100.1,102.7 99.5,100.7 98.8,98.8 98.2,96.8 97.6,94.9 97.0,92.9 96.3,91.0 95.7,89.0 95.1,87.1 94.5,85.1 94.0,83.2 93.4,81.2 92.8,79.2 92.2,77.3 91.7,75.3 91.1,73.4 90.5,71.4 90.0,69.5 89.4,67.5 88.9,65.6 88.4,63.6 87.8,61.7 87.3,59.7 86.8,57.7 86.2,55.8 85.7,53.8 85.2,51.9 84.7,49.9 84.2,48.0 83.7,46.0 83.2,44.1 82.7,42.1 82.2,40.1 82.2,40.1 83.2,42.1 84.2,44.1 85.2,46.0 86.2,48.0 87.3,49.9 88.4,51.9 89.4,53.8 90.5,55.8 91.7,57.7 92.8,59.7 94.0,61.7 95.1,63.6 96.3,65.6 97.6,67.5 98.8,69.5 100.1,71.4 101.5,73.4 102.8,75.3 104.2,77.3 105.7,79.2 107.2,81.2 108.7,83.2 110.3,85.1 112.0,87.1 113.7,89.0 115.5,91.0 117.4,92.9 119.4,94.9 121.6,96.8 123.9,98.8 126.4,100.7 129.1,102.7 132.3,104.7 136.0,106.6 140.9,108.6 152.6,110.5"/><polygon class="sv-fill2" points="152.6,110.5 164.3,108.6 169.2,106.6 172.9,104.7 176.0,102.7 178.8,100.7 181.3,98.8 183.6,96.8 185.8,94.9 187.8,92.9 189.7,91.0 191.5,89.0 193.2,87.1 194.9,85.1 196.5,83.2 198.0,81.2 199.5,79.2 201.0,77.3 202.4,75.3 203.7,73.4 205.0,71.4 206.3,69.5 207.6,67.5 208.8,65.6 210.0,63.6 211.2,61.7 212.4,59.7 213.5,57.7 214.7,55.8 215.8,53.8 216.8,51.9 217.9,49.9 218.9,48.0 220.0,46.0 221.0,44.1 222.0,42.1 223.0,40.1 223.0,40.1 222.5,42.1 222.0,44.1 221.5,46.0 221.0,48.0 220.5,49.9 220.0,51.9 219.5,53.8 218.9,55.8 218.4,57.7 217.9,59.7 217.4,61.7 216.8,63.6 216.3,65.6 215.8,67.5 215.2,69.5 214.7,71.4 214.1,73.4 213.5,75.3 213.0,77.3 212.4,79.2 211.8,81.2 211.2,83.2 210.6,85.1 210.0,87.1 209.4,89.0 208.8,91.0 208.2,92.9 207.6,94.9 207.0,96.8 206.3,98.8 205.7,100.7 205.0,102.7 204.4,104.7 203.7,106.6 203.0,108.6 202.4,110.5"/><polyline class="sv-l" points="82.2,40.1 86.1,55.4 90.0,69.7 94.0,83.2 97.9,95.7 101.8,107.5 105.7,118.3 109.6,128.3 113.5,137.5 117.4,145.7 121.3,153.1 125.2,159.6 129.1,165.3 133.0,170.0 137.0,173.9 140.9,177.0 144.8,179.2 148.7,180.5 152.6,180.9 156.5,180.5 160.4,179.2 164.3,177.0 168.2,173.9 172.1,170.0 176.0,165.3 180.0,159.6 183.9,153.1 187.8,145.7 191.7,137.5 195.6,128.3 199.5,118.3 203.4,107.5 207.3,95.7 211.2,83.2 215.1,69.7 219.1,55.4 223.0,40.1"/><polyline class="sv-l" points="82.2,40.1 86.1,47.7 90.0,54.9 94.0,61.7 97.9,67.9 101.8,73.8 105.7,79.2 109.6,84.2 113.5,88.8 117.4,92.9 121.3,96.6 125.2,99.9 129.1,102.7 133.0,105.1 137.0,107.0 140.9,108.6 144.8,109.6 148.7,110.3 152.6,110.5 156.5,110.3 160.4,109.6 164.3,108.6 168.2,107.0 172.1,105.1 176.0,102.7 180.0,99.9 183.9,96.6 187.8,92.9 191.7,88.8 195.6,84.2 199.5,79.2 203.4,73.8 207.3,67.9 211.2,61.7 215.1,54.9 219.1,47.7 223.0,40.1"/><polyline class="sv-dash" points="54.1,110.5 251.1,110.5"/><line class="sv-arx" x1="114.0" y1="138.7" x2="188.3" y2="138.7" marker-end="url(#x8h-mx)"/><line class="sv-arx" x1="98.4" y1="100.0" x2="123.7" y2="100.0" marker-end="url(#x8h-mx)"/><line class="sv-arx" x1="181.4" y1="100.0" x2="205.4" y2="100.0" marker-end="url(#x8h-mx)"/><text class="svt lb tx-m" x="237.0" y="126.5" text-anchor="start">Q₁</text><text class="svt lb tx-m" x="237.0" y="104.5" text-anchor="start">Q₂, Q₃</text></svg><figcaption>Lado izquierdo: tres piezas. Debajo de $\cy{y}=1$ una ($Q_1$); arriba, dos "cuernos" ($Q_2$ y $Q_3$).</figcaption></figure><figure class="fig"><svg class="fig-svg" viewBox="0 0 340 228" role="img" aria-label="Dibujo de la región de integración" xmlns="http://www.w3.org/2000/svg"><defs><marker id="x8v-mx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-x"/></marker><marker id="x8v-my" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-y"/></marker></defs><line class="sv-ax" x1="32.0" y1="180.9" x2="296.3" y2="180.9"/><line class="sv-ax" x1="152.6" y1="210.0" x2="152.6" y2="10.0"/><text class="svt tx-x" x="292.3" y="196.9">x</text><text class="svt tx-y" x="159.6" y="18.0">y</text><line class="sv-tick" x1="82.2" y1="177.9" x2="82.2" y2="183.9"/><text class="svt sm tx-m lb" x="82.2" y="195.9" text-anchor="middle">−1</text><line class="sv-tick" x1="223.0" y1="177.9" x2="223.0" y2="183.9"/><text class="svt sm tx-m lb" x="223.0" y="195.9" text-anchor="middle">1</text><line class="sv-tick" x1="149.6" y1="110.5" x2="155.6" y2="110.5"/><text class="svt sm tx-m lb" x="146.6" y="114.5" text-anchor="end">1</text><line class="sv-tick" x1="149.6" y1="40.1" x2="155.6" y2="40.1"/><text class="svt sm tx-m lb" x="146.6" y="44.1" text-anchor="end">2</text><polygon class="sv-fill" points="82.2,40.1 86.1,55.4 90.0,69.7 94.0,83.2 97.9,95.7 101.8,107.5 105.7,118.3 109.6,128.3 113.5,137.5 117.4,145.7 121.3,153.1 125.2,159.6 129.1,165.3 133.0,170.0 137.0,173.9 140.9,177.0 144.8,179.2 148.7,180.5 152.6,180.9 156.5,180.5 160.4,179.2 164.3,177.0 168.2,173.9 172.1,170.0 176.0,165.3 180.0,159.6 183.9,153.1 187.8,145.7 191.7,137.5 195.6,128.3 199.5,118.3 203.4,107.5 207.3,95.7 211.2,83.2 215.1,69.7 219.1,55.4 223.0,40.1 223.0,40.1 219.1,47.7 215.1,54.9 211.2,61.7 207.3,67.9 203.4,73.8 199.5,79.2 195.6,84.2 191.7,88.8 187.8,92.9 183.9,96.6 180.0,99.9 176.0,102.7 172.1,105.1 168.2,107.0 164.3,108.6 160.4,109.6 156.5,110.3 152.6,110.5 148.7,110.3 144.8,109.6 140.9,108.6 137.0,107.0 133.0,105.1 129.1,102.7 125.2,99.9 121.3,96.6 117.4,92.9 113.5,88.8 109.6,84.2 105.7,79.2 101.8,73.8 97.9,67.9 94.0,61.7 90.0,54.9 86.1,47.7 82.2,40.1"/><polyline class="sv-l" points="82.2,40.1 86.1,55.4 90.0,69.7 94.0,83.2 97.9,95.7 101.8,107.5 105.7,118.3 109.6,128.3 113.5,137.5 117.4,145.7 121.3,153.1 125.2,159.6 129.1,165.3 133.0,170.0 137.0,173.9 140.9,177.0 144.8,179.2 148.7,180.5 152.6,180.9 156.5,180.5 160.4,179.2 164.3,177.0 168.2,173.9 172.1,170.0 176.0,165.3 180.0,159.6 183.9,153.1 187.8,145.7 191.7,137.5 195.6,128.3 199.5,118.3 203.4,107.5 207.3,95.7 211.2,83.2 215.1,69.7 219.1,55.4 223.0,40.1"/><polyline class="sv-l" points="82.2,40.1 86.1,47.7 90.0,54.9 94.0,61.7 97.9,67.9 101.8,73.8 105.7,79.2 109.6,84.2 113.5,88.8 117.4,92.9 121.3,96.6 125.2,99.9 129.1,102.7 133.0,105.1 137.0,107.0 140.9,108.6 144.8,109.6 148.7,110.3 152.6,110.5 156.5,110.3 160.4,109.6 164.3,108.6 168.2,107.0 172.1,105.1 176.0,102.7 180.0,99.9 183.9,96.6 187.8,92.9 191.7,88.8 195.6,84.2 199.5,79.2 203.4,73.8 207.3,67.9 211.2,61.7 215.1,54.9 219.1,47.7 223.0,40.1"/><line class="sv-ary" x1="187.8" y1="145.7" x2="187.8" y2="96.4" marker-end="url(#x8v-my)"/><text class="svt lb tx-l" x="152.6" y="88.5" text-anchor="middle">y = 1 + x²</text><text class="svt lb tx-l" x="204.3" y="142.2" text-anchor="start">y = 2x²</text></svg><figcaption>Lado derecho: una sola pieza, $\cx{x}$ de $-1$ a $1$.</figcaption></figure></div>
+          <b>Derecha:</b> $2x^2=1+x^2\Rightarrow x=\pm1$ (en $\cy{y}=2$). Región entre las dos parábolas.<br>
+          <b>Con tiras horizontales:</b> $\cx{x}=\pm\sqrt{y/2}$ viene de $\cl{y=2x^2}$ y $\cx{x}=\pm\sqrt{y-1}$ de $\cl{y=1+x^2}$ (solo existe para $\cy{y}\ge1$).<br>
+          • Para $0\le\cy{y}\le1$: la tira va de $-\sqrt{y/2}$ a $\sqrt{y/2}$: una pieza (primera integral).<br>
+          • Para $1\le\cy{y}\le2$: la parábola de arriba se mete en el centro y parte la tira en dos: de $-\sqrt{y/2}$ a $-\sqrt{y-1}$ y de $\sqrt{y-1}$ a $\sqrt{y/2}$ (segunda y tercera integral).
+          <div class="ans">Sí se cumple: las tres piezas de la izquierda forman la región de la derecha.</div></div></details>
+      </div>
+    </section>
+
+    <!-- 23 -->
+    <section class="step" id="quiz3-sec" data-title="Mini-quiz">
+      <h3><span class="step-num">?</span>Mini-quiz</h3>
+      <p class="hint">Responde de memoria. Recibes retroalimentación al instante, se guarda tu resultado y estas preguntas entran al repaso espaciado.</p>
+      <div id="quiz3"></div>
+    </section>
+
+    <!-- 24 -->
+    <section class="step" data-title="Lo siguiente">
+      <h3>✅ Terminaste la Lección 3</h3>
+      <p>Para que se quede en la memoria:</p>
+      <ul>
+        <li>Mañana abre <b>Repaso del día</b>: las preguntas de las lecciones 1, 2 y 3 vuelven justo antes de que las olvides.</li>
+        <li>Vuelve a las tarjetas de fórmula y pulsa <b>Taparla y recordarla</b> sin mirar.</li>
+        <li>Toma las 7 integrales del problema 1 de tu problemario y, para cada una, dibuja la región y escribe el otro orden.</li>
+      </ul>
+      <p class="hint">Sigue la Lección 6 (integrales triples sobre cajas y regiones sólidas): próximamente.</p>
     </section>
 
     </div>
@@ -1046,9 +1461,9 @@ window.MathJax = {
       o: ['Números fijos, igual que en un rectángulo', 'Pueden depender de la variable de afuera', 'No se puede integrar sobre un triángulo'], c: 1,
       e: 'Un triángulo no tiene todos sus lados paralelos a los ejes, así que el largo de cada franja cambia. Aquí, para cada $x$ la $y$ va de $0$ a $x$: el límite de adentro depende de $x$.' },
     { id: 'pb',
-      q: '¿Cuánto crees que vale $\\iint_D 1\\,dA$ para ese mismo triángulo?',
-      o: ['$1$', '$1/2$', '$2$'], c: 1,
-      e: '$\\iint_D 1\\,dA$ es el área de $D$. El triángulo es la mitad del cuadrado unitario, así que vale $1/2$.' }
+      q: '$Q$ está limitada por $y=x^2$ y $y=4$. Si barres de abajo hacia arriba, ¿entre qué valores de $x$ te mueves por afuera?',
+      o: ['De $0$ a $4$', 'De $-2$ a $2$', 'De $-4$ a $4$'], c: 1,
+      e: 'Las curvas se cortan donde $x^2=4$, o sea en $x=-2$ y $x=2$. Esas intersecciones son los números de la integral de afuera.' }
   ];
   var QUIZ1 = [
     { id: 'q1', q: '$\\iint_R 1\\,dA$ con $R=[1,4]\\times[2,5]$ es:',
@@ -1074,7 +1489,7 @@ window.MathJax = {
       e: 'Suma de volúmenes de columnas de base $\\Delta A$ y altura $f$: el volumen del sólido entre $R$ y la superficie.' }
   ];
   var QUIZ2 = [
-    { id: 'r1', q: 'En una región tipo I, $\\iint_D f\\,dA=\\int_a^b\\!\\int_{g_1(x)}^{g_2(x)} f\\,dy\\,dx$. ¿Cómo son los límites?',
+    { id: 'r1', q: 'En una región tipo I, $\\iint_Q f\\,dA=\\int_a^b\\!\\int_{g_1(x)}^{g_2(x)} f\\,dy\\,dx$. ¿Cómo son los límites?',
       o: ['Los de afuera son números y los de adentro son funciones de $x$', 'Todos son números', 'Los de afuera son funciones y los de adentro son números', 'Los de adentro son funciones de $y$'], c: 0,
       e: 'La integral de afuera ($dx$) recorre todas las franjas con límites constantes $a$ y $b$. En cada franja, $y$ va de $g_1(x)$ a $g_2(x)$, y eso cambia con $x$.' },
     { id: 'r2', q: 'En una región tipo II (franjas horizontales), la integral de adentro es en:',
@@ -1086,18 +1501,63 @@ window.MathJax = {
     { id: 'r4', q: 'En $\\int_0^1\\!\\int_0^x f\\,dy\\,dx$, la región de integración es:',
       o: ['El cuadrado $[0,1]\\times[0,1]$', 'El triángulo $0\\le y\\le x\\le 1$', 'El triángulo $0\\le x\\le y\\le 1$', 'El triángulo con $y\\ge 1$'], c: 1,
       e: 'Para cada $x$ entre 0 y 1, $y$ va de $0$ a $x$: es el triángulo debajo de la recta $y=x$.' },
-    { id: 'r5', q: 'La integral $\\int_0^1\\!\\int_0^x f\\,dy\\,dx$ escrita en el orden $dx\\,dy$ es:',
-      o: ['$\\int_0^1\\!\\int_0^y f\\,dx\\,dy$', '$\\int_0^1\\!\\int_1^y f\\,dx\\,dy$', '$\\int_0^1\\!\\int_y^1 f\\,dx\\,dy$', '$\\int_0^x\\!\\int_0^1 f\\,dx\\,dy$'], c: 2,
-      e: 'La región es $0\\le y\\le x\\le1$. Para cada $y$ entre 0 y 1, $x$ va de $y$ (la recta) hasta 1 (el borde derecho). Los límites de afuera deben ser números.' },
-    { id: 'r6', q: 'El primer paso antes de cambiar el orden de integración es:',
-      o: ['Derivar $f$', 'Cambiar $dx$ por $dy$ sin más', 'Evaluar $f$ en el origen', 'Dibujar la región'], c: 3,
-      e: 'Los límites originales describen una región. Dibujarla te deja leerla en el otro sentido. Intercambiar solo $dx$ y $dy$ sin cambiar límites da una región distinta.' },
-    { id: 'r7', q: 'Si $D_1$ y $D_2$ no se traslapan (solo comparten borde), $\\iint_{D_1\\cup D_2} f\\,dA$ es:',
-      o: ['la suma $\\iint_{D_1}f\\,dA+\\iint_{D_2}f\\,dA$', 'el producto de las dos integrales', 'la diferencia de las dos integrales', 'el mayor de los dos valores'], c: 0,
-      e: 'Es la propiedad de aditividad: se parte la región en pedazos que no se traslapan y se suman las integrales.' },
-    { id: 'r8', q: 'El área de la región entre $y=x^2$ y $y=2x$ se calcula con:',
-      o: ['$\\int_0^2\\!\\int_{2x}^{x^2} dy\\,dx$', '$\\int_0^4\\!\\int_{x^2}^{2x} dy\\,dx$', '$\\int_0^2\\!\\int_0^{x} dy\\,dx$', '$\\int_0^2\\!\\int_{x^2}^{2x} dy\\,dx$'], c: 3,
-      e: 'Las curvas se cortan cuando $x^2=2x$, o sea en $x=0$ y $x=2$. Entre ellas, $2x$ está arriba y $x^2$ abajo, así que $y$ va de $x^2$ a $2x$. El resultado es $4/3$.' }
+    { id: 's1', q: '$Q$ está limitada por $2x+y=4$, $x=0$ y $y=0$. Con barrido vertical ($dy\\,dx$), los límites son:',
+      o: ['$0\\le x\\le 2$, $\\;0\\le y\\le 4-2x$', '$0\\le x\\le 4$, $\\;0\\le y\\le 2x$', '$0\\le x\\le 2$, $\\;0\\le y\\le 4$', '$0\\le x\\le 2$, $\\;4-2x\\le y\\le 0$'], c: 0,
+      e: 'Las rectas se cortan en $(0,0)$, $(2,0)$ y $(0,4)$. Para cada $x$ entre 0 y 2, $y$ entra por $y=0$ y sale por la recta $y=4-2x$ (la de arriba).' },
+    { id: 's2', q: '$Q$ está limitada por $y=x^2$ y $y=4$. Con barrido horizontal ($dx\\,dy$), la integral queda:',
+      o: ['$\\int_{-2}^{2}\\!\\int_{0}^{4} f\\,dx\\,dy$', '$\\int_{0}^{4}\\!\\int_{-\\sqrt{y}}^{\\sqrt{y}} f\\,dx\\,dy$', '$\\int_{0}^{4}\\!\\int_{0}^{y^2} f\\,dx\\,dy$', '$\\int_{0}^{2}\\!\\int_{-\\sqrt{y}}^{\\sqrt{y}} f\\,dx\\,dy$'], c: 1,
+      e: 'Despejando $x$ de $y=x^2$ salen dos ramas, $x=\\pm\\sqrt{y}$. Para cada $y$ entre 0 y 4, la flecha entra por $x=-\\sqrt{y}$ y sale por $x=\\sqrt{y}$.' },
+    { id: 's3', q: 'En el método de tus apuntes, ¿para qué sirve igualar las curvas (las intersecciones)?',
+      o: ['Para hallar los límites constantes de la integral de afuera', 'Para saber qué función integrar', 'Para decidir si la integral es positiva', 'Para cambiar $dx$ por $dy$'], c: 0,
+      e: 'Los puntos donde se cortan las curvas marcan dónde empieza y dónde termina la región, y de ahí salen los números de afuera.' },
+    { id: 's4', q: 'Para $\\iint_Q x\\,dA$ con $Q$ entre $y=x^2$ (abajo) y $y=2x+3$ (arriba), la integral de adentro vale:',
+      o: ['$x(2x+3-x^2)$', '$2x+3-x^2$', '$x(x^2-2x-3)$', '$\\tfrac{x}{2}(2x+3)^2$'], c: 0,
+      e: 'Como $x$ es constante respecto a $y$, queda $x\\,[y]_{x^2}^{2x+3}=x(2x+3-x^2)=2x^2+3x-x^3$.' },
+    { id: 's5', q: 'Antes de escribir los límites de una integral sobre una región "limitada por…", lo primero es:',
+      o: ['Derivar la función', 'Graficar la región', 'Cambiar $dx$ por $dy$', 'Evaluar la función en el origen'], c: 1,
+      e: 'El primer paso del método es graficar $Q$; sin el dibujo no sabes cuál curva queda arriba ni dónde empieza y termina la región.' }
+  ];
+  var PRED3 = [
+    { id: 'pc',
+      q: '¿Crees que se puede calcular $\\int e^{y^2}\\,dy$ con sustitución o por partes?',
+      o: ['Sí, con $u=y^2$', 'Sí, por partes', 'No: no tiene antiderivada con funciones normales'], c: 2,
+      e: 'No hay una fórmula con funciones normales para $\\int e^{y^2}\\,dy$. La sustitución $u=y^2$ no funciona porque falta un $y$ multiplicando (necesitarías $du=2y\\,dy$). Por eso, cuando aparece adentro, se cambia el orden.' },
+    { id: 'pd',
+      q: '$Q$ es el triángulo de vértices $(0,0)$, $(4,0)$ y $(2,2)$. Si lo cortas en tiras verticales, ¿crees que una sola fórmula para la curva de arriba sirve en toda la región?',
+      o: ['Sí, una sola fórmula', 'No: la curva de arriba cambia en $x=2$, hay que partir en dos', 'No se puede integrar sobre un triángulo'], c: 1,
+      e: 'Hasta $x=2$ el borde de arriba es $y=x$ y después es $y=4-x$: dos fórmulas, dos piezas. Con tiras horizontales, en cambio, la entrada ($x=y$) y la salida ($x=4-y$) son siempre las mismas.' }
+  ];
+  var QUIZ3 = [
+    { id: 'w1', q: 'Para calcular $\\int_0^1\\!\\int_x^1 e^{y^2}\\,dy\\,dx$, ¿qué orden sí funciona?',
+      o: ['$\\int_x^1\\!\\int_0^1 e^{y^2}\\,dx\\,dy$', '$\\int_0^1\\!\\int_y^1 e^{y^2}\\,dx\\,dy$', '$\\int_0^1\\!\\int_0^y e^{y^2}\\,dx\\,dy$', 'Ninguno: no se puede calcular'], c: 2,
+      e: 'La región es $0\\le x\\le y\\le1$ (triángulo). Con $dx$ adentro, $x$ va de $0$ a $y$ y $y$ de $0$ a $1$. Las otras opciones meten una variable en el límite equivocado o describen otra región.' },
+    { id: 'w2', q: 'El valor de $\\int_0^1\\!\\int_0^y e^{y^2}\\,dx\\,dy$ es:',
+      o: ['$e-1$', '$\\tfrac{e-1}{2}$', '$\\tfrac{e}{2}$', '$2(e-1)$'], c: 1,
+      e: 'Adentro: $e^{y^2}\\cdot y$. Afuera, con $u=y^2$: $\\int_0^1 y\\,e^{y^2}\\,dy=\\tfrac12\\left[e^{y^2}\\right]_0^1=\\tfrac{e-1}{2}$.' },
+    { id: 'w3', q: 'Al cambiar el orden de integración sobre una región, lo que NO cambia es:',
+      o: ['Los límites de integración', 'La región y el valor de la integral', 'El orden de $dx$ y $dy$', 'Las funciones de los límites de adentro'], c: 1,
+      e: 'Es la misma región vista con otro barrido, así que el valor es el mismo. Cambian los límites y el orden de las diferenciales.' },
+    { id: 'w4', q: 'Al cambiar el orden de $\\int_0^2\\!\\int_{x^2}^{4} f\\,dy\\,dx$, queda:',
+      o: ['$\\int_{x^2}^{4}\\!\\int_0^2 f\\,dx\\,dy$', '$\\int_0^2\\!\\int_0^{\\sqrt{y}} f\\,dx\\,dy$', '$\\int_0^4\\!\\int_0^{y^2} f\\,dx\\,dy$', '$\\int_0^4\\!\\int_0^{\\sqrt{y}} f\\,dx\\,dy$'], c: 3,
+      e: '$y$ recorre toda la región, de $0$ a $4$. Para cada $y$, $x$ entra por el eje ($x=0$) y sale por la parábola, que despejada es $x=\\sqrt{y}$.' },
+    { id: 'w5', q: '¿Cuándo hay que partir una región en piezas?',
+      o: ['Siempre que no sea un rectángulo', 'Cuando la curva de entrada o de salida de la tira cambia de fórmula', 'Cuando la función tiene exponentes', 'Solo si la región tiene un hueco'], c: 1,
+      e: 'Una integral iterada necesita una sola fórmula de entrada y una de salida. Si cambian a la mitad, se parte donde cambian y se suman las piezas.' },
+    { id: 'w6', q: '$Q$ está limitada por $y=x$, $y=x-4$, $y=0$ y $y=2$. Con barrido horizontal ($dx\\,dy$), los límites son:',
+      o: ['$0\\le y\\le2$, $\\;y\\le x\\le y+4$', '$0\\le y\\le2$, $\\;y-4\\le x\\le y$', '$0\\le x\\le6$, $\\;x-4\\le y\\le x$', '$0\\le y\\le2$, $\\;0\\le x\\le4$'], c: 0,
+      e: 'Despejando $x$: la tira entra por $y=x$, o sea $x=y$, y sale por $y=x-4$, o sea $x=y+4$. En el paralelogramo, $y$ va de $0$ a $2$.' },
+    { id: 'w7', q: 'El paralelogramo de vértices $(0,0)$, $(4,0)$, $(6,2)$ y $(2,2)$, ¿en cuántas piezas se parte con tiras verticales?',
+      o: ['1', '2', '3', '4'], c: 2,
+      e: 'En $x=2$ y en $x=4$ cambia la curva de entrada o de salida: $0\\le x\\le2$, $2\\le x\\le4$ y $4\\le x\\le6$. Son 3 piezas.' },
+    { id: 'w8', q: 'El área de la región limitada por $y=|x|$ y $y=4$ es:',
+      o: ['$8$', '$16$', '$32$', '$4$'], c: 1,
+      e: '$\\int_0^4\\!\\int_{-y}^{y}dx\\,dy=\\int_0^4 2y\\,dy=16$. Es un triángulo de base $8$ y altura $4$: $\\tfrac{8\\cdot4}{2}=16$.' },
+    { id: 'w9', q: '$\\int_0^1\\!\\int_0^x f\\,dy\\,dx+\\int_1^2\\!\\int_0^{2-x} f\\,dy\\,dx$ equivale a una sola integral:',
+      o: ['$\\int_0^2\\!\\int_y^{2-y} f\\,dx\\,dy$', '$\\int_0^1\\!\\int_0^{2-y} f\\,dx\\,dy$', '$\\int_0^1\\!\\int_{2-y}^{y} f\\,dx\\,dy$', '$\\int_0^1\\!\\int_y^{2-y} f\\,dx\\,dy$'], c: 3,
+      e: 'Las dos piezas forman el triángulo $(0,0)$, $(2,0)$, $(1,1)$. Con tiras horizontales, $y$ va de $0$ a $1$ y $x$ de $y$ a $2-y$.' },
+    { id: 'w10', q: '¿Qué tiene de malo escribir $\\int_0^2\\!\\int_{x^2}^{4}\\,dy\\,dx=\\int_{x^2}^{4}\\!\\int_0^2\\,dx\\,dy$?',
+      o: ['Nada, solo se intercambian los límites', 'La integral de afuera tendría $x$ en sus límites, y es otra región', 'Falta una constante', 'Debería ser $dy\\,dy$'], c: 1,
+      e: 'El orden nuevo se obtiene mirando el dibujo, no intercambiando números. Aquí la integral de afuera (en $y$) tendría límites con $x$, y el resultado no sería un número.' }
   ];
   var FIRSTS = [
     { host: 'first', id: 'e1',
@@ -1108,19 +1568,33 @@ window.MathJax = {
       c: 1,
       e: 'Primero se mira la región: como los límites son números, es un rectángulo y Fubini nos deja iterar. Separar no vale porque $x^2+y$ es una suma, no un producto; y multiplicar por el valor en una esquina solo da una estimación, no el valor exacto.' },
     { host: 'first2a', id: 'e2a',
-      q: 'Te piden $\\iint_D xy\\,dA$, donde $D$ es la región entre $y=x^2$ y $y=x$. ¿Qué harías primero?',
-      o: ['Integrar $xy$ de 0 a 1 en $x$ y en $y$, como si fuera un rectángulo',
-          'Dibujar $D$ y hallar dónde se cortan las curvas ($x^2=x$)',
+      q: 'Te piden $\\iint_Q xy\\,dA$, donde $Q$ está limitada por $2x+y=4$, $x=0$ y $y=0$. ¿Qué harías primero?',
+      o: ['Integrar $xy$ de 0 a 4 en $x$ y en $y$, como si fuera un rectángulo',
+          'Graficar las tres rectas y hallar dónde se cortan',
           'Separarla como $\\left(\\int x\\,dx\\right)\\left(\\int y\\,dy\\right)$'],
       c: 1,
-      e: 'Primero se dibuja la región y se buscan los cortes: $x^2=x$ en $x=0$ y $x=1$. Tratarla como rectángulo ignoraría que $y$ solo va de $x^2$ a $x$, y separar solo funciona sobre rectángulos.' },
+      e: 'Primero se grafica y se buscan las intersecciones: $(0,0)$, $(2,0)$ y $(0,4)$. Tratarla como rectángulo ignoraría que la recta recorta la región, y separar solo funciona sobre rectángulos.' },
     { host: 'first2b', id: 'e2b',
-      q: 'Te piden $\\int_0^1\\!\\int_x^1 e^{y^2}\\,dy\\,dx$. ¿Qué harías primero?',
-      o: ['Integrar $e^{y^2}$ respecto a $y$ en la integral de adentro',
-          'Dibujar la región y cambiar el orden a $dx\\,dy$',
-          'Cambiar $e^{y^2}$ por $e^{y}$ para simplificar'],
+      q: 'Te piden $\\iint_Q x\\,dA$, donde $Q$ está limitada por $y=x^2$ y $y=2x+3$. ¿Qué harías primero?',
+      o: ['Integrar $x$ de 0 a 3 en $x$ y de 0 a 9 en $y$',
+          'Igualar $x^2=2x+3$ para hallar las intersecciones y dibujar',
+          'Poner $x^2$ y $2x+3$ como límites de $x$'],
       c: 1,
-      e: 'La integral de adentro, $\\int e^{y^2}\\,dy$, no tiene antiderivada con funciones elementales: te atoras. Se dibuja la región y se cambia el orden, para que adentro quede $\\int dx$, que es fácil. Cambiar la función ya no sería el mismo problema.' }
+      e: 'Igualar las curvas da los límites de afuera: $x=-1$ y $x=3$. Las curvas son los límites de $y$ (de adentro), no de $x$: en la integral de adentro, los límites van con la letra de su $d$.' },
+    { host: 'first3a', id: 'e3a',
+      q: 'Te piden $\\int_0^2\\!\\int_{x^2}^{4} x\\,e^{y^2}\\,dy\\,dx$. ¿Qué harías primero?',
+      o: ['Integrar $e^{y^2}$ en $y$ por sustitución con $u=y^2$',
+          'Dibujar la región y cambiar el orden para que $x$ quede adentro',
+          'Separarla como $\\left(\\int x\\,dx\\right)\\left(\\int e^{y^2}\\,dy\\right)$'],
+      c: 1,
+      e: 'Adentro hay $\\int e^{y^2}\\,dy$, que no tiene antiderivada normal ($u=y^2$ no sirve: falta un $y$ multiplicando). Se dibuja la región y se escribe con $dx$ adentro. Separar no vale porque los límites de adentro dependen de $x$.' },
+    { host: 'first3b', id: 'e3b',
+      q: 'Te piden $\\iint_Q xy^2\\,dA$, con $Q$ limitada por $y=x$, $y=x-4$, $y=0$ y $y=2$. ¿Qué harías primero?',
+      o: ['Integrar $x$ de 0 a 6 y $y$ de 0 a 2, como un rectángulo',
+          'Graficar las cuatro rectas, hallar los vértices y ver qué barrido necesita menos piezas',
+          'Poner $y=x$ y $y=x-4$ como límites de $x$'],
+      c: 1,
+      e: 'Primero el dibujo: los vértices son $(0,0)$, $(4,0)$, $(6,2)$ y $(2,2)$, un paralelogramo, no un rectángulo. Las rectas $y=x$ y $y=x-4$ son límites de $y$ si barres vertical, o de $x$ ($x=y$ y $x=y+4$) si barres horizontal; en ese caso la región sale en una sola pieza.' }
   ];
 
   // ---------- Utilidades de pregunta ----------
@@ -1204,7 +1678,7 @@ window.MathJax = {
   }
 
   // ---------- Repaso espaciado (cajas de Leitner) ----------
-  var ALLQ = QUIZ1.concat(QUIZ2);
+  var ALLQ = QUIZ1.concat(QUIZ2, QUIZ3);
   var SKEY = 'calcmv:srs';
   var INTERVALS = [1, 3, 7, 14, 30];
   var srs = {};
@@ -1541,11 +2015,14 @@ window.MathJax = {
   updateDue();
   makePred('pred', PRED1);
   makePred('pred2', PRED2);
+  makePred('pred3', PRED3);
   FIRSTS.forEach(makeFirst);
   makeQuiz({ id: 'l1', host: 'quiz', qs: QUIZ1 });
   makeQuiz({ id: 'l2', host: 'quiz2', qs: QUIZ2 });
+  makeQuiz({ id: 'l3', host: 'quiz3', qs: QUIZ3 });
   initLesson('lesson-main', 'calcmv:l1:nav');
   initLesson('lesson2-main', 'calcmv:l2:nav');
+  initLesson('lesson3-main', 'calcmv:l3:nav');
 })();
 </script>
 </body>
