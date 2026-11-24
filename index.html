@@ -6,95 +6,166 @@
 <title>Cálculo Multivariable – Integrales dobles y triples</title>
 <script>
 window.MathJax = {
-  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']],
+    // código de color: cx, cy, cz = variables; cl = límites; cf = función; cd = dA/dV
+    macros: {
+      cx: ['\\class{c-x}{#1}', 1], cy: ['\\class{c-y}{#1}', 1], cz: ['\\class{c-z}{#1}', 1],
+      cl: ['\\class{c-l}{#1}', 1], cf: ['\\class{c-f}{#1}', 1], cd: ['\\class{c-d}{#1}', 1]
+    }
+  },
   svg: { fontCache: 'global' }
 };
 </script>
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
 <style>
   :root {
-    --bg: #f6f7fb; --card: #ffffff; --ink: #1c2030; --muted: #6a7087;
-    --brand: #4f46e5; --brand-soft: #eceafe; --ok: #0f9d6b; --ok-soft: #e3f6ee;
-    --warn: #b45309; --warn-soft: #fef3c7; --line: #e3e6f0;
+    --bg: #f6f7fb; --card: #ffffff; --ink: #1c2030; --muted: #5f6680;
+    --brand: #1f2937; --on-brand: #ffffff; --brand-soft: #eceff4; --soft2: #f3f4f8; --line: #dfe3ee;
+    /* código de color: x azul, y verde, z naranja, límites morado, f rojo, dA/dV gris */
+    --cx: #1d4ed8; --cy: #15803d; --cz: #c2410c; --cl: #7e22ce; --cf: #c62828; --cd: #5b6372;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #14161f; --card: #1c1f2c; --ink: #e8eaf4; --muted: #9298b3;
-      --brand: #8b84ff; --brand-soft: #262847; --ok: #3ccf98; --ok-soft: #153328;
-      --warn: #fbbf24; --warn-soft: #3a2f10; --line: #2c3043;
+      --bg: #14161f; --card: #1c1f2c; --ink: #e8eaf4; --muted: #a0a6bf;
+      --brand: #e5e7eb; --on-brand: #14161f; --brand-soft: #2a2f40; --soft2: #232738; --line: #2f3448;
+      --cx: #6cb0ff; --cy: #4ade80; --cz: #fb923c; --cl: #c9a5ff; --cf: #ff8080; --cd: #a3aabd;
     }
   }
   * { box-sizing: border-box; }
   body { margin: 0; font: 17px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); }
   .layout { display: grid; grid-template-columns: 270px 1fr; min-height: 100vh; }
-  aside { background: var(--card); border-right: 1px solid var(--line); padding: 24px 18px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  aside { background: var(--card); border-right: 1px solid var(--line); padding: 24px 18px 14px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; }
+  aside .navwrap { flex: 1; overflow-y: auto; min-height: 0; }
   aside h1 { font-size: 17px; margin: 0 0 4px; line-height: 1.3; }
   aside .sub { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
   aside .group { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 18px 0 6px; }
   .nav { display: block; width: 100%; text-align: left; border: 0; background: none; color: var(--ink); font: inherit; font-size: 15px; padding: 9px 12px; border-radius: 10px; cursor: pointer; }
   .nav:hover { background: var(--brand-soft); }
-  .nav.active { background: var(--brand); color: #fff; }
+  .nav.active { background: var(--brand); color: var(--on-brand); }
   .nav.soon { color: var(--muted); cursor: default; }
   .nav.soon:hover { background: none; }
   .nav small { display: block; font-size: 12px; opacity: .75; }
-  main { padding: 36px 44px 80px; max-width: 900px; }
-  .tag { display: inline-block; background: var(--brand-soft); color: var(--brand); font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 99px; margin-bottom: 8px; }
-  h2.title { font-size: 30px; margin: 0 0 6px; line-height: 1.2; }
-  .lead { color: var(--muted); margin: 0 0 28px; }
+  .legend { flex: none; border-top: 1px solid var(--line); margin-top: 10px; padding-top: 8px; font-size: 13px; }
+  .legend .group { margin: 4px 0 4px; }
+  .legend ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; }
+  .legend li { margin: 0; line-height: 1.35; display: flex; gap: 8px; align-items: baseline; }
+  .legend .sw { flex: none; width: 3.6em; font-weight: 700; font-family: Georgia, "Times New Roman", serif; font-style: italic; text-align: center; }
+  main { padding: 36px 44px 20px; max-width: 900px; }
+  .tag { display: inline-block; background: var(--brand-soft); color: var(--ink); font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 99px; margin-bottom: 8px; }
+  h2.title { font-size: 28px; margin: 0 0 12px; line-height: 1.2; }
+  .lead { color: var(--muted); margin: 0 0 18px; }
   section { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px 26px; margin-bottom: 20px; }
-  section h3 { margin: 0 0 12px; font-size: 20px; }
-  .step-num { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--brand); color: #fff; font-size: 14px; margin-right: 8px; }
+  section h3 { margin: 0 0 12px; font-size: 21px; }
+  .kicker { display: block; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .step-num { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--brand); color: var(--on-brand); font-size: 14px; margin-right: 8px; }
   .box { border-left: 4px solid var(--brand); background: var(--brand-soft); padding: 12px 16px; border-radius: 0 10px 10px 0; margin: 14px 0; }
-  .box b.t { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--brand); margin-bottom: 4px; }
-  .box.warn { border-color: var(--warn); background: var(--warn-soft); }
-  .box.warn b.t { color: var(--warn); }
+  .box b.t { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); margin-bottom: 4px; }
+  .box.warn { border-left-style: dashed; background: var(--soft2); }
+  .box ul { margin: 4px 0 0; }
+  .exam { border: 2px solid var(--brand); border-radius: 12px; padding: 14px 18px; background: var(--brand-soft); }
+  .exam b.t { display: block; font-size: 15px; margin-bottom: 6px; }
+  .exam ol { margin: 0; padding-left: 22px; }
   .formula { background: var(--bg); border: 1px dashed var(--line); border-radius: 10px; padding: 8px 14px; margin: 12px 0; overflow-x: auto; }
   ul { padding-left: 22px; }
   li { margin: 4px 0; }
   details { border: 1px solid var(--line); border-radius: 12px; margin: 14px 0; background: var(--bg); }
   details > summary { cursor: pointer; padding: 12px 16px; font-weight: 600; list-style: none; }
   details > summary::-webkit-details-marker { display: none; }
-  details > summary::before { content: "▸"; display: inline-block; width: 1.2em; color: var(--brand); }
+  details > summary::before { content: "▸"; display: inline-block; width: 1.2em; }
   details[open] > summary::before { content: "▾"; }
   details .inner { padding: 0 16px 14px; }
-  .ans { background: var(--ok-soft); border-radius: 10px; padding: 8px 14px; margin-top: 10px; font-weight: 600; color: var(--ok); }
+  .ans { background: var(--brand-soft); border-left: 4px solid var(--brand); border-radius: 0 10px 10px 0; padding: 8px 14px; margin-top: 10px; font-weight: 600; }
   .problem { padding: 14px 0; border-top: 1px solid var(--line); }
   .problem:first-of-type { border-top: 0; }
+  .problem-line { font-weight: 600; }
   .lvl { font-size: 12px; font-weight: 600; color: var(--muted); }
   .hint { color: var(--muted); font-size: 15px; }
   mjx-container { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+  h4.sub { margin: 18px 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .symwrap { overflow-x: auto; }
+  table.sym { width: 100%; border-collapse: collapse; font-size: 15px; margin: 6px 0; }
+  table.sym th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  table.sym th, table.sym td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.sym td:first-child { white-space: nowrap; }
+
+  /* código de color: mismas clases en texto y dentro de las fórmulas (MathJax \class) */
+  .c-x { color: var(--cx); } .c-y { color: var(--cy); } .c-z { color: var(--cz); }
+  .c-l { color: var(--cl); } .c-f { color: var(--cf); } .c-d { color: var(--cd); }
+  span.c-x, span.c-y, span.c-z, span.c-l, span.c-f, span.c-d { font-weight: 700; }
+
+  /* tarjetas de fórmula */
+  .fcard { border: 2px solid var(--brand); border-radius: 14px; padding: 14px 18px 16px; margin: 16px 0; background: var(--soft2); }
+  .fc-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .fc-name { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .fc-badge { font-size: 13px; color: var(--muted); }
+  .fcard mjx-container { font-size: 112%; }
+  .fc-full, .fc-cloze { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 6px 12px; margin: 10px 0; overflow-x: auto; }
+  .fc-trick { font-size: 15px; background: var(--card); border-radius: 10px; padding: 8px 12px; border: 1px solid var(--line); }
+  .fc-inputs { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+  .fc-in { display: flex; align-items: center; gap: 6px; }
+  .fc-in span { font-weight: 700; min-width: 1.6em; text-align: center; }
+  .fc-in input { font: inherit; font-size: 16px; width: 8.5em; padding: 6px 10px; border-radius: 8px; border: 2px solid var(--line); background: var(--card); color: var(--ink); }
+  .fc-in input:focus { outline: 2px solid var(--brand); border-color: var(--brand); }
+  .fc-in.good input { border-color: var(--brand); border-style: solid; }
+  .fc-in.bad input { border-style: dashed; border-color: var(--muted); }
+  .fc-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .fc-msg { font-weight: 600; font-size: 15px; margin-top: 6px; }
+  .fc-msg:empty { display: none; }
+  .fc-cover { margin-top: 12px; }
+
   .qtext { margin: 0 0 10px; font-weight: 600; }
   .q { padding: 14px 0; border-top: 1px solid var(--line); }
   .q:first-of-type { border-top: 0; }
   .opts { display: grid; gap: 8px; }
-  .opt { text-align: left; font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
+  .opt { text-align: left; font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 2px solid var(--line); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
   .opt:hover:not(:disabled) { border-color: var(--brand); background: var(--brand-soft); }
   .opt:disabled { cursor: default; }
-  .opt.right { border-color: var(--ok); background: var(--ok-soft); }
-  .opt.wrong { border-color: var(--warn); background: var(--warn-soft); }
+  .opt.right { border-color: var(--brand); background: var(--brand-soft); }
+  .opt.right::before { content: "✅ "; }
+  .opt.wrong { border-style: dashed; border-color: var(--muted); }
+  .opt.wrong::before { content: "❌ "; }
   .fb { margin-top: 10px; padding: 10px 14px; border-radius: 10px; background: var(--brand-soft); font-size: 15px; }
   .fb b.v { display: block; margin-bottom: 2px; }
-  .fb.ok b.v { color: var(--ok); }
-  .fb.no b.v { color: var(--warn); }
   .progress { color: var(--muted); font-size: 14px; margin-bottom: 6px; }
   .result { margin-top: 16px; padding: 14px 16px; border-radius: 12px; background: var(--brand-soft); }
   .result .score { font-size: 24px; font-weight: 700; }
-  .btn { font: inherit; font-size: 15px; font-weight: 600; background: var(--brand); color: #fff; border: 0; border-radius: 10px; padding: 8px 16px; cursor: pointer; margin-top: 8px; }
+  .btn { font: inherit; font-size: 15px; font-weight: 600; background: var(--brand); color: var(--on-brand); border: 2px solid var(--brand); border-radius: 10px; padding: 8px 16px; cursor: pointer; margin-top: 8px; }
+  .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn:disabled { opacity: .4; cursor: default; }
   .hist { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+  /* progreso y navegación por pasos */
+  .lprog { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 8px 0 10px; margin-bottom: 10px; }
+  .segs { display: flex; gap: 3px; }
+  .seg { flex: 1; height: 10px; border: 0; padding: 0; border-radius: 3px; background: var(--line); cursor: pointer; }
+  .seg.seen { background: var(--muted); }
+  .seg.cur { background: var(--brand); }
+  .plabel { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .step[hidden] { display: none; }
+  .stepnav { position: sticky; bottom: 0; z-index: 5; background: var(--bg); border-top: 1px solid var(--line); padding: 8px 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .stepnav .btn { margin-top: 0; }
+  .stepnav .hint { flex: 1; text-align: center; font-size: 13px; }
+
   @media (max-width: 800px) {
     .layout { grid-template-columns: 1fr; }
-    aside { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
-    main { padding: 22px 16px 60px; }
+    aside { position: static; height: auto; display: block; border-right: 0; border-bottom: 1px solid var(--line); }
+    aside .navwrap { overflow: visible; }
+    .legend ul { grid-template-columns: 1fr 1fr; column-gap: 12px; }
+    main { padding: 22px 16px 10px; }
+    section { padding: 18px 16px; }
+    .stepnav .hint { display: none; }
   }
 </style>
 </head>
 <body>
 <div class="layout">
   <aside>
+    <div class="navwrap">
     <h1>Cálculo Multivariable</h1>
     <div class="sub">Meta: 10 en el examen</div>
     <div class="group">Integrales dobles</div>
-    <button class="nav active">1 · Sobre rectángulos<small>Definición, Fubini</small></button>
+    <button class="nav active" id="nav-l1">1 · Sobre rectángulos<small>Definición, Fubini</small></button>
     <button class="nav soon">2 · Regiones generales<small>Tipo I y tipo II · próximamente</small></button>
     <button class="nav soon">3 · Coordenadas polares<small>próximamente</small></button>
     <button class="nav soon">4 · Aplicaciones<small>Área, masa, centro de masa · próximamente</small></button>
@@ -103,107 +174,406 @@ window.MathJax = {
     <button class="nav soon">6 · Cilíndricas y esféricas<small>próximamente</small></button>
     <button class="nav soon">7 · Jacobiano y cambio de variables<small>próximamente</small></button>
     <div class="group">Práctica</div>
+    <button class="nav" id="nav-review">Repaso del día<small id="due-label">Sin tarjetas aún</small></button>
     <button class="nav soon">Simulacro de examen<small>próximamente</small></button>
+    </div>
+    <div class="legend" aria-label="Leyenda de colores">
+      <div class="group">Colores (siempre igual)</div>
+      <ul>
+        <li><span class="sw c-x">x</span>variable x</li>
+        <li><span class="sw c-y">y</span>variable y</li>
+        <li><span class="sw c-z">z</span>variable z</li>
+        <li><span class="sw c-l">a b c d</span>límites</li>
+        <li><span class="sw c-f">f</span>la función</li>
+        <li><span class="sw c-d">dA dV</span>área / volumen</li>
+      </ul>
+    </div>
   </aside>
 
-  <main>
+  <main id="review-main" hidden>
+    <span class="tag">Práctica · Repaso espaciado</span>
+    <h2 class="title">Repaso del día</h2>
+    <p class="lead">Las preguntas que ya contestaste vuelven a los 1, 3, 7, 14 y 30 días. Si fallas una, regresa mañana; si la aciertas, se espacia más. Repasar justo antes de olvidar es lo que más fija la memoria.</p>
+    <section><div id="review"></div></section>
+  </main>
+
+  <main id="lesson-main">
     <span class="tag">Lección 1 · Integrales dobles</span>
     <h2 class="title">Integrales dobles sobre rectángulos</h2>
-    <p class="lead">La idea: sumar infinitos pedacitos de volumen para encontrar el volumen bajo una superficie.</p>
 
-    <section id="pred-sec">
+    <div class="lprog" id="lprog">
+      <div class="segs" id="segs"></div>
+      <div class="plabel" id="plabel"></div>
+    </div>
+
+    <div id="steps">
+
+    <!-- 1 -->
+    <section class="step" data-title="Resumen">
+      <h3>🎯 Qué vas a aprender y para qué sirve</h3>
+      <p class="lead">Cómo sumar una cantidad que cambia de un punto a otro, y cómo convertir ese problema en dos integrales que ya sabes hacer.</p>
+      <p><b>Qué vas a aprender:</b></p>
+      <ul>
+        <li>Qué es una integral doble y cómo imaginarla (como llenar una caja con arena).</li>
+        <li>Cómo calcularla: convertirla en <b>dos integrales normales</b>, una después de otra.</li>
+        <li>Un atajo cuando la función se puede separar en una parte de $\cx{x}$ y otra de $\cy{y}$.</li>
+      </ul>
+      <p><b>Para qué sirve:</b></p>
+      <ul>
+        <li>Para calcular <b>volúmenes</b> bajo una superficie, que es lo que casi siempre te piden en el examen.</li>
+        <li>Es la base de lo que sigue: áreas, masa de una placa, y después las integrales triples.</li>
+      </ul>
+      <p class="hint">Cómo se estudia aquí: una idea por pantalla. Los colores significan siempre lo mismo (mira la leyenda en la barra lateral). Cada fórmula tiene su tarjeta y un botón para taparla y recordarla.</p>
+    </section>
+
+    <!-- 2 -->
+    <section class="step" data-title="Predice" id="pred-sec">
       <h3>🔮 Antes de empezar: predice</h3>
-      <p class="hint">Responde con tu intuición, sin mirar abajo. No importa si fallas: equivocarte antes de ver la teoría hace que la recuerdes mejor.</p>
+      <p class="hint">Responde con tu intuición, sin mirar nada más. No importa si fallas: equivocarte antes de ver la teoría hace que la recuerdes mejor.</p>
       <div id="pred"></div>
     </section>
 
-    <section>
-      <h3><span class="step-num">1</span>Definiciones</h3>
-      <p>Un <b>rectángulo</b> en el plano es $R=[a,b]\times[c,d]=\{(x,y)\;:\; a\le x\le b,\; c\le y\le d\}$.</p>
-      <p>Dividimos $R$ en $m\cdot n$ subrectángulos de área $\Delta A$ y elegimos un punto de muestra $(x_{ij}^*,y_{ij}^*)$ en cada uno. La <b>integral doble</b> de $f$ sobre $R$ es</p>
-      <div class="formula">$$\iint_R f(x,y)\,dA=\lim_{m,n\to\infty}\sum_{i=1}^{m}\sum_{j=1}^{n} f(x_{ij}^*,y_{ij}^*)\,\Delta A$$</div>
-      <div class="box"><b class="t">Interpretación geométrica</b>
-        Si $f(x,y)\ge 0$, la integral doble es el <b>volumen</b> del sólido que queda entre el rectángulo $R$ (abajo) y la superficie $z=f(x,y)$ (arriba).
-      </div>
-      <p>Si $f$ es continua en $R$, la integral siempre existe.</p>
-    </section>
-
-    <section>
-      <h3><span class="step-num">2</span>Fórmulas clave</h3>
-      <p><b>Teorema de Fubini</b> (para $f$ continua en $R=[a,b]\times[c,d]$): se puede integrar en cualquier orden.</p>
-      <div class="formula">$$\iint_R f\,dA=\int_a^b\!\left(\int_c^d f(x,y)\,dy\right)dx=\int_c^d\!\left(\int_a^b f(x,y)\,dx\right)dy$$</div>
-      <p><b>Caso especial (variables separadas):</b> si $f(x,y)=g(x)\,h(y)$, entonces</p>
-      <div class="formula">$$\iint_R g(x)h(y)\,dA=\left(\int_a^b g(x)\,dx\right)\left(\int_c^d h(y)\,dy\right)$$</div>
-      <p><b>Propiedades:</b></p>
-      <ul>
-        <li>Linealidad: $\iint_R (f+g)\,dA=\iint_R f\,dA+\iint_R g\,dA$ y $\iint_R k f\,dA=k\iint_R f\,dA$.</li>
-        <li>Si $f\ge g$ en $R$, entonces $\iint_R f\,dA\ge\iint_R g\,dA$.</li>
-        <li>$\iint_R 1\,dA=\text{Área}(R)=(b-a)(d-c)$.</li>
-      </ul>
-      <div class="box warn"><b class="t">Cómo se resuelve una integral iterada</b>
-        Se resuelve de <b>adentro hacia afuera</b>. En la integral interior, la otra variable se trata como constante.
+    <!-- 3 -->
+    <section class="step" data-title="1 · La idea">
+      <span class="kicker">Tema 1 · Integral doble</span>
+      <h3>La idea: llenar una caja con arena</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        Imagina un piso rectangular y encima un montón de arena que no está parejo: en unos lugares es alto y en otros bajo. Para saber cuánta arena hay, divides el piso en cuadritos, mides la <span class="c-f">altura</span> de la arena en cada cuadrito y calculas el volumen de cada columnita (base por altura). Luego sumas todas las columnitas. La integral doble es esa suma cuando los cuadritos se hacen tan chiquitos que ya no se nota que eran columnas.
       </div>
     </section>
 
-    <section>
-      <h3><span class="step-num">3</span>Ejemplo resuelto</h3>
-      <p>Calcula $\displaystyle\iint_R (x^2+y)\,dA$ donde $R=[0,2]\times[1,3]$.</p>
-      <p><b>Paso 1.</b> Plantea la integral iterada:</p>
-      <div class="formula">$$\int_0^2\!\int_1^3 (x^2+y)\,dy\,dx$$</div>
-      <p><b>Paso 2.</b> Integral interior en $y$ (con $x$ constante):</p>
-      <div class="formula">$$\int_1^3 (x^2+y)\,dy=\left[x^2y+\frac{y^2}{2}\right]_{y=1}^{y=3}=\left(3x^2+\tfrac92\right)-\left(x^2+\tfrac12\right)=2x^2+4$$</div>
-      <p><b>Paso 3.</b> Integral exterior en $x$:</p>
-      <div class="formula">$$\int_0^2 (2x^2+4)\,dx=\left[\frac{2x^3}{3}+4x\right]_0^2=\frac{16}{3}+8=\frac{40}{3}$$</div>
+    <!-- 4 -->
+    <section class="step" data-title="1 · Símbolos">
+      <span class="kicker">Tema 1 · Integral doble</span>
+      <h3>Qué significa cada símbolo</h3>
+      <div class="symwrap"><table class="sym">
+        <tr><th>Símbolo</th><th>En español</th></tr>
+        <tr><td>$R=[\cl{a},\cl{b}]\times[\cl{c},\cl{d}]$</td><td>El "piso": un rectángulo donde <span class="c-x">x</span> va de <span class="c-l">a</span> a <span class="c-l">b</span> y <span class="c-y">y</span> va de <span class="c-l">c</span> a <span class="c-l">d</span>. Esos números son los <span class="c-l">límites</span>.</td></tr>
+        <tr><td>$\cf{f}(\cx{x},\cy{y})$</td><td>La <span class="c-f">altura</span> del montón de arena arriba del punto $(\cx{x},\cy{y})$.</td></tr>
+        <tr><td>$\cd{\Delta A}$</td><td>El <span class="c-d">área</span> de un cuadrito del piso (la base de una columnita).</td></tr>
+        <tr><td>$(\cx{x_{ij}^*},\cy{y_{ij}^*})$</td><td>Un punto cualquiera dentro del cuadrito donde medimos la altura.</td></tr>
+        <tr><td>$m,\ n$</td><td>Cuántas filas y columnas de cuadritos hay.</td></tr>
+        <tr><td>$\sum\sum$</td><td>"Suma todas las columnitas".</td></tr>
+        <tr><td>$\lim_{m,n\to\infty}$</td><td>"Haz los cuadritos cada vez más y más chicos".</td></tr>
+        <tr><td>$\iint_R \cf{f}\,\cd{dA}$</td><td>El resultado: la integral doble de <span class="c-f">f</span> sobre $R$.</td></tr>
+      </table></div>
+    </section>
+
+    <!-- 5 -->
+    <section class="step" data-title="1 · La fórmula">
+      <span class="kicker">Tema 1 · Integral doble</span>
+      <h3>La fórmula</h3>
+      <p>El piso es $R=[\cl{a},\cl{b}]\times[\cl{c},\cl{d}]=\{(\cx{x},\cy{y})\;:\; \cl{a}\le \cx{x}\le \cl{b},\; \cl{c}\le \cy{y}\le \cl{d}\}$.</p>
+      <div class="fcard" data-id="def" data-ans='[["f"],["deltaa","δa","da"]]'>
+        <div class="fc-head"><span class="fc-name">Definición de la integral doble</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\iint_R \cf{f}(\cx{x},\cy{y})\,\cd{dA}=\lim_{m,n\to\infty}\sum_{i=1}^{m}\sum_{j=1}^{n} \cf{f}(\cx{x_{ij}^*},\cy{y_{ij}^*})\,\cd{\Delta A}$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Completa los huecos (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\iint_R \cf{f}(\cx{x},\cy{y})\,\cd{dA}=\lim_{m,n\to\infty}\sum_{i=1}^{m}\sum_{j=1}^{n} \boxed{\,\mathbf{1}\,}(\cx{x_{ij}^*},\cy{y_{ij}^*})\,\boxed{\,\mathbf{2}\,}$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> columnitas de arena. Base ($\cd{\Delta A}$) por altura ($\cf{f}$), todas sumadas; achica los cuadritos y la suma se vuelve exacta.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="step" data-title="1 · Lo clave y el error">
+      <span class="kicker">Tema 1 · Integral doble</span>
+      <h3>Lo que debes recordar</h3>
+      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
+        <ul>
+          <li>Si $\cf{f}(\cx{x},\cy{y})\ge 0$, la integral doble es el <b>volumen</b> entre el rectángulo $R$ (abajo) y la superficie $\cz{z}=\cf{f}(\cx{x},\cy{y})$ (arriba).</li>
+          <li>Es una suma de columnitas (base $\cd{\Delta A}$ por <span class="c-f">altura</span>) que se hacen infinitamente chiquitas.</li>
+          <li>Si $\cf{f}$ es continua en $R$, la integral siempre existe.</li>
+        </ul>
+      </div>
+      <div class="box warn"><b class="t">⚠️ Error común</b>
+        Creer que la integral doble siempre es un volumen positivo. Si $\cf{f}$ es negativa en alguna parte, esa parte <b>resta</b>: el resultado es un volumen "con signo" y hasta puede dar negativo.
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="step" data-title="2 · La idea">
+      <span class="kicker">Tema 2 · Cómo se calcula (Fubini)</span>
+      <h3>La idea: rebanar el pan</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        Sumar todas las columnitas de golpe es difícil. Mejor corta el montón de arena en rebanadas, como un pan de caja: calculas el área de cada rebanada y luego sumas las rebanadas. Eso es una integral doble: <b>dos integrales normales, una dentro de la otra</b>. Lo bonito es que puedes cortar el pan en el sentido que quieras (a lo largo o a lo ancho) y la cantidad de pan es la misma.
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section class="step" data-title="2 · Símbolos y fórmula">
+      <span class="kicker">Tema 2 · Cómo se calcula (Fubini)</span>
+      <h3>Símbolos y fórmula</h3>
+      <div class="symwrap"><table class="sym">
+        <tr><th>Símbolo</th><th>En español</th></tr>
+        <tr><td>$\displaystyle\int_{\cl{c}}^{\cl{d}} \cf{f}\,\cy{dy}$</td><td>La integral de <b>adentro</b>: calcula el área de una rebanada. Aquí <span class="c-x">x</span> se queda quieta como un número y solo se mueve <span class="c-y">y</span> (de <span class="c-l">c</span> a <span class="c-l">d</span>).</td></tr>
+        <tr><td>$\displaystyle\int_{\cl{a}}^{\cl{b}}(\cdots)\,\cx{dx}$</td><td>La integral de <b>afuera</b>: suma todas las rebanadas, moviendo <span class="c-x">x</span> de <span class="c-l">a</span> a <span class="c-l">b</span>.</td></tr>
+        <tr><td>$\cy{dy},\ \cx{dx}$</td><td>Te dicen con qué variable integras. Los <span class="c-l">límites</span> de $\cy{dy}$ son los de <span class="c-y">y</span>; los de $\cx{dx}$ son los de <span class="c-x">x</span>.</td></tr>
+      </table></div>
+      <div class="fcard" data-id="fubini" data-ans='[["c"],["d"],["y","dy"],["x","dx"]]'>
+        <div class="fc-head"><span class="fc-name">Teorema de Fubini</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\iint_R \cf{f}\,\cd{dA}=\int_{\cl{a}}^{\cl{b}}\!\left(\int_{\cl{c}}^{\cl{d}} \cf{f}(\cx{x},\cy{y})\,\cy{dy}\right)\cx{dx}=\int_{\cl{c}}^{\cl{d}}\!\left(\int_{\cl{a}}^{\cl{b}} \cf{f}(\cx{x},\cy{y})\,\cx{dx}\right)\cy{dy}$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Completa los huecos de la primera igualdad (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\iint_R \cf{f}\,\cd{dA}=\int_{\cl{a}}^{\cl{b}}\!\left(\int_{\boxed{\,\mathbf{1}\,}}^{\boxed{\,\mathbf{2}\,}} \cf{f}(\cx{x},\cy{y})\,\mathrm{d}\boxed{\,\mathbf{3}\,}\right)\mathrm{d}\boxed{\,\mathbf{4}\,}$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> cada <b>d</b> se lleva sus propios límites: $\cy{dy}$ con $\cl{c}$ a $\cl{d}$, $\cx{dx}$ con $\cl{a}$ a $\cl{b}$. Se resuelve de adentro hacia afuera, como pelar una cebolla 🧅.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+      <p class="hint">Se cumple si $\cf{f}$ es continua en $R=[\cl{a},\cl{b}]\times[\cl{c},\cl{d}]$.</p>
+    </section>
+
+    <!-- 9 -->
+    <section class="step" data-title="2 · Lo clave y el error">
+      <span class="kicker">Tema 2 · Cómo se calcula (Fubini)</span>
+      <h3>Lo que debes recordar</h3>
+      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
+        <ul>
+          <li>Se resuelve de <b>adentro hacia afuera</b>. En la integral de adentro, la otra variable es una constante.</li>
+          <li>Después de la primera integral te queda una función de una sola variable, y esa se integra normal.</li>
+          <li>El orden no importa (si $\cf{f}$ es continua en $R$), así que elige el que haga la cuenta más fácil.</li>
+        </ul>
+      </div>
+      <div class="box warn"><b class="t">⚠️ Error común</b>
+        Poner los <span class="c-l">límites</span> en el lugar equivocado: usar los límites de $\cx{x}$ en la integral $\cy{dy}$ (o al revés). Regla para no fallar: <b>cada límite va con la letra de su $d$</b>.
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="step" data-title="3 · La idea">
+      <span class="kicker">Tema 3 · Atajo: variables separadas</span>
+      <h3>La idea: ancho por alto</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        A veces la altura se calcula multiplicando una cosa que solo depende de <span class="c-x">x</span> por otra que solo depende de <span class="c-y">y</span>. Entonces las dos partes no se estorban y puedes resolverlas por separado y multiplicar los resultados. Es como el área de un rectángulo: no necesitas mezclar el ancho con el alto, solo multiplicarlos.
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section class="step" data-title="3 · Símbolos y fórmula">
+      <span class="kicker">Tema 3 · Atajo: variables separadas</span>
+      <h3>Símbolos y fórmula</h3>
+      <div class="symwrap"><table class="sym">
+        <tr><th>Símbolo</th><th>En español</th></tr>
+        <tr><td>$\cf{g}(\cx{x})$</td><td>La parte de la función que solo tiene <span class="c-x">x</span>.</td></tr>
+        <tr><td>$\cf{h}(\cy{y})$</td><td>La parte de la función que solo tiene <span class="c-y">y</span>.</td></tr>
+        <tr><td>$\displaystyle\int_{\cl{a}}^{\cl{b}} \cf{g}(\cx{x})\,\cx{dx}$</td><td>Un número: la integral normal de la parte de <span class="c-x">x</span>.</td></tr>
+      </table></div>
+      <div class="fcard" data-id="sep" data-ans='[["g(x)","g"],["h(y)","h"]]'>
+        <div class="fc-head"><span class="fc-name">Variables separadas</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\iint_R \cf{g}(\cx{x})\,\cf{h}(\cy{y})\,\cd{dA}=\left(\int_{\cl{a}}^{\cl{b}} \cf{g}(\cx{x})\,\cx{dx}\right)\left(\int_{\cl{c}}^{\cl{d}} \cf{h}(\cy{y})\,\cy{dy}\right)$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Completa los huecos (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\iint_R \cf{g}(\cx{x})\,\cf{h}(\cy{y})\,\cd{dA}=\left(\int_{\cl{a}}^{\cl{b}} \boxed{\,\mathbf{1}\,}\,\cx{dx}\right)\left(\int_{\cl{c}}^{\cl{d}} \boxed{\,\mathbf{2}\,}\,\cy{dy}\right)$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> ancho × alto. Cada quien por su lado y al final se multiplican. Solo vale con <b>producto</b>, nunca con suma.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+    </section>
+
+    <!-- 12 -->
+    <section class="step" data-title="3 · Lo clave y el error">
+      <span class="kicker">Tema 3 · Atajo: variables separadas</span>
+      <h3>Lo que debes recordar</h3>
+      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
+        <ul>
+          <li>Solo sirve si la función es un <b>producto</b> de una parte en $\cx{x}$ y otra en $\cy{y}$, y si $R$ es un rectángulo.</li>
+          <li>Truco típico: $e^{\cx{x}+\cy{y}}=e^{\cx{x}}\,e^{\cy{y}}$ se separa.</li>
+        </ul>
+      </div>
+      <div class="box warn"><b class="t">⚠️ Error común</b>
+        Querer separar una <b>suma</b>. $\cx{x}^2+\cy{y}$ no es un producto, así que $\iint_R (\cx{x}^2+\cy{y})\,\cd{dA}$ <b>no</b> es igual a $\left(\int \cx{x}^2\,\cx{dx}\right)\left(\int \cy{y}\,\cy{dy}\right)$.
+      </div>
+    </section>
+
+    <!-- 13 -->
+    <section class="step" data-title="4 · La idea">
+      <span class="kicker">Tema 4 · Propiedades</span>
+      <h3>La idea: reglas de sentido común</h3>
+      <div class="box"><b class="t">En palabras simples</b>
+        Si juntas dos montones de arena, el volumen total es la suma. Si el montón es el doble de alto en todas partes, tienes el doble de arena. Si un montón siempre está por encima de otro, tiene más arena. Y si la "altura" es 1 en todo el piso, la arena que hay es justo el área del piso.
+      </div>
+    </section>
+
+    <!-- 14 -->
+    <section class="step" data-title="4 · Símbolos y fórmulas">
+      <span class="kicker">Tema 4 · Propiedades</span>
+      <h3>Símbolos y fórmulas</h3>
+      <div class="symwrap"><table class="sym">
+        <tr><th>Símbolo</th><th>En español</th></tr>
+        <tr><td>$\cf{f}+\cf{g}$</td><td>Sumar las <span class="c-f">alturas</span> de dos montones, punto por punto.</td></tr>
+        <tr><td>$k$</td><td>Un número fijo (constante), como 2 o $-3$.</td></tr>
+        <tr><td>$\text{Área}(R)$</td><td>El área del piso: ancho por largo, $(\cl{b}-\cl{a})(\cl{d}-\cl{c})$.</td></tr>
+      </table></div>
+
+      <div class="fcard" data-id="area" data-ans='[["b"],["c"]]'>
+        <div class="fc-head"><span class="fc-name">Área del rectángulo</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\iint_R 1\,\cd{dA}=\text{Área}(R)=(\cl{b}-\cl{a})(\cl{d}-\cl{c})$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Completa los huecos (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\iint_R 1\,\cd{dA}=\text{Área}(R)=(\boxed{\,\mathbf{1}\,}-\cl{a})(\cl{d}-\boxed{\,\mathbf{2}\,})$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> piso con arena a altura 1. El volumen es el área del piso: ancho por largo, "final menos inicio" en cada lado.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+
+      <div class="fcard" data-id="lin" data-ans='[["g"],["k"]]'>
+        <div class="fc-head"><span class="fc-name">Linealidad</span><span class="fc-badge"></span></div>
+        <div class="fc-msg" aria-live="polite"></div>
+        <div class="fc-full">$$\begin{aligned}\iint_R (\cf{f}+\cf{g})\,\cd{dA}&=\iint_R \cf{f}\,\cd{dA}+\iint_R \cf{g}\,\cd{dA}\\ \iint_R k\,\cf{f}\,\cd{dA}&=k\iint_R \cf{f}\,\cd{dA}\end{aligned}$$</div>
+        <div class="fc-drill" hidden>
+          <p class="hint">Completa los huecos (o escríbela en papel y pulsa Revelar).</p>
+          <div class="fc-cloze">$$\begin{aligned}\iint_R (\cf{f}+\cf{g})\,\cd{dA}&=\iint_R \cf{f}\,\cd{dA}+\iint_R \boxed{\,\mathbf{1}\,}\,\cd{dA}\\ \iint_R k\,\cf{f}\,\cd{dA}&=\boxed{\,\mathbf{2}\,}\iint_R \cf{f}\,\cd{dA}\end{aligned}$$</div>
+          <div class="fc-inputs"></div>
+          <div class="fc-actions"><button type="button" class="btn fc-check">Revisar</button><button type="button" class="btn ghost fc-reveal">Revelar</button></div>
+        </div>
+        <div class="fc-trick">💡 <b>Truco:</b> como repartir la cuenta. La suma se reparte entre los sumandos y el número fijo sale al frente.</div>
+        <button type="button" class="btn fc-cover">🙈 Taparla y recordarla</button>
+      </div>
+      <p class="hint">Y si $\cf{f}\ge\cf{g}$ en $R$, entonces $\iint_R \cf{f}\,\cd{dA}\ge\iint_R \cf{g}\,\cd{dA}$ (el montón de arriba tiene más arena).</p>
+    </section>
+
+    <!-- 15 -->
+    <section class="step" data-title="4 · Lo clave y el error">
+      <span class="kicker">Tema 4 · Propiedades</span>
+      <h3>Lo que debes recordar</h3>
+      <div class="box ok"><b class="t">🔑 Lo clave que debes recordar</b>
+        <ul>
+          <li>La integral de una suma es la suma de las integrales, y un número fijo sale multiplicando.</li>
+          <li>$\iint_R 1\,\cd{dA}$ es simplemente el área de $R$.</li>
+        </ul>
+      </div>
+      <div class="box warn"><b class="t">⚠️ Error común</b>
+        Sacar de la integral algo que <b>no</b> es constante. Un número como 5 sí sale, pero $\cx{x}$ o $\cy{y}$ no: $\iint_R \cx{x}\,\cf{f}\,\cd{dA}$ no es $\cx{x}\iint_R \cf{f}\,\cd{dA}$.
+      </div>
+    </section>
+
+    <!-- 16 -->
+    <section class="step" data-title="Lo que más cae">
+      <div class="exam"><b class="t">⭐ Lo que más cae en examen</b>
+        <ol>
+          <li><b>Plantear bien los límites:</b> cada límite va con la letra de su $d$ ($\cy{dy}$ con los de $\cy{y}$, $\cx{dx}$ con los de $\cx{x}$).</li>
+          <li><b>Elegir el orden:</b> integra primero el que deje la integral de adentro más fácil (la trampa de $\cf{y\cos(xy)}$).</li>
+          <li><b>Separar solo productos:</b> $\cf{g}(\cx{x})\,\cf{h}(\cy{y})$ sí; una suma como $\cx{x}^2+\cy{y}$ nunca.</li>
+        </ol>
+      </div>
+      <p class="hint">Si solo repasas tres cosas antes del examen, que sean estas.</p>
+    </section>
+
+    <!-- 17 -->
+    <section class="step" data-title="Ejemplo · ¿Qué harías?" data-gate="e1">
+      <span class="kicker">Ejemplo resuelto</span>
+      <h3>¿Qué harías primero?</h3>
+      <p>Antes de ver cómo se resuelve, decide tú el primer paso. Elige una opción para continuar.</p>
+      <div id="first"></div>
+    </section>
+
+    <!-- 18 -->
+    <section class="step" data-title="Ejemplo · Paso 1">
+      <span class="kicker">Ejemplo resuelto · Paso 1 de 3</span>
+      <p class="problem-line">Calcula $\displaystyle\iint_R \cf{(\cx{x}^2+\cy{y})}\,\cd{dA}$ donde $R=[\cl{0},\cl{2}]\times[\cl{1},\cl{3}]$.</p>
+      <h3>Plantear</h3>
+      <p>Los <span class="c-l">límites</span> de $R$ son números ($\cx{x}$ de 0 a 2, $\cy{y}$ de 1 a 3), así que es un rectángulo y Fubini nos deja integrar en el orden que queramos. Elegimos primero $\cy{y}$, porque no hay razón para preferir el otro orden (la función es un polinomio y se integra fácil de las dos formas).</p>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{2}}\!\int_{\cl{1}}^{\cl{3}} \cf{(\cx{x}^2+\cy{y})}\,\cy{dy}\,\cx{dx}$$</div>
+    </section>
+
+    <!-- 19 -->
+    <section class="step" data-title="Ejemplo · Paso 2">
+      <span class="kicker">Ejemplo resuelto · Paso 2 de 3</span>
+      <h3>Integral de adentro, en $\cy{y}$</h3>
+      <p>Es la de adentro porque $\cy{dy}$ está pegada a la función, y por eso va primero. Mientras integramos en $\cy{y}$, $\cx{x}$ es un número fijo: $\cx{x}^2$ se integra como si fuera una constante (da $\cx{x}^2\cy{y}$) y $\cy{y}$ se integra a $\cy{y}^2/2$. Luego evaluamos con los <span class="c-l">límites</span> de $\cy{y}$, de 1 a 3, y restamos.</p>
+      <div class="formula">$$\int_{\cl{1}}^{\cl{3}} (\cx{x}^2+\cy{y})\,\cy{dy}=\left[\cx{x}^2\cy{y}+\frac{\cy{y}^2}{2}\right]_{\cy{y}=\cl{1}}^{\cy{y}=\cl{3}}=\left(3\cx{x}^2+\tfrac92\right)-\left(\cx{x}^2+\tfrac12\right)=2\cx{x}^2+4$$</div>
+      <p class="hint">Fíjate: ya no queda ninguna $\cy{y}$. El resultado $2\cx{x}^2+4$ es el área de la rebanada que corresponde a cada valor de $\cx{x}$.</p>
+    </section>
+
+    <!-- 20 -->
+    <section class="step" data-title="Ejemplo · Paso 3">
+      <span class="kicker">Ejemplo resuelto · Paso 3 de 3</span>
+      <h3>Integral de afuera, en $\cx{x}$</h3>
+      <p>Ahora solo queda $\cx{x}$, así que sumamos todas las rebanadas con los <span class="c-l">límites</span> de $\cx{x}$, de 0 a 2. Es una integral normal de una variable.</p>
+      <div class="formula">$$\int_{\cl{0}}^{\cl{2}} (2\cx{x}^2+4)\,\cx{dx}=\left[\frac{2\cx{x}^3}{3}+4\cx{x}\right]_{\cl{0}}^{\cl{2}}=\frac{16}{3}+8=\frac{40}{3}$$</div>
       <div class="ans">Resultado: $\dfrac{40}{3}$</div>
+      <p><b>¿Tiene sentido?</b> El piso $R$ mide $2\cdot2=4$. Dividiendo, la altura promedio es $\frac{40/3}{4}=\frac{10}{3}\approx3.3$. La altura $\cx{x}^2+\cy{y}$ va de 1 (en $(0,1)$) a 7 (en $(2,3)$), así que 3.3 es un promedio razonable.</p>
     </section>
 
-    <section>
-      <h3><span class="step-num">4</span>Ejercicios</h3>
+    <!-- 21 -->
+    <section class="step" data-title="Ejercicios">
+      <h3><span class="step-num">★</span>Ejercicios</h3>
       <p class="hint">Intenta primero sin ver la solución. Abre la pista solo si te atoras.</p>
 
       <div class="problem">
         <span class="lvl">NIVEL 1 · Variables separadas</span>
-        <p>Calcula $\displaystyle\iint_R 2xy\,dA$, con $R=[0,1]\times[0,2]$.</p>
-        <details><summary>Pista</summary><div class="inner">La función es $g(x)h(y)$ con $g=2x$ y $h=y$. Usa el producto de dos integrales simples.</div></details>
+        <p>Calcula $\displaystyle\iint_R \cf{2\cx{x}\cy{y}}\,\cd{dA}$, con $R=[\cl{0},\cl{1}]\times[\cl{0},\cl{2}]$.</p>
+        <details><summary>Pista</summary><div class="inner">$2xy$ es un producto: una parte solo de $\cx{x}$ ($2\cx{x}$) por una parte solo de $\cy{y}$ ($\cy{y}$). Usa el atajo de variables separadas.</div></details>
         <details><summary>Ver solución</summary><div class="inner">
-          $$\int_0^1 2x\,dx=\Big[x^2\Big]_0^1=1,\qquad \int_0^2 y\,dy=\Big[\tfrac{y^2}{2}\Big]_0^2=2$$
-          Producto: $1\cdot 2=2$.
+          Separamos porque $\cf{f}=\cf{g}(\cx{x})\cf{h}(\cy{y})$ con $\cf{g}=2\cx{x}$ y $\cf{h}=\cy{y}$, y $R$ es un rectángulo:
+          $$\int_{\cl{0}}^{\cl{1}} 2\cx{x}\,\cx{dx}=\Big[\cx{x}^2\Big]_{\cl{0}}^{\cl{1}}=1,\qquad \int_{\cl{0}}^{\cl{2}} \cy{y}\,\cy{dy}=\Big[\tfrac{\cy{y}^2}{2}\Big]_{\cl{0}}^{\cl{2}}=2$$
+          Multiplicamos los dos números: $1\cdot 2=2$.
           <div class="ans">Resultado: 2</div></div></details>
       </div>
 
       <div class="problem">
         <span class="lvl">NIVEL 2 · Exponenciales</span>
-        <p>Calcula $\displaystyle\iint_R e^{x+y}\,dA$, con $R=[0,1]\times[0,1]$.</p>
-        <details><summary>Pista</summary><div class="inner">Recuerda que $e^{x+y}=e^x\,e^y$, así que se separa.</div></details>
+        <p>Calcula $\displaystyle\iint_R \cf{e^{\cx{x}+\cy{y}}}\,\cd{dA}$, con $R=[\cl{0},\cl{1}]\times[\cl{0},\cl{1}]$.</p>
+        <details><summary>Pista</summary><div class="inner">Por las leyes de los exponentes, $e^{\cx{x}+\cy{y}}=e^{\cx{x}}\,e^{\cy{y}}$. Ya es un producto, así que se separa.</div></details>
         <details><summary>Ver solución</summary><div class="inner">
-          $$\iint_R e^{x}e^{y}\,dA=\left(\int_0^1 e^x\,dx\right)\left(\int_0^1 e^y\,dy\right)=(e-1)(e-1)$$
+          Primero rompemos la exponencial en un producto y luego aplicamos el atajo:
+          $$\iint_R e^{\cx{x}}e^{\cy{y}}\,\cd{dA}=\left(\int_{\cl{0}}^{\cl{1}} e^{\cx{x}}\,\cx{dx}\right)\left(\int_{\cl{0}}^{\cl{1}} e^{\cy{y}}\,\cy{dy}\right)=(e-1)(e-1)$$
+          Cada integral da $e-1$ porque $\int_0^1 e^x\,dx=e^1-e^0$.
           <div class="ans">Resultado: $(e-1)^2\approx 2.95$</div></div></details>
       </div>
 
       <div class="problem">
         <span class="lvl">NIVEL 3 · Elegir el orden (trampa de examen)</span>
-        <p>Calcula $\displaystyle\iint_R y\cos(xy)\,dA$, con $R=[0,1]\times[0,\pi]$.</p>
-        <details><summary>Pista</summary><div class="inner">Si integras primero en $y$ te toca por partes. Prueba integrar <b>primero en $x$</b>: ahí $y$ es constante y $\cos(xy)$ se integra directo.</div></details>
+        <p>Calcula $\displaystyle\iint_R \cf{\cy{y}\cos(\cx{x}\cy{y})}\,\cd{dA}$, con $R=[\cl{0},\cl{1}]\times[\cl{0},\cl{\pi}]$.</p>
+        <details><summary>Pista</summary><div class="inner">Si integras primero en $\cy{y}$ te toca por partes. Prueba integrar <b>primero en $\cx{x}$</b>: ahí $\cy{y}$ es constante y $\cos(\cx{x}\cy{y})$ se integra directo.</div></details>
         <details><summary>Ver solución</summary><div class="inner">
-          Orden $dx\,dy$:
-          $$\int_0^{\pi}\!\int_0^1 y\cos(xy)\,dx\,dy$$
-          Interior: $\displaystyle\int_0^1 y\cos(xy)\,dx=\Big[\sin(xy)\Big]_{x=0}^{x=1}=\sin y$.<br>
-          Exterior: $\displaystyle\int_0^\pi \sin y\,dy=\Big[-\cos y\Big]_0^\pi=1+1=2$.
+          Elegimos el orden $\cx{dx}\,\cy{dy}$ porque así la integral de adentro es fácil:
+          $$\int_{\cl{0}}^{\cl{\pi}}\!\int_{\cl{0}}^{\cl{1}} \cy{y}\cos(\cx{x}\cy{y})\,\cx{dx}\,\cy{dy}$$
+          Adentro (en $\cx{x}$, con $\cy{y}$ constante): $\displaystyle\int_0^1 \cy{y}\cos(\cx{x}\cy{y})\,\cx{dx}=\Big[\sin(\cx{x}\cy{y})\Big]_{\cx{x}=0}^{\cx{x}=1}=\sin \cy{y}$. Sale directo porque la derivada de $\sin(\cx{x}\cy{y})$ respecto a $\cx{x}$ es justo $\cy{y}\cos(\cx{x}\cy{y})$.<br>
+          Afuera (en $\cy{y}$): $\displaystyle\int_0^\pi \sin \cy{y}\,\cy{dy}=\Big[-\cos \cy{y}\Big]_0^\pi=1+1=2$.
           <div class="ans">Resultado: 2</div>
-          <p class="hint">Moraleja: Fubini te deja elegir el orden. Elige el que haga la integral interior más fácil.</p></div></details>
+          <p class="hint">Moraleja: Fubini te deja elegir el orden. Elige el que haga la integral de adentro más fácil.</p></div></details>
       </div>
     </section>
 
-    <section id="quiz-sec">
-      <h3><span class="step-num">5</span>Mini-quiz</h3>
+    <!-- 22 -->
+    <section class="step" id="quiz-sec" data-title="Mini-quiz">
+      <h3><span class="step-num">?</span>Mini-quiz</h3>
       <p class="hint">Responde de memoria. Recibes retroalimentación al instante y tus resultados se guardan en este navegador.</p>
       <div id="quiz"></div>
     </section>
 
-    <section>
-      <h3>Siguiente paso</h3>
-      <p>Cuando domines esta lección, sigue la <b>Lección 2: regiones generales</b> (cuando los límites no son constantes). Dime y la agrego aquí.</p>
+    <!-- 23 -->
+    <section class="step" data-title="Lo siguiente">
+      <h3>✅ Terminaste la Lección 1</h3>
+      <p>Para que se quede en la memoria:</p>
+      <ul>
+        <li>Mañana abre <b>Repaso del día</b> en la barra lateral: tus preguntas del quiz vuelven justo antes de que las olvides.</li>
+        <li>Vuelve a las tarjetas de fórmula y pulsa <b>Taparla y recordarla</b> sin mirar.</li>
+      </ul>
+      <p class="hint">Lección 2 (regiones generales): próximamente.</p>
     </section>
+
+    </div>
+
+    <div class="stepnav">
+      <button type="button" class="btn ghost" id="prev">← Anterior</button>
+      <span class="hint" id="gatehint"></span>
+      <button type="button" class="btn" id="next">Siguiente →</button>
+    </div>
   </main>
 </div>
 <script>
@@ -298,8 +668,10 @@ window.MathJax = {
       var fb = document.createElement('div');
       fb.className = 'fb ' + (ok ? 'ok' : 'no');
       var head = kind === 'pred'
-        ? (ok ? '¡Tu intuición acertó!' : 'No era eso, y está bien: ahora la teoría te va a quedar mejor.')
-        : (ok ? '¡Correcto!' : 'Incorrecto.');
+        ? (ok ? '✅ ¡Tu intuición acertó!' : '❌ No era eso, y está bien: ahora la teoría te va a quedar mejor.')
+        : kind === 'first'
+        ? (ok ? '✅ ¡Buen primer paso!' : '❌ Ese no sería el primer paso.')
+        : (ok ? '✅ ¡Correcto!' : '❌ Incorrecto.');
       fb.innerHTML = '<b class="v">' + head + '</b>' + q.e;
       box.appendChild(fb);
     }
@@ -333,6 +705,7 @@ window.MathJax = {
     QUIZ.forEach(function (q) {
       paint(quizHost, q, answers[q.id] ? { ch: answers[q.id].ch } : null, 'quiz', function (i) {
         answers[q.id] = { ch: i, ok: i === q.c };
+        record(q.id, i === q.c);
         var all = QUIZ.every(function (x) { return answers[x.id]; });
         if (all) {
           var score = QUIZ.filter(function (x) { return answers[x.id].ok; }).length;
@@ -372,8 +745,276 @@ window.MathJax = {
     typeset(quizHost);
   }
 
+  // Repaso espaciado (cajas de Leitner)
+  var SKEY = 'calcmv:srs';
+  var INTERVALS = [1, 3, 7, 14, 30];
+  var srs = {};
+  try { srs = JSON.parse(localStorage.getItem(SKEY)) || {}; } catch (e) {}
+  function saveSrs() { try { localStorage.setItem(SKEY, JSON.stringify(srs)); } catch (e) {} }
+  function today() {
+    var d = new Date();
+    return Math.floor((d.getTime() - d.getTimezoneOffset() * 6e4) / 864e5);
+  }
+  function record(id, ok) {
+    var r = srs[id] || { box: 0 };
+    r.box = ok ? Math.min(r.box + 1, INTERVALS.length - 1) : 0;
+    r.due = today() + INTERVALS[r.box];
+    srs[id] = r;
+    saveSrs();
+    updateDue();
+  }
+  function dueList() {
+    var t = today();
+    return QUIZ.filter(function (q) { return srs[q.id] && srs[q.id].due <= t; });
+  }
+  function nextDue() {
+    var t = today(), m = null;
+    QUIZ.forEach(function (q) {
+      if (srs[q.id] && srs[q.id].due > t && (m === null || srs[q.id].due < m)) m = srs[q.id].due;
+    });
+    return m === null ? null : m - t;
+  }
+  function when(n) { return n === 1 ? 'mañana' : 'en ' + n + ' días'; }
+  var dueLabel = document.getElementById('due-label');
+  function updateDue() {
+    var n = dueList().length;
+    var seen = Object.keys(srs).length;
+    dueLabel.textContent = n ? n + (n === 1 ? ' pregunta pendiente' : ' preguntas pendientes')
+      : seen ? 'Al día ✓' : 'Sin tarjetas aún';
+  }
+
+  var rvHost = document.getElementById('review');
+  var queue = [], qi = 0, answered = null, hits = 0, started = 0;
+  function startReview() {
+    queue = dueList();
+    started = queue.length;
+    qi = 0; answered = null; hits = 0;
+    renderReview();
+  }
+  function renderReview() {
+    rvHost.innerHTML = '';
+    var note = document.createElement('p');
+    note.className = 'hint';
+    if (qi < queue.length) {
+      var q = queue[qi];
+      var prog = document.createElement('div');
+      prog.className = 'progress';
+      prog.textContent = 'Repaso ' + (qi + 1) + ' de ' + queue.length;
+      rvHost.appendChild(prog);
+      paint(rvHost, q, answered, 'quiz', function (i) {
+        answered = { ch: i };
+        if (i === q.c) hits++;
+        record(q.id, i === q.c);
+        renderReview();
+      });
+      if (answered) {
+        var nx = document.createElement('button');
+        nx.type = 'button';
+        nx.className = 'btn';
+        nx.textContent = qi + 1 < queue.length ? 'Siguiente' : 'Terminar';
+        nx.addEventListener('click', function () { qi++; answered = null; renderReview(); });
+        rvHost.appendChild(nx);
+      }
+    } else {
+      var nd = nextDue();
+      var r = document.createElement('div');
+      r.className = 'result';
+      if (started) {
+        r.innerHTML = '<div class="score">' + hits + ' / ' + started + '</div><div>Repaso completado. ' +
+          (nd ? 'Lo siguiente toca ' + when(nd) + '.' : '') + '</div>';
+      } else if (Object.keys(srs).length) {
+        r.innerHTML = '<div class="score">Al día ✓</div><div>No tienes nada pendiente hoy.' +
+          (nd ? ' Lo siguiente toca ' + when(nd) + '.' : '') + '</div>';
+      } else {
+        r.innerHTML = '<div class="score">Aún no hay tarjetas</div><div>Contesta el mini-quiz de la Lección 1 y tus preguntas aparecerán aquí a repasar.</div>';
+      }
+      rvHost.appendChild(r);
+    }
+    var counts = INTERVALS.map(function () { return 0; });
+    Object.keys(srs).forEach(function (k) { counts[srs[k].box]++; });
+    var h = document.createElement('div');
+    h.className = 'hist';
+    h.textContent = 'Cajas: ' + INTERVALS.map(function (d, b) { return 'cada ' + d + ' d: ' + counts[b]; }).join(' · ');
+    rvHost.appendChild(h);
+    typeset(rvHost);
+  }
+
+  var lessonMain = document.getElementById('lesson-main');
+  var reviewMain = document.getElementById('review-main');
+  var navL1 = document.getElementById('nav-l1');
+  var navRv = document.getElementById('nav-review');
+  function show(v) {
+    lessonMain.hidden = v !== 'lesson';
+    reviewMain.hidden = v !== 'review';
+    navL1.classList.toggle('active', v === 'lesson');
+    navRv.classList.toggle('active', v === 'review');
+    if (v === 'review') startReview();
+    window.scrollTo(0, 0);
+  }
+  navL1.addEventListener('click', function () { show('lesson'); });
+  navRv.addEventListener('click', function () { show('review'); });
+
+  // "¿Qué harías primero?" antes del ejemplo resuelto
+  var FIRST = {
+    id: 'e1',
+    q: 'Te piden $\\iint_R (x^2+y)\\,dA$ con $R=[0,2]\\times[1,3]$. ¿Qué harías primero?',
+    o: ['Separarla como $\\left(\\int x^2\\,dx\\right)\\left(\\int y\\,dy\\right)$',
+        'Ver que $R$ es un rectángulo con límites constantes y plantear la integral iterada con esos límites',
+        'Multiplicar el área de $R$ por el valor de $f$ en una esquina'],
+    c: 1,
+    e: 'Primero se mira la región: como los límites son números, es un rectángulo y Fubini nos deja iterar. Separar no vale porque $x^2+y$ es una suma, no un producto; y multiplicar por el valor en una esquina solo da una estimación, no el valor exacto.'
+  };
+  var firstHost = document.getElementById('first');
+  function renderFirst() {
+    firstHost.innerHTML = '';
+    paint(firstHost, FIRST, state.pred.e1 ? { ch: state.pred.e1.ch } : null, 'first', function (i) {
+      state.pred.e1 = { ch: i, ok: i === FIRST.c, t: Date.now() };
+      save();
+      renderFirst();
+      syncNav();
+    });
+    typeset(firstHost);
+  }
+
+  // Pasos de la lección con barra de progreso
+  var steps = [].slice.call(document.querySelectorAll('#lesson-main .step'));
+  var NKEY = 'calcmv:l1:nav';
+  var nav = { cur: 0, seen: {} };
+  try {
+    var sv = JSON.parse(localStorage.getItem(NKEY));
+    if (sv) { nav.cur = Math.min(Math.max(sv.cur | 0, 0), steps.length - 1); nav.seen = sv.seen || {}; }
+  } catch (e) {}
+  var segsHost = document.getElementById('segs');
+  var plabel = document.getElementById('plabel');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var gateHint = document.getElementById('gatehint');
+  var segs = steps.map(function (s, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'seg';
+    b.title = (i + 1) + '. ' + s.getAttribute('data-title');
+    b.setAttribute('aria-label', 'Ir al paso ' + (i + 1) + ': ' + s.getAttribute('data-title'));
+    b.addEventListener('click', function () { goStep(i); });
+    segsHost.appendChild(b);
+    return b;
+  });
+  function gateOpen(i) {
+    var g = steps[i].getAttribute('data-gate');
+    return !g || !!state.pred[g];
+  }
+  function syncNav() {
+    var i = nav.cur;
+    var open = gateOpen(i);
+    prevBtn.disabled = i === 0;
+    nextBtn.disabled = i === steps.length - 1 || !open;
+    gateHint.textContent = open ? '' : 'Elige una opción para continuar';
+  }
+  function goStep(i) {
+    i = Math.max(0, Math.min(i, steps.length - 1));
+    for (var k = 0; k < i; k++) if (!gateOpen(k)) { i = k; break; }
+    nav.cur = i;
+    nav.seen[i] = 1;
+    steps.forEach(function (s, k) { s.hidden = k !== i; });
+    var seenCount = 0;
+    segs.forEach(function (b, k) {
+      b.classList.toggle('cur', k === i);
+      b.classList.toggle('seen', !!nav.seen[k] && k !== i);
+      if (nav.seen[k]) seenCount++;
+    });
+    plabel.textContent = 'Paso ' + (i + 1) + ' de ' + steps.length + ' · ' + steps[i].getAttribute('data-title') +
+      ' · ' + Math.round(seenCount / steps.length * 100) + '% visto';
+    syncNav();
+    try { localStorage.setItem(NKEY, JSON.stringify(nav)); } catch (e) {}
+    window.scrollTo(0, 0);
+  }
+  prevBtn.addEventListener('click', function () { goStep(nav.cur - 1); });
+  nextBtn.addEventListener('click', function () { goStep(nav.cur + 1); });
+
+  // Tarjetas de fórmula: taparla y recordarla (completar huecos)
+  var FKEY = 'calcmv:formulas';
+  var fstat = {};
+  try { fstat = JSON.parse(localStorage.getItem(FKEY)) || {}; } catch (e) {}
+  function norm(s) { return s.toLowerCase().replace(/[\s\\{}$]/g, ''); }
+  [].forEach.call(document.querySelectorAll('.fcard'), function (card) {
+    var id = card.getAttribute('data-id');
+    var ans = JSON.parse(card.getAttribute('data-ans'));
+    var full = card.querySelector('.fc-full');
+    var drill = card.querySelector('.fc-drill');
+    var inputsHost = card.querySelector('.fc-inputs');
+    var msg = card.querySelector('.fc-msg');
+    var badge = card.querySelector('.fc-badge');
+    var cover = card.querySelector('.fc-cover');
+    var inputs = [], labels = [];
+    ans.forEach(function (a, i) {
+      var l = document.createElement('label');
+      l.className = 'fc-in';
+      var n = document.createElement('span');
+      n.textContent = (i + 1);
+      var inp = document.createElement('input');
+      inp.type = 'text';
+      inp.autocomplete = 'off';
+      inp.autocapitalize = 'off';
+      inp.spellcheck = false;
+      inp.setAttribute('aria-label', 'Hueco ' + (i + 1));
+      inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
+      l.appendChild(n);
+      l.appendChild(inp);
+      inputsHost.appendChild(l);
+      inputs.push(inp);
+      labels.push(l);
+    });
+    function showBadge() {
+      var s = fstat[id];
+      badge.textContent = s && s.ok ? '✓ Recordada ' + s.ok + (s.ok === 1 ? ' vez' : ' veces') : '';
+    }
+    function saveF() { try { localStorage.setItem(FKEY, JSON.stringify(fstat)); } catch (e) {} }
+    function start() {
+      full.hidden = true;
+      drill.hidden = false;
+      cover.hidden = true;
+      msg.textContent = '';
+      inputs.forEach(function (inp, i) { inp.value = ''; labels[i].className = 'fc-in'; });
+      inputs[0].focus();
+    }
+    function reveal() {
+      full.hidden = false;
+      drill.hidden = true;
+      cover.hidden = false;
+    }
+    function check() {
+      var right = 0;
+      inputs.forEach(function (inp, i) {
+        var ok = ans[i].some(function (a) { return norm(a) === norm(inp.value); });
+        labels[i].className = 'fc-in ' + (ok ? 'good' : 'bad');
+        if (ok) right++;
+      });
+      var s = fstat[id] || { ok: 0, tries: 0 };
+      s.tries++;
+      if (right === ans.length) {
+        s.ok++;
+        msg.textContent = '✅ ¡Perfecto! La recordaste. Ahí está completa.';
+        fstat[id] = s;
+        saveF();
+        showBadge();
+        reveal();
+      } else {
+        msg.textContent = '❌ Acertaste ' + right + ' de ' + ans.length + '. Corrige los marcados con línea punteada o pulsa Revelar.';
+        fstat[id] = s;
+        saveF();
+      }
+    }
+    card.querySelector('.fc-check').addEventListener('click', check);
+    card.querySelector('.fc-reveal').addEventListener('click', function () { msg.textContent = ''; reveal(); });
+    cover.addEventListener('click', start);
+    showBadge();
+  });
+
+  updateDue();
   renderPred();
+  renderFirst();
   renderQuiz();
+  goStep(nav.cur);
 })();
 </script>
 </body>
